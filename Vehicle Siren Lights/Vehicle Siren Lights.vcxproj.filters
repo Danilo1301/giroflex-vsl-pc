@@ -1,0 +1,152 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="source">
+      <UniqueIdentifier>{5d4b9773-e72a-48b6-a3f3-d2b407ef799f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\menu">
+      <UniqueIdentifier>{00c3d5c6-067e-4044-8d5b-090cbb426823}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\input">
+      <UniqueIdentifier>{3a43f5dc-c989-4b33-9517-f5145a5023b2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\json">
+      <UniqueIdentifier>{074b534a-1f4b-4da8-90b4-82ff283ae88d}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="source\pch.h">
+      <Filter>source</Filter>
+    </ClInclude>
+    <ClInclude Include="source\Mod.h">
+      <Filter>source</Filter>
+    </ClInclude>
+    <ClInclude Include="source\Vehicle.h">
+      <Filter>source</Filter>
+    </ClInclude>
+    <ClInclude Include="source\menu\Menu.h">
+      <Filter>source\menu</Filter>
+    </ClInclude>
+    <ClInclude Include="source\menu\Window.h">
+      <Filter>source\menu</Filter>
+    </ClInclude>
+    <ClInclude Include="source\menu\Item.h">
+      <Filter>source\menu</Filter>
+    </ClInclude>
+    <ClInclude Include="source\menu\Button.h">
+      <Filter>source\menu</Filter>
+    </ClInclude>
+    <ClInclude Include="source\input\Input.h">
+      <Filter>source\input</Filter>
+    </ClInclude>
+    <ClInclude Include="source\menu\NumberRange.h">
+      <Filter>source\menu</Filter>
+    </ClInclude>
+    <ClInclude Include="source\menu\Options.h">
+      <Filter>source\menu</Filter>
+    </ClInclude>
+    <ClInclude Include="source\menu\PositionEditor.h">
+      <Filter>source\menu</Filter>
+    </ClInclude>
+    <ClInclude Include="source\Log.h">
+      <Filter>source</Filter>
+    </ClInclude>
+    <ClInclude Include="source\menu\TextEditor.h">
+      <Filter>source\menu</Filter>
+    </ClInclude>
+    <ClInclude Include="source\LightGroup.h">
+      <Filter>source</Filter>
+    </ClInclude>
+    <ClInclude Include="source\Point.h">
+      <Filter>source</Filter>
+    </ClInclude>
+    <ClInclude Include="source\Pattern.h">
+      <Filter>source</Filter>
+    </ClInclude>
+    <ClInclude Include="source\Language.h">
+      <Filter>source</Filter>
+    </ClInclude>
+    <ClInclude Include="source\menu\CheckBox.h">
+      <Filter>source\menu</Filter>
+    </ClInclude>
+    <ClInclude Include="source\ColorTexture.h">
+      <Filter>source</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\json_tool.h">
+      <Filter>source\json</Filter>
+    </ClInclude>
+    <ClInclude Include="source\menu\ButtonKey.h">
+      <Filter>source\menu</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="source\Mod.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Vehicle.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="source\menu\Menu.cpp">
+      <Filter>source\menu</Filter>
+    </ClCompile>
+    <ClCompile Include="source\menu\Window.cpp">
+      <Filter>source\menu</Filter>
+    </ClCompile>
+    <ClCompile Include="source\menu\Item.cpp">
+      <Filter>source\menu</Filter>
+    </ClCompile>
+    <ClCompile Include="source\menu\Button.cpp">
+      <Filter>source\menu</Filter>
+    </ClCompile>
+    <ClCompile Include="source\input\Input.cpp">
+      <Filter>source\input</Filter>
+    </ClCompile>
+    <ClCompile Include="source\menu\NumberRange.cpp">
+      <Filter>source\menu</Filter>
+    </ClCompile>
+    <ClCompile Include="source\menu\Options.cpp">
+      <Filter>source\menu</Filter>
+    </ClCompile>
+    <ClCompile Include="source\menu\PositionEditor.cpp">
+      <Filter>source\menu</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Log.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="source\menu\TextEditor.cpp">
+      <Filter>source\menu</Filter>
+    </ClCompile>
+    <ClCompile Include="source\LightGroup.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Pattern.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Language.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="source\menu\CheckBox.cpp">
+      <Filter>source\menu</Filter>
+    </ClCompile>
+    <ClCompile Include="source\ColorTexture.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\include\json_reader.cpp">
+      <Filter>source\json</Filter>
+    </ClCompile>
+    <ClCompile Include="..\include\json_value.cpp">
+      <Filter>source\json</Filter>
+    </ClCompile>
+    <ClCompile Include="..\include\json_writer.cpp">
+      <Filter>source\json</Filter>
+    </ClCompile>
+    <ClCompile Include="source\menu\ButtonKey.cpp">
+      <Filter>source\menu</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\include\json_valueiterator.inl">
+      <Filter>source\json</Filter>
+    </None>
+  </ItemGroup>
+</Project>
