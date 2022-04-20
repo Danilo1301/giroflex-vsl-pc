@@ -15,17 +15,10 @@
 #include "map"
 
 #include "Log.h"
-#include "Input/Input.h"
+#include "Language.h"
+
 
 using namespace plugin;
-
-
-/*
-
-sprintf(buffer, "%d", a);
-MessageBox(HWND_DESKTOP, buffer, "", MB_ICONERROR);
-
-*/
 
 static CVector2D WorldToScreen(CVector position) {
 	RwV3d rwp = { position.x, position.y, position.z };
@@ -59,19 +52,12 @@ static void DrawScreenText(char* text, CVector2D position, CRGBA color = CRGBA(0
 	CFont::SetDropShadowPosition(1);
 	CFont::SetBackground(false, false);
 	CFont::SetWrapx(500.0);
-	CFont::SetScale(0.5 * 0.7f, 1.0 * 0.7f);
+	CFont::SetScale(0.5, 1.0);
 	CFont::SetFontStyle(FONT_SUBTITLES);
 	CFont::SetProportional(true);
 
 	CFont::PrintString(position.x, position.y, text);
 }
-
-static void DrawScreenTextStr(std::string text, CVector2D position, CRGBA color = CRGBA(0, 255, 0, 255)) {
-	char buffer[1024];
-	sprintf(buffer, "%s", text.c_str());
-	DrawScreenText(buffer, position, color);
-}
-
 
 static CVector CVectorLerp(CVector A, CVector B, float t) {
 	return A * t + B * (1.f - t);
@@ -154,11 +140,4 @@ static CVector CVectorFromJSON(Json::Value json) {
 	vec.y = json["y"].asFloat();
 	vec.z = json["z"].asFloat();
 	return vec;
-}
-
-
-static char* (*GetFrameNodeName)(RwFrame* frame) = (char* (*)(RwFrame*))0x72FB30;
-
-static CVector GetFrameNodePosition(RwFrame* frame) {
-	return { frame->modelling.pos.x, frame->modelling.pos.y, frame->modelling.pos.z };
 }

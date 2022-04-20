@@ -2,11 +2,12 @@
 
 #include "plugin.h"
 
-#include "item/Item.h"
-#include "item/CheckBox.h"
-#include "item/Options.h"
-#include "item/NumberRange.h"
-#include "item/ButtonKey.h"
+#include "Item.h"
+#include "CheckBox.h"
+#include "Button.h"
+#include "Options.h"
+#include "NumberRange.h"
+#include "ButtonKey.h"
 
 class Window {
 public:
@@ -36,16 +37,15 @@ public:
 	Item* GetSelectedItem();
 	int GetNextSelectableItemIndex(int by);
 	Item* AddItem(Item* item);
-	Item* AddItem(std::string text);
-	Item* AddButton(std::string text);
 
 	CheckBox* AddCheckBox(std::string text, bool* value);
+	Button* AddButton(std::string text);
 	Options* AddOptions(std::string text, int* value);
 
 	template<class T>
 	NumberRange<T>* AddNumberRange(std::string text, T* value, T min, T max);
-	Item* AddDivider();
-	Item* AddDivider(float height);
+	void AddDivider(float height);
 
 	ButtonKey* AddButtonKey(std::string text, int* keys);
+
 };

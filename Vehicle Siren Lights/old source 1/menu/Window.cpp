@@ -63,8 +63,8 @@ void Window::Draw() {
 	}
 	//
 
-	//sprintf_s(buffer, "%d next 1: %d , -1: %d -- top %d bottom %d", m_SelectedIndex, GetNextSelectableItemIndex(1), GetNextSelectableItemIndex(-1), GetViewTopItemIndex(), GetViewBottomItemIndex());
-	//Menu::DrawString(buffer, m_Position.x, m_Position.y, CRGBA(255,0,0));
+	sprintf_s(buffer, "%d next 1: %d , -1: %d -- top %d bottom %d", m_SelectedIndex, GetNextSelectableItemIndex(1), GetNextSelectableItemIndex(-1), GetViewTopItemIndex(), GetViewBottomItemIndex());
+	Menu::DrawString(buffer, m_Position.x, m_Position.y, CRGBA(255,0,0));
 }
 
 
@@ -161,23 +161,16 @@ Item* Window::AddItem(Item* item) {
 	return item;
 }
 
-Item* Window::AddItem(std::string text) {
-	auto item = AddItem(new Item());
-	item->m_Label = text;
-	return item;
-}
-
-Item* Window::AddButton(std::string text) {
-	auto item = AddItem(new Item());
-	item->m_Label = text;
-	item->m_CanBeSelected = true;
-	return item;
-}
-
 CheckBox* Window::AddCheckBox(std::string text, bool* value) {
 	auto checkBox = (CheckBox*)AddItem((Item*)new CheckBox(value));
 	checkBox->m_Label = text;
 	return checkBox;
+}
+
+Button* Window::AddButton(std::string text) {
+	auto button = (Button*)AddItem((Item*)new Button());
+	button->m_Label = text;
+	return button;
 }
 
 Options* Window::AddOptions(std::string text, int* value) {
@@ -225,17 +218,11 @@ NumberRange<unsigned char>* Window::AddNumberRange(std::string text, unsigned ch
 	return numberRange;
 }
 
-Item* Window::AddDivider() {
+void Window::AddDivider(float height) {
 	auto divider = AddItem(new Item());
-	divider->m_Label = "";
-	//divider->m_BackgroundColor = CRGBA(255, 255, 255, 255);
-	return divider;
-}
-
-Item* Window::AddDivider(float height) {
-	auto divider = AddDivider();
 	divider->m_Size.y = height;
-	return divider;
+	divider->m_Label = "";
+	divider->m_BackgroundColor = CRGBA(255, 255, 255, 255);
 }
 
 ButtonKey* Window::AddButtonKey(std::string text, int* keys) {
@@ -243,6 +230,7 @@ ButtonKey* Window::AddButtonKey(std::string text, int* keys) {
 	buttonKey->m_Label = text;
 	return buttonKey;
 }
+
 
 /*
 NumberRange<float>* Window::AddNumberRange(std::string text, float* value, float min, float max) {

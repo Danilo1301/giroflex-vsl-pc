@@ -5,10 +5,9 @@
 
 std::vector<Window*> Menu::m_Windows;
 Window* Menu::m_ActiveWindow = nullptr;
-Item* Menu::m_ItemClicked = nullptr;
+Button* Menu::m_ButtonClicked = nullptr;
 bool Menu::m_Visible = false;
 int Menu::m_OpenAtIndex = -1;
-CVector2D Menu::m_DefaultPosition = CVector2D(10.0f, 120.0f);
 eFontAlignment Menu::m_FontAlign = eFontAlignment::ALIGN_LEFT;
 
 void Menu::DrawRect(float x, float y, float width, float height, CRGBA color) {
@@ -106,7 +105,6 @@ Window* Menu::AddWindow(std::string title, std::string description) {
     Window* window = new Window();
     window->m_Title = title;
     window->m_Description = description;
-    window->m_Position = m_DefaultPosition;
     m_Windows.push_back(window);
     m_ActiveWindow = window;
     return window;
@@ -120,22 +118,16 @@ Window* Menu::AddWindow() {
     return AddWindow("", "");
 }
 
-void Menu::RemoveWindow(Window* window) {
-    auto it = std::find(m_Windows.begin(), m_Windows.end(), window);
-    if (it == m_Windows.end()) return;
-
-    if (m_ActiveWindow == window) m_ActiveWindow = nullptr;
-
-    window->Destroy();
-    m_Windows.erase(it);
-    delete window;
-}
-
 void Menu::RemoveAllWindows() {
-    while (m_Windows.size() > 0) {
-        RemoveWindow(m_Windows[0]);
+    for (Window* window : m_Windows) {
+        window->Destroy();
+        delete window;
     }
+    m_Windows.clear();
+
+    m_ActiveWindow = nullptr;
 }
+
 
 Window* Menu::CreateColorPickerWindow(CRGBA* color, std::function<void(void)> onClose) {
     auto window = Menu::AddWindow();
@@ -163,7 +155,7 @@ void Menu::SetOpen(bool open) {
 void Menu::Draw() {
     m_FontAlign = eFontAlignment::ALIGN_LEFT;
 
-    if (m_Visible && !PositionEditor::m_Visible) {
+    if (m_Visible && !PositionEditor::m_Visible && !TextEditor::m_Visible) {
         for (Window* window : m_Windows)
         {
             window->Draw();
@@ -203,13 +195,10 @@ void Menu::Update() {
         window->Update();
     }
 
-    if (m_ItemClicked) {
-        auto fn = m_ItemClicked->m_OnClick;
-        m_ItemClicked = nullptr;
-
-        fn();
+    if (m_ButtonClicked) {
+        m_ButtonClicked->m_OnClick();
+        m_ButtonClicked = nullptr;
     }
-
 
     if (TextEditor::m_OnConfirm != NULL && !TextEditor::m_Visible) {
         TextEditor::m_OnConfirm();

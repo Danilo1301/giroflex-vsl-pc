@@ -10,6 +10,58 @@
       <Platform>Win32</Platform>
     </ProjectConfiguration>
   </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="source\input\Input.cpp" />
+    <ClCompile Include="source\LightGroups.cpp" />
+    <ClCompile Include="source\Log.cpp" />
+    <ClCompile Include="source\menu\item\ButtonKey.cpp" />
+    <ClCompile Include="source\menu\item\CheckBox.cpp" />
+    <ClCompile Include="source\menu\item\Item.cpp" />
+    <ClCompile Include="source\menu\item\NumberRange.cpp" />
+    <ClCompile Include="source\menu\item\Options.cpp" />
+    <ClCompile Include="source\menu\Menu.cpp" />
+    <ClCompile Include="source\menu\PositionEditor.cpp" />
+    <ClCompile Include="source\menu\TextEditor.cpp" />
+    <ClCompile Include="source\menu\Window.cpp" />
+    <ClCompile Include="source\Mod.cpp" />
+    <ClCompile Include="source\Patterns.cpp" />
+    <ClCompile Include="source\pch.cpp" />
+    <ClCompile Include="source\Vehicle.cpp" />
+    <ClCompile Include="source\VehicleDummy.cpp" />
+    <ClCompile Include="source\Vehicles.cpp" />
+    <ClCompile Include="source\windows\WindowLightGroup.cpp" />
+    <ClCompile Include="source\windows\WindowMain.cpp" />
+    <ClCompile Include="source\windows\WindowPoint.cpp" />
+    <ClCompile Include="source\windows\WindowSelectPattern.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="source\input\Input.h" />
+    <ClInclude Include="source\LightGroup.h" />
+    <ClInclude Include="source\LightGroups.h" />
+    <ClInclude Include="source\Log.h" />
+    <ClInclude Include="source\menu\item\ButtonKey.h" />
+    <ClInclude Include="source\menu\item\CheckBox.h" />
+    <ClInclude Include="source\menu\item\Item.h" />
+    <ClInclude Include="source\menu\item\NumberRange.h" />
+    <ClInclude Include="source\menu\item\Options.h" />
+    <ClInclude Include="source\menu\Menu.h" />
+    <ClInclude Include="source\menu\PositionEditor.h" />
+    <ClInclude Include="source\menu\TextEditor.h" />
+    <ClInclude Include="source\menu\Window.h" />
+    <ClInclude Include="source\Mod.h" />
+    <ClInclude Include="source\Pattern.h" />
+    <ClInclude Include="source\PatternLoop.h" />
+    <ClInclude Include="source\Patterns.h" />
+    <ClInclude Include="source\pch.h" />
+    <ClInclude Include="source\Vehicle.h" />
+    <ClInclude Include="source\VehicleDummy.h" />
+    <ClInclude Include="source\Vehicles.h" />
+    <ClInclude Include="source\windows\WindowLightGroup.h" />
+    <ClInclude Include="source\windows\WindowMain.h" />
+    <ClInclude Include="source\windows\WindowPoint.h" />
+    <ClInclude Include="source\windows\WindowSelectPattern.h" />
+    <ClInclude Include="source\windows\WindowTest.h" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{B212DDA4-2A8E-45B2-914D-7BEEB31D06B1}</ProjectGuid>
     <IgnoreWarnCompileDuplicatedFilename>true</IgnoreWarnCompileDuplicatedFilename>
@@ -97,55 +149,6 @@
       <SubSystem>Windows</SubSystem>
     </Link>
   </ItemDefinitionGroup>
-  <ItemGroup>
-    <ClInclude Include="..\include\json_tool.h" />
-    <ClInclude Include="source\ColorTexture.h" />
-    <ClInclude Include="source\input\Input.h" />
-    <ClInclude Include="source\Language.h" />
-    <ClInclude Include="source\LightGroup.h" />
-    <ClInclude Include="source\Log.h" />
-    <ClInclude Include="source\menu\Button.h" />
-    <ClInclude Include="source\menu\ButtonKey.h" />
-    <ClInclude Include="source\menu\CheckBox.h" />
-    <ClInclude Include="source\menu\PositionEditor.h" />
-    <ClInclude Include="source\menu\Item.h" />
-    <ClInclude Include="source\menu\Menu.h" />
-    <ClInclude Include="source\menu\NumberRange.h" />
-    <ClInclude Include="source\menu\Options.h" />
-    <ClInclude Include="source\menu\TextEditor.h" />
-    <ClInclude Include="source\menu\Window.h" />
-    <ClInclude Include="source\Mod.h" />
-    <ClInclude Include="source\Pattern.h" />
-    <ClInclude Include="source\pch.h" />
-    <ClInclude Include="source\Point.h" />
-    <ClInclude Include="source\Vehicle.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="..\include\json_reader.cpp" />
-    <ClCompile Include="..\include\json_value.cpp" />
-    <ClCompile Include="..\include\json_writer.cpp" />
-    <ClCompile Include="source\ColorTexture.cpp" />
-    <ClCompile Include="source\input\Input.cpp" />
-    <ClCompile Include="source\Language.cpp" />
-    <ClCompile Include="source\LightGroup.cpp" />
-    <ClCompile Include="source\Log.cpp" />
-    <ClCompile Include="source\menu\Button.cpp" />
-    <ClCompile Include="source\menu\ButtonKey.cpp" />
-    <ClCompile Include="source\menu\CheckBox.cpp" />
-    <ClCompile Include="source\menu\PositionEditor.cpp" />
-    <ClCompile Include="source\menu\Item.cpp" />
-    <ClCompile Include="source\menu\Menu.cpp" />
-    <ClCompile Include="source\menu\NumberRange.cpp" />
-    <ClCompile Include="source\menu\Options.cpp" />
-    <ClCompile Include="source\menu\TextEditor.cpp" />
-    <ClCompile Include="source\menu\Window.cpp" />
-    <ClCompile Include="source\Mod.cpp" />
-    <ClCompile Include="source\Pattern.cpp" />
-    <ClCompile Include="source\Vehicle.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="..\include\json_valueiterator.inl" />
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

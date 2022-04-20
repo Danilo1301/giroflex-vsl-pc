@@ -2,151 +2,167 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <Filter Include="source">
-      <UniqueIdentifier>{5d4b9773-e72a-48b6-a3f3-d2b407ef799f}</UniqueIdentifier>
+      <UniqueIdentifier>{1b949505-f578-4476-b6b9-ca5f95cb70c7}</UniqueIdentifier>
     </Filter>
     <Filter Include="source\menu">
-      <UniqueIdentifier>{00c3d5c6-067e-4044-8d5b-090cbb426823}</UniqueIdentifier>
+      <UniqueIdentifier>{8aeb124c-3e19-4fbc-a784-8da64f786603}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\menu\item">
+      <UniqueIdentifier>{83dc011a-b48c-43e5-98b8-336387dd31fa}</UniqueIdentifier>
     </Filter>
     <Filter Include="source\input">
-      <UniqueIdentifier>{3a43f5dc-c989-4b33-9517-f5145a5023b2}</UniqueIdentifier>
+      <UniqueIdentifier>{5470673d-59e1-458e-ba13-f1e5e8595afe}</UniqueIdentifier>
     </Filter>
-    <Filter Include="source\json">
-      <UniqueIdentifier>{074b534a-1f4b-4da8-90b4-82ff283ae88d}</UniqueIdentifier>
+    <Filter Include="source\windows">
+      <UniqueIdentifier>{8e2c48e6-59d0-42e3-be14-e7b4266c4e7a}</UniqueIdentifier>
     </Filter>
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="source\pch.h">
-      <Filter>source</Filter>
-    </ClInclude>
-    <ClInclude Include="source\Mod.h">
-      <Filter>source</Filter>
-    </ClInclude>
-    <ClInclude Include="source\Vehicle.h">
-      <Filter>source</Filter>
-    </ClInclude>
-    <ClInclude Include="source\menu\Menu.h">
-      <Filter>source\menu</Filter>
-    </ClInclude>
-    <ClInclude Include="source\menu\Window.h">
-      <Filter>source\menu</Filter>
-    </ClInclude>
-    <ClInclude Include="source\menu\Item.h">
-      <Filter>source\menu</Filter>
-    </ClInclude>
-    <ClInclude Include="source\menu\Button.h">
-      <Filter>source\menu</Filter>
-    </ClInclude>
-    <ClInclude Include="source\input\Input.h">
-      <Filter>source\input</Filter>
-    </ClInclude>
-    <ClInclude Include="source\menu\NumberRange.h">
-      <Filter>source\menu</Filter>
-    </ClInclude>
-    <ClInclude Include="source\menu\Options.h">
-      <Filter>source\menu</Filter>
-    </ClInclude>
-    <ClInclude Include="source\menu\PositionEditor.h">
-      <Filter>source\menu</Filter>
-    </ClInclude>
-    <ClInclude Include="source\Log.h">
-      <Filter>source</Filter>
-    </ClInclude>
-    <ClInclude Include="source\menu\TextEditor.h">
-      <Filter>source\menu</Filter>
-    </ClInclude>
-    <ClInclude Include="source\LightGroup.h">
-      <Filter>source</Filter>
-    </ClInclude>
-    <ClInclude Include="source\Point.h">
-      <Filter>source</Filter>
-    </ClInclude>
-    <ClInclude Include="source\Pattern.h">
-      <Filter>source</Filter>
-    </ClInclude>
-    <ClInclude Include="source\Language.h">
-      <Filter>source</Filter>
-    </ClInclude>
-    <ClInclude Include="source\menu\CheckBox.h">
-      <Filter>source\menu</Filter>
-    </ClInclude>
-    <ClInclude Include="source\ColorTexture.h">
-      <Filter>source</Filter>
-    </ClInclude>
-    <ClInclude Include="..\include\json_tool.h">
-      <Filter>source\json</Filter>
-    </ClInclude>
-    <ClInclude Include="source\menu\ButtonKey.h">
-      <Filter>source\menu</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="source\Mod.cpp">
       <Filter>source</Filter>
     </ClCompile>
-    <ClCompile Include="source\Vehicle.cpp">
+    <ClCompile Include="source\pch.cpp">
       <Filter>source</Filter>
     </ClCompile>
+    <ClCompile Include="source\menu\item\ButtonKey.cpp">
+      <Filter>source\menu\item</Filter>
+    </ClCompile>
+    <ClCompile Include="source\menu\item\CheckBox.cpp">
+      <Filter>source\menu\item</Filter>
+    </ClCompile>
+    <ClCompile Include="source\menu\item\Item.cpp">
+      <Filter>source\menu\item</Filter>
+    </ClCompile>
+    <ClCompile Include="source\menu\item\NumberRange.cpp">
+      <Filter>source\menu\item</Filter>
+    </ClCompile>
+    <ClCompile Include="source\menu\item\Options.cpp">
+      <Filter>source\menu\item</Filter>
+    </ClCompile>
     <ClCompile Include="source\menu\Menu.cpp">
-      <Filter>source\menu</Filter>
-    </ClCompile>
-    <ClCompile Include="source\menu\Window.cpp">
-      <Filter>source\menu</Filter>
-    </ClCompile>
-    <ClCompile Include="source\menu\Item.cpp">
-      <Filter>source\menu</Filter>
-    </ClCompile>
-    <ClCompile Include="source\menu\Button.cpp">
-      <Filter>source\menu</Filter>
-    </ClCompile>
-    <ClCompile Include="source\input\Input.cpp">
-      <Filter>source\input</Filter>
-    </ClCompile>
-    <ClCompile Include="source\menu\NumberRange.cpp">
-      <Filter>source\menu</Filter>
-    </ClCompile>
-    <ClCompile Include="source\menu\Options.cpp">
       <Filter>source\menu</Filter>
     </ClCompile>
     <ClCompile Include="source\menu\PositionEditor.cpp">
       <Filter>source\menu</Filter>
     </ClCompile>
-    <ClCompile Include="source\Log.cpp">
-      <Filter>source</Filter>
-    </ClCompile>
     <ClCompile Include="source\menu\TextEditor.cpp">
       <Filter>source\menu</Filter>
     </ClCompile>
-    <ClCompile Include="source\LightGroup.cpp">
-      <Filter>source</Filter>
-    </ClCompile>
-    <ClCompile Include="source\Pattern.cpp">
-      <Filter>source</Filter>
-    </ClCompile>
-    <ClCompile Include="source\Language.cpp">
-      <Filter>source</Filter>
-    </ClCompile>
-    <ClCompile Include="source\menu\CheckBox.cpp">
+    <ClCompile Include="source\menu\Window.cpp">
       <Filter>source\menu</Filter>
     </ClCompile>
-    <ClCompile Include="source\ColorTexture.cpp">
+    <ClCompile Include="source\input\Input.cpp">
+      <Filter>source\input</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Log.cpp">
       <Filter>source</Filter>
     </ClCompile>
-    <ClCompile Include="..\include\json_reader.cpp">
-      <Filter>source\json</Filter>
+    <ClCompile Include="source\Vehicles.cpp">
+      <Filter>source</Filter>
     </ClCompile>
-    <ClCompile Include="..\include\json_value.cpp">
-      <Filter>source\json</Filter>
+    <ClCompile Include="source\Vehicle.cpp">
+      <Filter>source</Filter>
     </ClCompile>
-    <ClCompile Include="..\include\json_writer.cpp">
-      <Filter>source\json</Filter>
+    <ClCompile Include="source\Patterns.cpp">
+      <Filter>source</Filter>
     </ClCompile>
-    <ClCompile Include="source\menu\ButtonKey.cpp">
-      <Filter>source\menu</Filter>
+    <ClCompile Include="source\VehicleDummy.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="source\LightGroups.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="source\windows\WindowMain.cpp">
+      <Filter>source\windows</Filter>
+    </ClCompile>
+    <ClCompile Include="source\windows\WindowLightGroup.cpp">
+      <Filter>source\windows</Filter>
+    </ClCompile>
+    <ClCompile Include="source\windows\WindowPoint.cpp">
+      <Filter>source\windows</Filter>
+    </ClCompile>
+    <ClCompile Include="source\windows\WindowSelectPattern.cpp">
+      <Filter>source\windows</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\include\json_valueiterator.inl">
-      <Filter>source\json</Filter>
-    </None>
+    <ClInclude Include="source\Mod.h">
+      <Filter>source</Filter>
+    </ClInclude>
+    <ClInclude Include="source\pch.h">
+      <Filter>source</Filter>
+    </ClInclude>
+    <ClInclude Include="source\menu\item\ButtonKey.h">
+      <Filter>source\menu\item</Filter>
+    </ClInclude>
+    <ClInclude Include="source\menu\item\CheckBox.h">
+      <Filter>source\menu\item</Filter>
+    </ClInclude>
+    <ClInclude Include="source\menu\item\Item.h">
+      <Filter>source\menu\item</Filter>
+    </ClInclude>
+    <ClInclude Include="source\menu\item\NumberRange.h">
+      <Filter>source\menu\item</Filter>
+    </ClInclude>
+    <ClInclude Include="source\menu\item\Options.h">
+      <Filter>source\menu\item</Filter>
+    </ClInclude>
+    <ClInclude Include="source\menu\Menu.h">
+      <Filter>source\menu</Filter>
+    </ClInclude>
+    <ClInclude Include="source\menu\PositionEditor.h">
+      <Filter>source\menu</Filter>
+    </ClInclude>
+    <ClInclude Include="source\menu\TextEditor.h">
+      <Filter>source\menu</Filter>
+    </ClInclude>
+    <ClInclude Include="source\menu\Window.h">
+      <Filter>source\menu</Filter>
+    </ClInclude>
+    <ClInclude Include="source\input\Input.h">
+      <Filter>source\input</Filter>
+    </ClInclude>
+    <ClInclude Include="source\Log.h">
+      <Filter>source</Filter>
+    </ClInclude>
+    <ClInclude Include="source\windows\WindowMain.h">
+      <Filter>source\windows</Filter>
+    </ClInclude>
+    <ClInclude Include="source\windows\WindowTest.h">
+      <Filter>source\windows</Filter>
+    </ClInclude>
+    <ClInclude Include="source\Vehicles.h">
+      <Filter>source</Filter>
+    </ClInclude>
+    <ClInclude Include="source\Vehicle.h">
+      <Filter>source</Filter>
+    </ClInclude>
+    <ClInclude Include="source\PatternLoop.h">
+      <Filter>source</Filter>
+    </ClInclude>
+    <ClInclude Include="source\Pattern.h">
+      <Filter>source</Filter>
+    </ClInclude>
+    <ClInclude Include="source\Patterns.h">
+      <Filter>source</Filter>
+    </ClInclude>
+    <ClInclude Include="source\VehicleDummy.h">
+      <Filter>source</Filter>
+    </ClInclude>
+    <ClInclude Include="source\LightGroup.h">
+      <Filter>source</Filter>
+    </ClInclude>
+    <ClInclude Include="source\LightGroups.h">
+      <Filter>source</Filter>
+    </ClInclude>
+    <ClInclude Include="source\windows\WindowLightGroup.h">
+      <Filter>source\windows</Filter>
+    </ClInclude>
+    <ClInclude Include="source\windows\WindowPoint.h">
+      <Filter>source\windows</Filter>
+    </ClInclude>
+    <ClInclude Include="source\windows\WindowSelectPattern.h">
+      <Filter>source\windows</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

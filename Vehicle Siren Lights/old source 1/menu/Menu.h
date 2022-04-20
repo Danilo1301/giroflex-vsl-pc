@@ -4,6 +4,7 @@
 #include "CFont.h"
 
 #include "Window.h"
+#include "Button.h"
 
 static float ScreenX(float x) { return (x * (SCREEN_COORD_CENTER_X * 2)) / 1024.0f; }
 static float ScreenY(float y) { return (y * (SCREEN_COORD_CENTER_Y * 2)) / 768.0f; }
@@ -19,11 +20,10 @@ class Menu {
 public:
 	static std::vector<Window*> m_Windows;
 	static Window* m_ActiveWindow;
-	static Item* m_ItemClicked;
+	static Button* m_ButtonClicked;
 
 	static bool m_Visible;
 	static int m_OpenAtIndex;
-	static CVector2D m_DefaultPosition;
 
 	static eFontAlignment m_FontAlign;
 
@@ -39,7 +39,6 @@ public:
 	static Window* AddWindow(std::string title, std::string description);
 	static Window* AddWindow(std::string title);
 	static Window* AddWindow();
-	static void RemoveWindow(Window* window);
 	static void RemoveAllWindows();
 	static Window* CreateColorPickerWindow(CRGBA* color, std::function<void(void)> onClose);
 
