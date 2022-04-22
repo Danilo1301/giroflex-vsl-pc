@@ -45,6 +45,26 @@ void Vehicle::DrawDebug() {
 	char text[512];
 	auto screenPos = WorldToScreen(m_Vehicle->GetPosition() + CVector(0, 0, -0.5f));
 
+	//draw angle
+	for (auto pair : m_LightGroupData) {
+		auto lightGroup = pair.first;
+		auto vehiclePatternData = pair.second;
+
+		for (auto point : lightGroup->points) {
+			auto position = m_Vehicle->TransformFromObjectSpace(lightGroup->position + point->position);
+
+			auto positionY = lightGroup->position.y + point->position.y;
+
+			auto angle = Point::GetAngle(m_Vehicle, lightGroup->position + point->position);
+			auto radiusMult = point->GetRadiusMultiplier(angle, lightGroup->direction, positionY);
+
+			eSirenDirection atDirection = positionY > 0 ? eSirenDirection::FRONT : eSirenDirection::BACK;
+
+			sprintf(text, "%.2f x%.1f [atDir= %d] [dir= %d]", (float)angle, radiusMult, (int)atDirection, (int)lightGroup->direction);
+			DrawWorldText(text, position);
+		}
+	}
+
 	//draw pattern and step info
 	for (auto pair : m_LightGroupData) {
 		auto lightGroup = pair.first;
@@ -94,6 +114,7 @@ void Vehicle::DrawPoints() {
 		int i = 0;
 		for (auto point : lightGroup->points) {
 			auto position = m_Vehicle->TransformFromObjectSpace(lightGroup->position + point->position);
+
 
 			sprintf(text, "[%d]", i + 1);
 			DrawWorldText(text, position);
@@ -350,6 +371,15 @@ void Vehicle::RegisterCoronas() {
 				enabled = true;
 			}
 
+			//
+
+			auto positionY = lightGroup->position.y + point->position.y;
+			auto angle = Point::GetAngle(m_Vehicle, lightGroup->position + point->position);
+			auto radiusMult = point->GetRadiusMultiplier(angle, lightGroup->direction, positionY);
+			auto radius = lightGroup->size * radiusMult;
+
+			//
+
 			CCoronas::RegisterCorona(
 				lightId++,
 				m_Vehicle,
@@ -358,7 +388,7 @@ void Vehicle::RegisterCoronas() {
 				color.b,
 				color.a,
 				lightGroup->position + position,
-				enabled ? lightGroup->size : 0.0f,
+				enabled ? radius : 0.0f,
 				800.0f,
 				lightGroup->type,
 				enabled ? lightGroup->flareType : eCoronaFlareType::FLARETYPE_NONE,

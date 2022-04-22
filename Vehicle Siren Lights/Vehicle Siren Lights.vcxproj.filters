@@ -191,6 +191,9 @@
     <ClInclude Include="..\include\json_tool.h">
       <Filter>source\json</Filter>
     </ClInclude>
+    <ClInclude Include="source\Point.h">
+      <Filter>source</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\include\json_valueiterator.inl">

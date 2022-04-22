@@ -23,7 +23,8 @@ void WindowPoint::CreatePoints() {
 	for (auto point : lightGroup->points)
 	{
 		auto buttonEditPoint = window->AddButton("[ Edit point [" + std::to_string(i + 1) + "] " + point->name + (point->name.length() == 0 ? "" : " ") + "]");
-		buttonEditPoint->m_OnClick = [window, point]() mutable {
+		buttonEditPoint->AddColorIndicator(&point->color, CVector2D(20, 0));
+		buttonEditPoint->m_OnClick = [window, point]() {
 			m_Point = point;
 
 			Menu::RemoveWindow(window);

@@ -60,6 +60,7 @@
     <ClInclude Include="source\PatternLoop.h" />
     <ClInclude Include="source\Patterns.h" />
     <ClInclude Include="source\pch.h" />
+    <ClInclude Include="source\Point.h" />
     <ClInclude Include="source\Vehicle.h" />
     <ClInclude Include="source\VehicleDummy.h" />
     <ClInclude Include="source\Vehicles.h" />

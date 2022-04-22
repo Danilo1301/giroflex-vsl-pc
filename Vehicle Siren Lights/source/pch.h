@@ -163,3 +163,10 @@ static char* (*GetFrameNodeName)(RwFrame* frame) = (char* (*)(RwFrame*))0x72FB30
 static CVector GetFrameNodePosition(RwFrame* frame) {
 	return { frame->modelling.pos.x, frame->modelling.pos.y, frame->modelling.pos.z };
 }
+
+static double GetAngleBetweenVectors(CVector v1, CVector v2, CVector v3) {
+	double v12 = sqrt(pow(v1.x - v2.x, 2) + pow(v1.y - v2.y, 2));
+	double v13 = sqrt(pow(v1.x - v3.x, 2) + pow(v1.y - v3.y, 2));
+	double v23 = sqrt(pow(v2.x - v3.x, 2) + pow(v2.y - v3.y, 2));
+	return acos((pow(v12, 2) + pow(v13, 2) - pow(v23, 2)) / (2 * (v12 * v13)));
+}

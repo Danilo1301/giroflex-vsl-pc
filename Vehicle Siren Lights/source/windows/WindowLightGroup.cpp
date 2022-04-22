@@ -144,18 +144,16 @@ void WindowLightGroup::CreateEditLightGroup() {
 
 	//auto checkBoxCReflect = window->AddCheckBox("Corona reflection", &lightGroup->cReflect);
 
-	static int flareTypeVal;
-	flareTypeVal = (int)lightGroup->flareType;
-	auto optionsFlareType = window->AddOptions("Flare type", &flareTypeVal);
-	optionsFlareType->AddOption("None", (int)eCoronaFlareType::FLARETYPE_NONE);
-	optionsFlareType->AddOption("Headlights", (int)eCoronaFlareType::FLARETYPE_HEADLIGHTS);
-	optionsFlareType->AddOption("Sun", (int)eCoronaFlareType::FLARETYPE_SUN);
-	optionsFlareType->m_OnChange = [lightGroup]() {
-		lightGroup->flareType = (eCoronaFlareType)flareTypeVal;
+	static int directionVal;
+	directionVal = (int)lightGroup->direction;
+	auto optionsDirection = window->AddOptions("Light direction", &directionVal);
+	optionsDirection->AddOption("Back only", (int)eSirenDirection::BACK);
+	optionsDirection->AddOption("All directions", (int)eSirenDirection::BOTH);
+	optionsDirection->AddOption("Front only", (int)eSirenDirection::FRONT);
+	optionsDirection->m_OnChange = [lightGroup]() {
+		lightGroup->direction = (eSirenDirection)directionVal;
 	};
 
-	//0 2 3 4 9
-	
 
 	static int typeVal;
 	typeVal = (int)lightGroup->type;
@@ -172,6 +170,16 @@ void WindowLightGroup::CreateEditLightGroup() {
 	optionsType->AddOption("Torus", (int)eCoronaType::CORONATYPE_TORUS);
 	optionsType->m_OnChange = [lightGroup]() {
 		lightGroup->type = (eCoronaType)typeVal;
+	};
+
+	static int flareTypeVal;
+	flareTypeVal = (int)lightGroup->flareType;
+	auto optionsFlareType = window->AddOptions("Flare type", &flareTypeVal);
+	optionsFlareType->AddOption("None", (int)eCoronaFlareType::FLARETYPE_NONE);
+	optionsFlareType->AddOption("Headlights", (int)eCoronaFlareType::FLARETYPE_HEADLIGHTS);
+	optionsFlareType->AddOption("Sun", (int)eCoronaFlareType::FLARETYPE_SUN);
+	optionsFlareType->m_OnChange = [lightGroup]() {
+		lightGroup->flareType = (eCoronaFlareType)flareTypeVal;
 	};
 
 	/*

@@ -2,78 +2,7 @@
 
 #include "pch.h"
 #include "Patterns.h"
-
-enum class eSirenPosition {
-	LEFT,
-	MIDDLE,
-	RIGHT
-};
-
-enum class eSirenDirection {
-	FRONT,
-	BOTH,
-	BACK
-};
-
-
-class Point {
-public:
-	std::string name = "";
-	CVector position = CVector(0, 0, 0);
-	std::string object = "";
-	CRGBA color = CRGBA(255, 0, 0);
-	CRGBA disabledColor = CRGBA(0, 0, 0);
-	eSirenPosition sirenPosition = eSirenPosition::LEFT;
-
-	CRGBA GetColor(PatternStep* step) {
-		switch (sirenPosition)
-		{
-		case eSirenPosition::LEFT:
-			return step->leftColor;
-		case eSirenPosition::MIDDLE:
-			return step->middleColor;
-		case eSirenPosition::RIGHT:
-			return step->rightColor;
-		}
-		return NULL;
-	}
-
-	bool GetIsEnabled(PatternStep* step) {
-		switch (sirenPosition)
-		{
-		case eSirenPosition::LEFT:
-			return step->leftState;
-		case eSirenPosition::MIDDLE:
-			return step->middleState;
-		case eSirenPosition::RIGHT:
-			return step->rightState;
-		}
-
-		return false;
-	}
-
-	Json::Value ToJSON() {
-		Json::Value value = Json::objectValue;
-
-		value["name"] = name;
-		value["position"] = CVectorToJSON(position);
-		value["object"] = object;
-		value["color"] = ColorToJSON(color);
-		value["disabledColor"] = ColorToJSON(disabledColor);
-		value["sirenPosition"] = (int)sirenPosition;
-
-		return value;
-	}
-
-	void FromJSON(Json::Value value) {
-		name = value["name"].asString();
-		position = CVectorFromJSON(value["position"]);
-		object = value["object"].asString();
-		color = ColorFromJSON(value["color"]);
-		disabledColor = ColorFromJSON(value["disabledColor"]);
-		sirenPosition = (eSirenPosition)value["sirenPosition"].asInt();
-	}
-};
+#include "Point.h"
 
 class LightGroup {
 public:
