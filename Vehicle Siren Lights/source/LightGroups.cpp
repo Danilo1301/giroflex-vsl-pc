@@ -28,3 +28,25 @@ std::vector<LightGroup*> LightGroups::GetLightGroups(int modelId) {
 bool LightGroups::HasLightGroups(int modelId) {
 	return m_LightGroups.find(modelId) != m_LightGroups.end();
 }
+
+void LightGroups::RemovePatternReferences(Pattern* pattern) {
+	Log::file << "[LightGroups] Trying to remove pattern " << pattern->name << " references" << std::endl;
+
+	for (auto pair : m_LightGroups) {
+		auto lightGroups = pair.second;
+
+		for (auto lightGroup : lightGroups) {
+			std::vector<PatternCycleStep*> toRemove;
+
+			for (auto patternCycleStep : lightGroup->patternCycleSteps) {
+				if (patternCycleStep->pattern == pattern) {
+					toRemove.push_back(patternCycleStep);
+				}
+			}
+
+			for (auto item : toRemove) {
+				lightGroup->RemovePatternCycleStep(item);
+			}
+		}
+	}
+}

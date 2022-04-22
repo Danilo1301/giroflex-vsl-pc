@@ -16,7 +16,6 @@ public:
 
 	void Clear() {
 		m_Steps.clear();
-		Reset();
 	}
 
 	std::vector<int*> GetSteps() {

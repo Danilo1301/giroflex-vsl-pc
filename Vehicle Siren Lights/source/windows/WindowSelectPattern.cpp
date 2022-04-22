@@ -13,9 +13,10 @@ Window* WindowSelectPattern::m_MainWindow = nullptr;
 //std::function<void()> WindowSelectPattern::m_OnAdd;
 std::function<void()> WindowSelectPattern::m_OnBack;
 std::function<void(Pattern*, int)> WindowSelectPattern::m_OnAddPatternCycleStep;
+std::function<void(PatternCycleStep*)> WindowSelectPattern::m_OnDeletePatternCycleStep;
 
 void WindowSelectPattern::CreatePatterns() {
-	auto window = Menu::AddWindow("Title", "LightGroups > lightGroup->name > Patterns");
+	auto window = Menu::AddWindow("Vehicle Siren Lights", "Patterns");
 
 	if (m_MainWindow) {
 		Menu::RemoveWindow(m_MainWindow);
@@ -194,7 +195,8 @@ void WindowSelectPattern::CreateEditPattern() {
 	time->m_AddBy = 5;
 
 	auto buttonDelete = window->AddButton("Delete");
-	buttonDelete->m_OnClick = [window]() {
+	buttonDelete->m_OnClick = [window, patternCycleStep]() {
+		if (m_OnDeletePatternCycleStep) m_OnDeletePatternCycleStep(patternCycleStep);
 		
 		Menu::RemoveWindow(window);
 		CreatePatterns();

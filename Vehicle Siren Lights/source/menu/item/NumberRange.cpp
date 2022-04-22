@@ -58,25 +58,29 @@ void NumberRange<T>::Update()
 
 	if (!m_IsSelected) return;
 
-	if (m_HoldToChange) {
-		if (Input::GetKey(VK_LEFT)) {
-			(*m_Value) -= m_AddBy;
+	if ((*m_Value > m_Min)) {
+		if (m_HoldToChange) {
+			if (Input::GetKey(VK_LEFT)) {
+				(*m_Value) -= m_AddBy;
+			}
+		}
+		else {
+			if (Input::GetKeyDown(VK_LEFT)) {
+				(*m_Value) -= m_AddBy;
+			}
 		}
 	}
-	else {
-		if (Input::GetKeyDown(VK_LEFT)) {
-			(*m_Value) -= m_AddBy;
+	
+	if ((*m_Value < m_Max)) {
+		if (m_HoldToChange) {
+			if (Input::GetKey(VK_RIGHT)) {
+				(*m_Value) += m_AddBy;
+			}
 		}
-	}
-
-	if (m_HoldToChange) {
-		if (Input::GetKey(VK_RIGHT)) {
-			(*m_Value) += m_AddBy;
-		}
-	}
-	else {
-		if (Input::GetKeyDown(VK_RIGHT)) {
-			(*m_Value) += m_AddBy;
+		else {
+			if (Input::GetKeyDown(VK_RIGHT)) {
+				(*m_Value) += m_AddBy;
+			}
 		}
 	}
 

@@ -19,7 +19,7 @@ Vehicle* Vehicles::AddVehicle(CVehicle* veh) {
 }
 
 void Vehicles::TryAddAllVehicles() {
-	Log::file << "[Vehicles] TryAddAllVehicles" << std::endl;
+	//Log::file << "[Vehicles] TryAddAllVehicles" << std::endl;
 
 	for (auto veh : CPools::ms_pVehiclePool)
 	{

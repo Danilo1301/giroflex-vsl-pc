@@ -14,18 +14,18 @@ LightGroup* WindowLightGroup::m_LightGroup = nullptr;
 
 void WindowLightGroup::CreateLightGroups() {
 	auto veh = WindowMain::m_Vehicle;
-	auto window = Menu::AddWindow("Title", "LightGroups");
+	auto window = Menu::AddWindow("Vehicle Siren Lights", "LightGroups");
 
-	auto buttonAddLightGroupSiren = window->AddButton("Add light group [siren]");
+	auto buttonAddLightGroupSiren = window->AddButton("Add light group");
 	buttonAddLightGroupSiren->m_OnClick = [veh, window]() mutable {
 
 		auto lightGroup = LightGroups::CreateLightGroup(veh->m_nModelIndex);
 		lightGroup->position = CVector(0, 0, 2);
-		lightGroup->AddPoint(CVector(-0.5, 0, 0), eSirenPosition::LEFT);
-		lightGroup->AddPoint(CVector(0, 0, 0), eSirenPosition::MIDDLE);
-		lightGroup->AddPoint(CVector(0.5, 0, 0), eSirenPosition::RIGHT);
+		lightGroup->AddPoint(CVector(-0.3f, 0, 0), eSirenPosition::LEFT);
+		//lightGroup->AddPoint(CVector(0, 0, 0), eSirenPosition::MIDDLE);
+		lightGroup->AddPoint(CVector(0.3f, 0, 0), eSirenPosition::RIGHT);
 
-		for (size_t i = 0; i < 2; i++)
+		for (size_t i = 0; i < 1; i++)
 		{
 			if (i <= Patterns::m_Patterns.size() - 1) {
 				lightGroup->AddPatternCycleStep(Patterns::m_Patterns[i], 5000);
@@ -69,25 +69,15 @@ void WindowLightGroup::CreateEditLightGroup() {
 	auto lightGroup = m_LightGroup;
 	CVehicle* veh = WindowMain::m_Vehicle;
 
-	auto window = Menu::AddWindow("Title", "LightGroups > " + lightGroup->name);
+	auto window = Menu::AddWindow("Vehicle Siren Lights", "LightGroups > " + lightGroup->name);
 
-	auto editTestInt = window->AddNumberRange("Edit testint", &Mod::testInt, 0, 5000);
-	editTestInt->m_HoldToChange = true;
-	//editTestInt->AddTextInt(&testInt, CVector2D(10, 0));
-	editTestInt->m_OnClick = []() mutable {
-		TextEditor::Open("testInt", true, &Mod::testInt);
-	};
+	auto checkBoxFreezeLights = window->AddCheckBox("Freeze lights", &Vehicle::m_FreezeLights);
 
 	auto buttonName = window->AddButton("Edit name");
 	buttonName->AddTextStr(&lightGroup->name, CVector2D(10, 0));
-	buttonName->m_OnClick = [lightGroup]() mutable {
-		TextEditor::m_OnConfirm = []() {
-
-		};
+	buttonName->m_OnClick = [lightGroup]() {
 		TextEditor::Open("Edit name", true, &lightGroup->name);
 	};
-
-
 
 	auto buttonEditPoints = window->AddButton("Edit points (" + std::to_string(lightGroup->points.size()) + " points)");
 	buttonEditPoints->m_OnClick = [window]() {
@@ -103,8 +93,19 @@ void WindowLightGroup::CreateEditLightGroup() {
 		WindowSelectPattern::m_PatternCycleSteps = &lightGroup->patternCycleSteps;
 		WindowSelectPattern::m_OnAddPatternCycleStep = [lightGroup](Pattern* pattern, int time) {
 			Vehicles::RemoveAllVehicles();
-
 			lightGroup->AddPatternCycleStep(pattern, time);
+			Vehicles::TryAddAllVehicles();
+		};
+		WindowSelectPattern::m_OnDeletePatternCycleStep = [lightGroup](PatternCycleStep* patternCycleStep) {
+
+			if (lightGroup->patternCycleSteps.size() == 1) {
+				CMessages::AddMessageJumpQ("NO", 1000, 0, false);
+				return;
+			}
+
+			Vehicles::RemoveAllVehicles();
+			lightGroup->RemovePatternCycleStep(patternCycleStep);
+			Vehicles::TryAddAllVehicles();
 		};
 		WindowSelectPattern::m_OnBack = []() {
 			WindowSelectPattern::Close();
@@ -131,10 +132,45 @@ void WindowLightGroup::CreateEditLightGroup() {
 
 	auto size = window->AddNumberRange("Size", &lightGroup->size, 0.0f, 10.0f);
 
+	auto nearClip = window->AddNumberRange("Near clip", &lightGroup->nearClip, 0.0f, 10.0f);
+
 	auto checkBoxReflect = window->AddCheckBox("Reflect", &lightGroup->reflect);
+
 	auto reflectionDistance = window->AddNumberRange("Reflection distance", &lightGroup->reflectionDistance, 0.0f, 50.0f);
 	reflectionDistance->m_HoldToChange = true;
 	reflectionDistance->m_AddBy = 0.1f;
+
+	//auto checkBoxCReflect = window->AddCheckBox("Corona reflection", &lightGroup->cReflect);
+
+	static int flareTypeVal;
+	flareTypeVal = (int)lightGroup->flareType;
+	auto optionsFlareType = window->AddOptions("Flare type", &flareTypeVal);
+	optionsFlareType->AddOption("None", (int)eCoronaFlareType::FLARETYPE_NONE);
+	optionsFlareType->AddOption("Headlights", (int)eCoronaFlareType::FLARETYPE_HEADLIGHTS);
+	optionsFlareType->AddOption("Sun", (int)eCoronaFlareType::FLARETYPE_SUN);
+	optionsFlareType->m_OnChange = [lightGroup]() {
+		lightGroup->flareType = (eCoronaFlareType)flareTypeVal;
+	};
+
+	//0 2 3 4 9
+	
+
+	static int typeVal;
+	typeVal = (int)lightGroup->type;
+	auto optionsType = window->AddOptions("Type", &typeVal);
+	optionsType->AddOption("Circle", (int)eCoronaType::CORONATYPE_CIRCLE);
+	optionsType->AddOption("Headlight", (int)eCoronaType::CORONATYPE_HEADLIGHT);
+	optionsType->AddOption("Headlight Line", (int)eCoronaType::CORONATYPE_HEADLIGHTLINE);
+	optionsType->AddOption("Hex", (int)eCoronaType::CORONATYPE_HEX);
+	optionsType->AddOption("Moon", (int)eCoronaType::CORONATYPE_MOON);
+	optionsType->AddOption("Reflection", (int)eCoronaType::CORONATYPE_REFLECTION);
+	optionsType->AddOption("Ring", (int)eCoronaType::CORONATYPE_RING);
+	optionsType->AddOption("Shinystar", (int)eCoronaType::CORONATYPE_SHINYSTAR);
+	optionsType->AddOption("Streak", (int)eCoronaType::CORONATYPE_STREAK);
+	optionsType->AddOption("Torus", (int)eCoronaType::CORONATYPE_TORUS);
+	optionsType->m_OnChange = [lightGroup]() {
+		lightGroup->type = (eCoronaType)typeVal;
+	};
 
 	/*
 	auto checkBoxLerp = window->AddCheckBox("Lerp color", &lightGroup->lerpColor);

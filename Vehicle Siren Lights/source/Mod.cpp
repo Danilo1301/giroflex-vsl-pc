@@ -7,19 +7,48 @@
 #include "Patterns.h"
 #include "Vehicles.h"
 #include "LightGroups.h"
+#include "Config.h"
 
 int Mod::testInt = 500;
+bool Mod::m_DebugEnabled = false;
 
 void Mod::Update() {
 	Input::Update();
 
-	if (Input::GetKeyDown(88)) {
-		ToggleMenu();
+	//
+	if (Input::GetKey(17)) {
+		if (Input::GetKeyDown(74)) {
+			auto veh = FindPlayerVehicle(0, false);
+			if (veh) {
+				auto vehicle = Vehicles::m_Vehicles[veh];
+				vehicle->SetAllLightGroupState(!vehicle->m_PrevLightState);
+			}
+		}
+	}
+	//
+
+	if (Input::GetKey(17) && Input::GetKey(16)) {
+		if (Input::GetKeyDown(68)) {
+			m_DebugEnabled = !m_DebugEnabled;
+			CMessages::AddMessageJumpQ(m_DebugEnabled ? "Debug enabled" : "Debug disabled", 1000, 0, false);
+		}
+	}
+
+	if (Input::GetKey(17)) {
+		if (Input::GetKeyDown(76)) {
+			ToggleMenu();
+		}
 	}
 
 	if (Menu::m_Visible) {
-		if (Input::GetKeyDown(18)) SetPlayerControl(true);
-		if (Input::GetKeyUp(18)) SetPlayerControl(false);
+		if (Input::GetKeyDown(18)) {
+			SetPlayerControl(true);
+			Menu::m_Hide = true;
+		}
+		if (Input::GetKeyUp(18)) {
+			SetPlayerControl(false);
+			Menu::m_Hide = false;
+		}
 	}
 	else {
 		if(Vehicles::m_DrawVehicleFrames) Vehicles::m_DrawVehicleFrames = false;
@@ -27,6 +56,8 @@ void Mod::Update() {
 	}
 
 	Menu::Update();
+
+	Vehicles::TryAddAllVehicles();
 
 	for (auto pair : Vehicles::m_Vehicles)
 	{
@@ -40,7 +71,10 @@ void Mod::Draw() {
 	{
 		Vehicle* vehicle = pair.second;
 		vehicle->Draw();
-		vehicle->DrawDebug();
+
+		if (m_DebugEnabled) {
+			vehicle->DrawDebug();
+		}
 
 		bool isPlayerVeh = vehicle->m_Vehicle == FindPlayerVehicle(0, false);
 
@@ -64,11 +98,15 @@ void Mod::SetPlayerControl(bool enabled) {
 
 void Mod::ToggleMenu() {
 	Menu::m_Visible = !Menu::m_Visible;
+	Menu::m_Hide = false;
 
 	if (Menu::m_Visible) {
 
 		WindowMain::m_Vehicle = FindPlayerVehicle(0, false);
-		if (!WindowMain::m_Vehicle) return;
+		if (!WindowMain::m_Vehicle) {
+			CMessages::AddMessageJumpQ("You must be in a vehicle!", 1000, 0, false);
+			return;
+		}
 
 		WindowMain::CreateMain();
 		//WindowTest::Create();
@@ -79,6 +117,8 @@ void Mod::ToggleMenu() {
 		Menu::RemoveAllWindows();
 
 		SetPlayerControl(true);
+
+		Config::SaveJSON();
 	}
 }
 
@@ -86,26 +126,49 @@ Mod::Mod() {
 	Log::Open();
 	Log::file << "Initialized" << std::endl;
 
-	auto pattern1 = Patterns::CreatePattern("red blue");
-	pattern1->AddStep(true, false, false, CRGBA(255, 0, 0), 250);
-	pattern1->AddStep(false, true, false, CRGBA(255, 0, 0), 250);
-	pattern1->AddStep(false, false, true, CRGBA(0, 0, 255), 250);
-	pattern1->AddStep(false, true, false, CRGBA(0, 0, 255), 250);
+	Config::LoadJSON();
 
-	auto pattern2 = Patterns::CreatePattern("yellow");
-	pattern2->AddStep(true, true, false, CRGBA(255, 255, 0), 250);
-	pattern2->AddStep(true, false, false, CRGBA(255, 255, 0), 250);
-	pattern2->AddStep(false, true, true, CRGBA(255, 255, 0), 250);
-	pattern2->AddStep(false, false, true, CRGBA(255, 255, 0), 250);
+	if (Patterns::m_Patterns.size() == 0) {
 
-	auto lightGroup1 = LightGroups::CreateLightGroup(523);
-	lightGroup1->position = CVector(0, 0, 2);
-	lightGroup1->AddPoint(CVector(-0.3f, 0, 0), eSirenPosition::LEFT);
-	lightGroup1->AddPoint(CVector(0, 0, 0), eSirenPosition::MIDDLE);
-	lightGroup1->AddPoint(CVector(0.3f, 0, 0), eSirenPosition::RIGHT);
+		auto pattern1 = Patterns::CreatePattern("Red 1");
+		pattern1->AddStep(1, 0, 0, CRGBA(255, 0, 0), 120);
+		pattern1->AddStep(0, 0, 0, CRGBA(255, 0, 0), 120);
+		pattern1->AddStep(0, 1, 1, CRGBA(255, 0, 0), 120);
+		pattern1->AddStep(0, 1, 0, CRGBA(255, 0, 0), 120);
 
-	lightGroup1->AddPatternCycleStep(pattern1, 3000);
-	lightGroup1->AddPatternCycleStep(pattern2, 3000);
+		auto pattern2 = Patterns::CreatePattern("Red 2");
+		pattern2->AddStep(0, 1, 1, CRGBA(255, 0, 0), 70);
+		pattern2->AddStep(1, 0, 1, CRGBA(255, 0, 0), 80);
+
+		pattern2->AddStep(0, 1, 1, CRGBA(255, 0, 0), 70);
+		pattern2->AddStep(1, 0, 1, CRGBA(255, 0, 0), 80);
+
+		pattern2->AddStep(0, 0, 1, CRGBA(255, 0, 0), 70);
+		pattern2->AddStep(1, 0, 1, CRGBA(255, 0, 0), 80);
+
+		pattern2->AddStep(1, 1, 0, CRGBA(255, 0, 0), 70);
+		pattern2->AddStep(1, 0, 1, CRGBA(255, 0, 0), 80);
+
+		pattern2->AddStep(1, 1, 0, CRGBA(255, 0, 0), 70);
+		pattern2->AddStep(1, 0, 1, CRGBA(255, 0, 0), 80);
+
+		pattern2->AddStep(1, 0, 0, CRGBA(255, 0, 0), 70);
+		pattern2->AddStep(1, 0, 1, CRGBA(255, 0, 0), 80);
+
+		/*
+		auto lightGroup1 = LightGroups::CreateLightGroup(523);
+		lightGroup1->position = CVector(0, 0, 2);
+		lightGroup1->AddPoint(CVector(-0.3f, 0, 0), eSirenPosition::LEFT);
+		lightGroup1->AddPoint(CVector(0, 0, 0), eSirenPosition::MIDDLE);
+		lightGroup1->AddPoint(CVector(0.3f, 0, 0), eSirenPosition::RIGHT);
+
+		lightGroup1->AddPatternCycleStep(pattern1, 3000);
+		lightGroup1->AddPatternCycleStep(pattern2, 3000);
+		*/
+	}
+	
+	Config::SaveJSON();
+
 
 	Events::processScriptsEvent += []() {
 		Update();
@@ -116,12 +179,14 @@ Mod::Mod() {
 	};
 
 	Events::vehicleSetModelEvent.after += [](CVehicle* vehicle, int modelId) {
+		/*
 		if (!Vehicles::HasVehicle(vehicle)) {
 			Vehicles::AddVehicle(vehicle);
 		}
+		*/
 	};
 
-	Events::vehicleDtorEvent.after += [](CVehicle* vehicle) {
+	Events::vehicleDtorEvent.before += [](CVehicle* vehicle) {
 		if (Vehicles::HasVehicle(vehicle)) {
 			Vehicles::RemoveVehicle(vehicle);
 		}

@@ -7,6 +7,7 @@ std::vector<Window*> Menu::m_Windows;
 Window* Menu::m_ActiveWindow = nullptr;
 Item* Menu::m_ItemClicked = nullptr;
 bool Menu::m_Visible = false;
+bool Menu::m_Hide = false;
 int Menu::m_OpenAtIndex = -1;
 CVector2D Menu::m_DefaultPosition = CVector2D(10.0f, 120.0f);
 eFontAlignment Menu::m_FontAlign = eFontAlignment::ALIGN_LEFT;
@@ -20,8 +21,11 @@ void Menu::DrawString(std::string text, float x, float y, CRGBA color)
     char buffer[256];
     sprintf_s(buffer, "%s", text.c_str());
 
+    CFont::m_fWrapx = 100000.0f;
     CFont::SetOrientation(m_FontAlign);
     CFont::SetDropShadowPosition(0);
+    CFont::SetRightJustifyWrap(false);
+    CFont::SetJustify(false);
     CFont::SetBackground(false, false);
     CFont::SetScale(ScreenX(0.35f), ScreenY(0.95f));
     CFont::SetFontStyle(FONT_SUBTITLES);
@@ -139,8 +143,8 @@ void Menu::RemoveAllWindows() {
 
 Window* Menu::CreateColorPickerWindow(CRGBA* color, std::function<void(void)> onClose) {
     auto window = Menu::AddWindow();
+    window->m_Position.x += window->m_Size.x + 5.0f;
     window->m_Size.x = 250;
-    window->m_Position = CVector2D(430.0f, 120.0f);
 
     window->AddNumberRange<unsigned char>("Red", &color->r, 0, 255);
     window->AddNumberRange<unsigned char>("Green", &color->g, 0, 255);
@@ -148,7 +152,10 @@ Window* Menu::CreateColorPickerWindow(CRGBA* color, std::function<void(void)> on
     window->AddNumberRange<unsigned char>("Alpha", &color->a, 0, 255);
 
     auto confirmButton = window->AddButton("Confirm");
-    confirmButton->m_OnClick = onClose;
+    confirmButton->m_OnClick = [window, onClose]() {
+        Menu::RemoveWindow(window);
+        onClose();
+    };
 
     return window;
 }
@@ -161,6 +168,8 @@ void Menu::SetOpen(bool open) {
 }
 
 void Menu::Draw() {
+    if (m_Hide) return;
+
     m_FontAlign = eFontAlignment::ALIGN_LEFT;
 
     if (m_Visible && !PositionEditor::m_Visible) {

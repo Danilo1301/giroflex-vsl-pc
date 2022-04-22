@@ -7,6 +7,7 @@
 #include "CSprite.h"
 #include "CCoronas.h"
 #include "CGeneral.h"
+#include "CTimer.h"
 
 #include "extensions/ScriptCommands.h"
 

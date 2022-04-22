@@ -20,25 +20,35 @@ public:
 
 class Vehicle {
 public:
+	static float m_MatAmbient;
+	static bool m_FreezeLights;
+
+
 	CVehicle* m_Vehicle;
 
 	std::map<LightGroup*, VehiclePatternData*> m_LightGroupData;
 
 	Vehicle(CVehicle* veh);
 
+	bool m_PrevLightState = false;
+	bool m_PrevSirenState = false;
+	unsigned int m_PrevTime;
+
 	void Update();
+	void UpdateSirenState();
 	void Draw();
 	void DrawDebug();
 	void DrawFrames();
 	void DrawPoints();
 	void Destroy();
 
+	bool GetSirenState();
+
 	void RenderBefore();
 	void RenderAfter();
 
 	void UpdateVehicleMaterial(RpMaterial* material, std::string frameName);
-
-	void RegisterCorona(int lightid, CVector position, CRGBA color, float radius);
+	void SetAllLightGroupState(bool enabled);
 
 	void CheckForLightGroups();
 	void UpdatePatternAndSteps();

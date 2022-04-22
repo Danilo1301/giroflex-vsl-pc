@@ -22,6 +22,7 @@ public:
 	static Item* m_ItemClicked;
 
 	static bool m_Visible;
+	static bool m_Hide;
 	static int m_OpenAtIndex;
 	static CVector2D m_DefaultPosition;
 

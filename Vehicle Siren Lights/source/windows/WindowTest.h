@@ -18,6 +18,6 @@ public:
 			};
 		}
 
-		Menu::SetOpen(true);
+		//Menu::SetOpen(true);
 	}
 };

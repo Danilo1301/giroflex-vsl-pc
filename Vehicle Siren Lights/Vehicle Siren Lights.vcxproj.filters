@@ -16,6 +16,9 @@
     <Filter Include="source\windows">
       <UniqueIdentifier>{8e2c48e6-59d0-42e3-be14-e7b4266c4e7a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="source\json">
+      <UniqueIdentifier>{1bc9946e-4caf-42a3-a6b3-277efacb1cb3}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="source\Mod.cpp">
@@ -83,6 +86,21 @@
     </ClCompile>
     <ClCompile Include="source\windows\WindowSelectPattern.cpp">
       <Filter>source\windows</Filter>
+    </ClCompile>
+    <ClCompile Include="source\windows\WindowPattern.cpp">
+      <Filter>source\windows</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Config.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\include\json_reader.cpp">
+      <Filter>source\json</Filter>
+    </ClCompile>
+    <ClCompile Include="..\include\json_value.cpp">
+      <Filter>source\json</Filter>
+    </ClCompile>
+    <ClCompile Include="..\include\json_writer.cpp">
+      <Filter>source\json</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -164,5 +182,19 @@
     <ClInclude Include="source\windows\WindowSelectPattern.h">
       <Filter>source\windows</Filter>
     </ClInclude>
+    <ClInclude Include="source\windows\WindowPattern.h">
+      <Filter>source\windows</Filter>
+    </ClInclude>
+    <ClInclude Include="source\Config.h">
+      <Filter>source</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\json_tool.h">
+      <Filter>source\json</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\include\json_valueiterator.inl">
+      <Filter>source\json</Filter>
+    </None>
   </ItemGroup>
 </Project>

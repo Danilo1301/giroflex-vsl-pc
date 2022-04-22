@@ -7,4 +7,5 @@ public:
 	static CVehicle* m_Vehicle;
 
 	static void CreateMain();
+	static void CreateMaterialProps();
 };

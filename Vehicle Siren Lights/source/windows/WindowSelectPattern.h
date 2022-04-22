@@ -15,6 +15,7 @@ public:
 	//static std::function<void()> m_OnAdd;
 	static std::function<void()> m_OnBack;
 	static std::function<void(Pattern*, int)> m_OnAddPatternCycleStep;
+	static std::function<void(PatternCycleStep*)> m_OnDeletePatternCycleStep;
 
 	static void CreatePatterns();
 	static void CreateAddPattern();

@@ -10,4 +10,5 @@ public:
 	static void RemoveLightGroup(LightGroup* lightGroup);
 	static std::vector<LightGroup*> GetLightGroups(int modelId);
 	static bool HasLightGroups(int modelId);
+	static void RemovePatternReferences(Pattern* removePattern);
 };

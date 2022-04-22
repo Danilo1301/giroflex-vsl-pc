@@ -17,7 +17,7 @@ void WindowPoint::CreatePoints() {
 	CVehicle* veh = WindowMain::m_Vehicle;
 	auto lightGroup = WindowLightGroup::m_LightGroup;
 
-	auto window = Menu::AddWindow("Title", "LightGroups > " + lightGroup->name + " > Points");
+	auto window = Menu::AddWindow("Vehicle Siren Lights", "LightGroups > " + lightGroup->name + " > Points");
 
 	int i = 0;
 	for (auto point : lightGroup->points)
@@ -57,14 +57,25 @@ void WindowPoint::CreateEditPoint() {
 	auto lightGroup = WindowLightGroup::m_LightGroup;
 	auto point = m_Point;
 
-	auto window = Menu::AddWindow("Title", "LightGroups > " + lightGroup->name + " > Points");
+	auto window = Menu::AddWindow("Vehicle Siren Lights", "LightGroups > " + lightGroup->name + " > Points");
 
 	auto positionButton = window->AddButton("Edit position");
 	positionButton->m_OnClick = [point]() {
 		PositionEditor::Toggle(&point->position);
 	};
 
-	auto buttonObjName = window->AddButton("Edit object name");
+	static int tmpVal;
+	tmpVal = (int)point->sirenPosition;
+
+	auto optionsSirenPos = window->AddOptions("Siren position", &tmpVal);
+	optionsSirenPos->AddOption("Left", (int)eSirenPosition::LEFT);
+	optionsSirenPos->AddOption("Middle", (int)eSirenPosition::MIDDLE);
+	optionsSirenPos->AddOption("Right", (int)eSirenPosition::RIGHT);
+	optionsSirenPos->m_OnChange = [point, optionsSirenPos]() {
+		point->sirenPosition = (eSirenPosition)tmpVal;
+	};
+
+	auto buttonObjName = window->AddButton("Select object");
 	buttonObjName->AddTextStr(&point->object, CVector2D(10, 0));
 	buttonObjName->m_OnClick = [window, point, veh]() mutable {
 		//TextEditor::Open("Name", false, &point->object);
@@ -99,15 +110,13 @@ void WindowPoint::CreateEditPoint() {
 		}
 	};
 
-	static int tmpVal;
-	tmpVal = (int)point->sirenPosition;
+	auto buttonDisabledColor = window->AddButton("Object disabled color");
+	buttonDisabledColor->AddColorIndicator(&point->disabledObjectColor, CVector2D(20, 0));
+	buttonDisabledColor->m_OnClick = [window, point]() {
+		Menu::CreateColorPickerWindow(&point->disabledObjectColor, [window]() {
+			Menu::m_ActiveWindow = window;
+		});
 
-	auto optionsSirenPos = window->AddOptions("Siren position", &tmpVal);
-	optionsSirenPos->AddOption("Left", (int)eSirenPosition::LEFT);
-	optionsSirenPos->AddOption("Middle", (int)eSirenPosition::MIDDLE);
-	optionsSirenPos->AddOption("Right", (int)eSirenPosition::RIGHT);
-	optionsSirenPos->m_OnChange = [point, optionsSirenPos]() {
-		point->sirenPosition = (eSirenPosition)tmpVal;
 	};
 
 	auto buttonDelete = window->AddButton("Delete point");
@@ -117,6 +126,15 @@ void WindowPoint::CreateEditPoint() {
 		if (lightGroup->points.size() < 2) return;
 
 		lightGroup->RemovePoint(point);
+
+		Menu::RemoveWindow(window);
+		CreatePoints();
+	};
+	
+	auto buttonClone = window->AddButton("Clone");
+	buttonClone->m_OnClick = [window, lightGroup, point]() {
+		auto newPoint = lightGroup->AddPoint(CVector());
+		newPoint->FromJSON(point->ToJSON());
 
 		Menu::RemoveWindow(window);
 		CreatePoints();
