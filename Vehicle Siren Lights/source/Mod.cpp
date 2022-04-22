@@ -9,7 +9,7 @@
 #include "LightGroups.h"
 #include "Config.h"
 
-bool Mod::m_DebugEnabled = true;
+bool Mod::m_DebugEnabled = false;
 bool Mod::m_IsSamp = false;
 
 void Mod::Update() {
@@ -140,13 +140,13 @@ Mod::Mod() {
 
 	if (Patterns::m_Patterns.size() == 0) {
 
-		auto pattern1 = Patterns::CreatePattern("Red 1");
+		auto pattern1 = Patterns::CreatePattern("DEFAULT Red 1");
 		pattern1->AddStep(1, 0, 0, CRGBA(255, 0, 0), 120);
 		pattern1->AddStep(0, 0, 0, CRGBA(255, 0, 0), 120);
 		pattern1->AddStep(0, 1, 1, CRGBA(255, 0, 0), 120);
 		pattern1->AddStep(0, 1, 0, CRGBA(255, 0, 0), 120);
 
-		auto pattern2 = Patterns::CreatePattern("Red 2");
+		auto pattern2 = Patterns::CreatePattern("DEFAULT Red 2");
 		pattern2->AddStep(0, 1, 1, CRGBA(255, 0, 0), 70);
 		pattern2->AddStep(1, 0, 1, CRGBA(255, 0, 0), 80);
 
@@ -164,6 +164,25 @@ Mod::Mod() {
 
 		pattern2->AddStep(1, 0, 0, CRGBA(255, 0, 0), 70);
 		pattern2->AddStep(1, 0, 1, CRGBA(255, 0, 0), 80);
+
+		auto pattern3 = Patterns::CreatePattern("DEFAULT Red 3");
+		pattern3->AddStep(1, 0, 0, CRGBA(255, 0, 0), 135);
+		pattern3->AddStep(0, 1, 0, CRGBA(255, 0, 0), 135);
+		pattern3->AddStep(0, 0, 1, CRGBA(255, 0, 0), 135);
+		pattern3->AddStep(0, 1, 0, CRGBA(255, 0, 0), 135);
+
+		auto pattern4 = Patterns::CreatePattern("DEFAULT Red 4");
+		pattern4->AddStep(1, 1, 1, CRGBA(255, 0, 0), 60);
+		pattern4->AddStep(0, 0, 0, CRGBA(255, 0, 0), 60);
+
+		pattern4->AddStep(1, 1, 1, CRGBA(255, 0, 0), 60);
+		pattern4->AddStep(0, 0, 0, CRGBA(255, 0, 0), 60);
+
+		pattern4->AddStep(1, 1, 1, CRGBA(255, 0, 0), 60);
+		pattern4->AddStep(0, 0, 0, CRGBA(255, 0, 0), 60);
+
+		pattern4->AddStep(1, 1, 1, CRGBA(255, 0, 0), 60);
+		pattern4->AddStep(0, 0, 0, CRGBA(255, 0, 0), 360);
 
 		/*
 		auto lightGroup1 = LightGroups::CreateLightGroup(523);

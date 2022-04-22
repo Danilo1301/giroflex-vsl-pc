@@ -25,7 +25,7 @@ void WindowLightGroup::CreateLightGroups() {
 		//lightGroup->AddPoint(CVector(0, 0, 0), CRGBA(255, 255, 255), eSirenPosition::MIDDLE);
 		lightGroup->AddPoint(CVector(0.3f, 0, 0), CRGBA(0, 0, 255), eSirenPosition::RIGHT);
 
-		for (size_t i = 0; i < 2; i++)
+		for (size_t i = 0; i < 4; i++)
 		{
 			if (i <= Patterns::m_Patterns.size() - 1) {
 				lightGroup->AddPatternCycleStep(Patterns::m_Patterns[i], 5000);
