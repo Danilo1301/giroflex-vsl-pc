@@ -12,6 +12,7 @@ public:
 	static std::string m_LightGroupsPath;
 
 	static void SaveJSON();
+	static void DeleteAllConfig();
 	static void LoadJSON();
 	static std::string GetFullPath(std::string path);
 	static void CreatePath(std::string path);

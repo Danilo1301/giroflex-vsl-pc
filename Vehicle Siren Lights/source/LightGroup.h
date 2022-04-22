@@ -19,7 +19,7 @@ enum class eSirenDirection {
 class Point {
 public:
 	CVector position = CVector(0, 0, 0);
-	std::string object = "chassis"; //CHANGE
+	std::string object = "";
 	CRGBA color = CRGBA(255, 0, 0);
 	CRGBA disabledColor = CRGBA(0, 0, 0);
 	eSirenPosition sirenPosition = eSirenPosition::LEFT;

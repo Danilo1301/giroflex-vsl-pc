@@ -26,7 +26,14 @@ std::vector<LightGroup*> LightGroups::GetLightGroups(int modelId) {
 }
 
 bool LightGroups::HasLightGroups(int modelId) {
-	return m_LightGroups.find(modelId) != m_LightGroups.end();
+	auto it = m_LightGroups.find(modelId);
+
+	if (it != m_LightGroups.end()) {
+		if ((*it).second.size() == 0) return false;
+		return true;
+	}
+
+	return false;
 }
 
 void LightGroups::RemovePatternReferences(Pattern* pattern) {

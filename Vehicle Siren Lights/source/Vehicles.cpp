@@ -24,8 +24,12 @@ void Vehicles::TryAddAllVehicles() {
 
 	for (auto veh : CPools::ms_pVehiclePool)
 	{
-		if(LightGroups::HasLightGroups(veh->m_nModelIndex))
+		if (LightGroups::HasLightGroups(veh->m_nModelIndex)) {
 			if (!HasVehicle(veh)) AddVehicle(veh);
+		}
+		else {
+			if (HasVehicle(veh)) RemoveVehicle(veh);
+		}
 	}
 }
 

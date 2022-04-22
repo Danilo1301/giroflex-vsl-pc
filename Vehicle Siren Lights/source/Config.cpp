@@ -13,6 +13,8 @@ void Config::SaveJSON() {
 	CreatePath(m_DataPath + m_PatternsPath);
 	CreatePath(m_DataPath + m_VehiclesPath);
 
+	DeleteAllConfig();
+
 	for (size_t i = 0; i < Patterns::m_Patterns.size(); i++)
 	{
 		SavePattern(i, Patterns::m_Patterns[i]);
@@ -115,6 +117,32 @@ Json::Value Config::ReadFile(std::string path) {
 	}
 
 	return value;
+}
+
+void Config::DeleteAllConfig() {
+	Log::file << "[Config] DeleteAllConfig" << std::endl;
+
+	std::string pathPatterns = GetFullPath(m_DataPath + m_PatternsPath);
+
+	for (const auto& entry : std::filesystem::directory_iterator(pathPatterns)) {
+		std::filesystem::remove_all(entry.path());
+	}
+
+	//
+
+	std::string pathVehicles = GetFullPath(m_DataPath + m_VehiclesPath);
+
+	for (const auto& entry : std::filesystem::directory_iterator(pathVehicles)) {
+		int modelId = std::stoi(entry.path().filename().replace_extension());
+
+		std::string pathLightGroups = GetFullPath(m_DataPath + m_VehiclesPath + std::to_string(modelId) + m_LightGroupsPath);
+
+		for (const auto& entry2 : std::filesystem::directory_iterator(pathLightGroups)) {
+			std::filesystem::remove_all(entry2.path());
+		}
+
+		std::filesystem::remove_all(entry.path());
+	}
 }
 
 void Config::SavePattern(int index, Pattern* pattern) {
