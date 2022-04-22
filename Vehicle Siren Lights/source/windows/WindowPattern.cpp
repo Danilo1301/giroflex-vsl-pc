@@ -101,7 +101,7 @@ void WindowPattern::CreateEditPattern() {
 	buttonDelete->m_BackgroundColorSelected = CRGBA(255, 0, 0, 172);
 	buttonDelete->m_OnClick = [window, pattern]() {
 		if (Patterns::m_Patterns.size() == 1) {
-			CMessages::AddMessageJumpQ("NO", 1000, 0, false);
+			CMessages::AddMessageJumpQ("Need at least 1 pattern", 1000, 0, false);
 			return;
 		}
 
@@ -203,7 +203,7 @@ void WindowPattern::CreateEditStep() {
 	buttonDelete->m_BackgroundColorSelected = CRGBA(255, 0, 0, 172);
 	buttonDelete->m_OnClick = [window, pattern, step]() {
 		if (pattern->steps.size() == 1) {
-			CMessages::AddMessageJumpQ("NO", 1000, 0, false);
+			CMessages::AddMessageJumpQ("Need at least 1 step", 1000, 0, false);
 			return;
 		}
 

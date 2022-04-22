@@ -4,7 +4,9 @@
 #include "CVisibilityPlugins.h"
 #include "menu/Menu.h"
 
-float Vehicle::m_MatAmbient = 3.0f;
+#include "windows/WindowLightGroup.h"
+
+float Vehicle::m_MatAmbient = 2.5f;
 bool Vehicle::m_FreezeLights = false;
 
 static std::list<std::pair<unsigned int*, unsigned int>> m_ResetEntries;
@@ -63,6 +65,8 @@ void Vehicle::DrawDebug() {
 }
 
 void Vehicle::DrawFrames() {
+	return;
+
 	char text[512];
 
 	auto frames = VehicleDummy::GetFramesOnVehicle(m_Vehicle);
@@ -85,11 +89,13 @@ void Vehicle::DrawPoints() {
 		auto lightGroup = pair.first;
 		auto vehiclePatternData = pair.second;
 
+		if (lightGroup != WindowLightGroup::m_LightGroup) continue;
+
 		int i = 0;
 		for (auto point : lightGroup->points) {
 			auto position = m_Vehicle->TransformFromObjectSpace(lightGroup->position + point->position);
 
-			sprintf(text, "Point %d", i + 1);
+			sprintf(text, "[%d]", i + 1);
 			DrawWorldText(text, position);
 
 			i++;

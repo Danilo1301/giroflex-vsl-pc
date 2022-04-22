@@ -99,7 +99,7 @@ void WindowLightGroup::CreateEditLightGroup() {
 		WindowSelectPattern::m_OnDeletePatternCycleStep = [lightGroup](PatternCycleStep* patternCycleStep) {
 
 			if (lightGroup->patternCycleSteps.size() == 1) {
-				CMessages::AddMessageJumpQ("NO", 1000, 0, false);
+				CMessages::AddMessageJumpQ("Need at least 1 step", 1000, 0, false);
 				return;
 			}
 

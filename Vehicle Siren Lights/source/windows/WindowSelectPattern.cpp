@@ -10,7 +10,6 @@ LightGroup* WindowSelectPattern::m_LightGroup = nullptr;
 
 Window* WindowSelectPattern::m_MainWindow = nullptr;
 
-//std::function<void()> WindowSelectPattern::m_OnAdd;
 std::function<void()> WindowSelectPattern::m_OnBack;
 std::function<void(Pattern*, int)> WindowSelectPattern::m_OnAddPatternCycleStep;
 std::function<void(PatternCycleStep*)> WindowSelectPattern::m_OnDeletePatternCycleStep;
@@ -35,26 +34,6 @@ void WindowSelectPattern::CreatePatterns() {
 				WindowSelectPattern::m_PatternCycleStep = patternCycleStep;
 				WindowSelectPattern::RemoveMainWindow();
 				WindowSelectPattern::CreateEditPattern();
-
-
-				/*
-				CreateMenu_SelectPatterns_Edit(patternData, [patternData, lightGroup](bool remove) {
-
-					
-
-					if (remove) {
-						Vehicles::RemoveAllVehicles();
-						lightGroup->RemovePattern(patternData);
-						Vehicles::TryAddAllVehicles();
-
-						CMessages::AddMessageJumpQ("removed", 500, 0, false);
-					}
-					else {}
-
-					CreateMenu_EditLightGroup_EditPatterns(lightGroup);
-
-					});
-				*/
 			};
 		}
 	}
@@ -63,23 +42,6 @@ void WindowSelectPattern::CreatePatterns() {
 	addPattern->m_OnClick = [window]() {
 		WindowSelectPattern::RemoveMainWindow();
 		WindowSelectPattern::CreateAddPattern();
-
-		//if (m_OnAdd) m_OnAdd();
-
-		/*
-		CreateMenu_SelectPatterns_Select(
-			[lightGroup](PatternData* patternData) {
-				lightGroup->AddPattern(patternData);
-
-				Menu::RemoveAllWindows();
-				CreateMenu_EditLightGroup_EditPatterns(lightGroup);
-			},
-			[lightGroup]() {
-				Menu::RemoveAllWindows();
-				CreateMenu_EditLightGroup_EditPatterns(lightGroup);
-			}
-			);
-		*/
 	};
 
 	auto buttonBack = window->AddButton("Back");

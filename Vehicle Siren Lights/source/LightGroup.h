@@ -18,6 +18,7 @@ enum class eSirenDirection {
 
 class Point {
 public:
+	std::string name = "";
 	CVector position = CVector(0, 0, 0);
 	std::string object = "";
 	CRGBA color = CRGBA(255, 0, 0);
@@ -54,6 +55,7 @@ public:
 	Json::Value ToJSON() {
 		Json::Value value = Json::objectValue;
 
+		value["name"] = name;
 		value["position"] = CVectorToJSON(position);
 		value["object"] = object;
 		value["color"] = ColorToJSON(color);
@@ -64,6 +66,7 @@ public:
 	}
 
 	void FromJSON(Json::Value value) {
+		name = value["name"].asString();
 		position = CVectorFromJSON(value["position"]);
 		object = value["object"].asString();
 		color = ColorFromJSON(value["color"]);

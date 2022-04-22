@@ -22,7 +22,7 @@ void WindowPoint::CreatePoints() {
 	int i = 0;
 	for (auto point : lightGroup->points)
 	{
-		auto buttonEditPoint = window->AddButton("[ Edit point " + std::to_string(i + 1) + " ]");
+		auto buttonEditPoint = window->AddButton("[ Edit point [" + std::to_string(i + 1) + "] " + point->name + (point->name.length() == 0 ? "" : " ") + "]");
 		buttonEditPoint->m_OnClick = [window, point]() mutable {
 			m_Point = point;
 
@@ -58,6 +58,12 @@ void WindowPoint::CreateEditPoint() {
 	auto point = m_Point;
 
 	auto window = Menu::AddWindow("Vehicle Siren Lights", "LightGroups > " + lightGroup->name + " > Points");
+
+	auto buttonName = window->AddButton("Edit name");
+	buttonName->AddTextStr(&point->name, CVector2D(10, 0));
+	buttonName->m_OnClick = [point]() {
+		TextEditor::Open("Edit name", true, &point->name);
+	};
 
 	auto positionButton = window->AddButton("Edit position");
 	positionButton->m_OnClick = [point]() {
