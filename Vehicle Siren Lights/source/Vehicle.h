@@ -15,6 +15,9 @@ public:
 	VehiclePatternData() {
 		patternLoop = new PatternLoop();
 		stepLoop = new PatternLoop();
+
+		patternLoop->name = "Pattern";
+		stepLoop->name = "Step";
 	}
 };
 
@@ -22,8 +25,6 @@ class Vehicle {
 public:
 	static float m_MatAmbient;
 	static bool m_FreezeLights;
-
-
 	CVehicle* m_Vehicle;
 
 	std::map<LightGroup*, VehiclePatternData*> m_LightGroupData;

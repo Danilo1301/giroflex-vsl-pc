@@ -36,7 +36,7 @@ void WindowPoint::CreatePoints() {
 	auto buttonAddPoint = window->AddButton("Add point");
 	buttonAddPoint->m_OnClick = [window, lightGroup]() {
 
-		lightGroup->AddPoint(CVector(0, 0, 0));
+		lightGroup->AddPoint(CVector(0, 0, 0), CRGBA(255, 0, 0));
 
 		Menu::RemoveWindow(window);
 		CreatePoints();
@@ -75,10 +75,17 @@ void WindowPoint::CreateEditPoint() {
 		point->sirenPosition = (eSirenPosition)tmpVal;
 	};
 
+	auto buttonColor = window->AddButton("Color");
+	buttonColor->AddColorIndicator(&point->color, CVector2D(20, 0));
+	buttonColor->m_OnClick = [window, point]() {
+		Menu::CreateColorPickerWindow(&point->color, [window]() {
+			Menu::m_ActiveWindow = window;
+		});
+	};
+
 	auto buttonObjName = window->AddButton("Select object");
 	buttonObjName->AddTextStr(&point->object, CVector2D(10, 0));
-	buttonObjName->m_OnClick = [window, point, veh]() mutable {
-		//TextEditor::Open("Name", false, &point->object);
+	buttonObjName->m_OnClick = [window, point, veh]() {
 		Vehicles::m_DrawVehicleFrames = true;
 
 		auto window2 = Menu::AddWindow("", "Select object");
@@ -110,13 +117,12 @@ void WindowPoint::CreateEditPoint() {
 		}
 	};
 
-	auto buttonDisabledColor = window->AddButton("Object disabled color");
-	buttonDisabledColor->AddColorIndicator(&point->disabledObjectColor, CVector2D(20, 0));
+	auto buttonDisabledColor = window->AddButton("Disabled color (for object)");
+	buttonDisabledColor->AddColorIndicator(&point->disabledColor, CVector2D(20, 0));
 	buttonDisabledColor->m_OnClick = [window, point]() {
-		Menu::CreateColorPickerWindow(&point->disabledObjectColor, [window]() {
+		Menu::CreateColorPickerWindow(&point->disabledColor, [window]() {
 			Menu::m_ActiveWindow = window;
 		});
-
 	};
 
 	auto buttonDelete = window->AddButton("Delete point");
@@ -133,7 +139,7 @@ void WindowPoint::CreateEditPoint() {
 	
 	auto buttonClone = window->AddButton("Clone");
 	buttonClone->m_OnClick = [window, lightGroup, point]() {
-		auto newPoint = lightGroup->AddPoint(CVector());
+		auto newPoint = lightGroup->AddPoint(CVector(), CRGBA());
 		newPoint->FromJSON(point->ToJSON());
 
 		Menu::RemoveWindow(window);

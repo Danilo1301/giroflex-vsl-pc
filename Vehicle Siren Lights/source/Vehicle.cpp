@@ -167,7 +167,7 @@ void Vehicle::RenderBefore() {
 							if (!m_FreezeLights) {
 								if (!vehiclePatternData->enabled) {
 									for (auto material : materials) {
-										material->color = { point->disabledObjectColor.r, point->disabledObjectColor.g, point->disabledObjectColor.b, point->disabledObjectColor.a };
+										material->color = { point->disabledColor.r, point->disabledColor.g, point->disabledColor.b, point->disabledColor.a };
 									}
 									continue;
 								}
@@ -176,7 +176,7 @@ void Vehicle::RenderBefore() {
 							//
 
 							for (auto material : materials) {
-								CRGBA color = point->GetColor(step);
+								CRGBA color = lightGroup->usePatternColors ? point->GetColor(step) : point->color;
 								bool enabled = point->GetIsEnabled(step);
 
 								if (m_FreezeLights) enabled = true;
@@ -185,7 +185,7 @@ void Vehicle::RenderBefore() {
 									material->color = { color.r, color.g, color.b, color.a };
 								}
 								else {
-									material->color = { point->disabledObjectColor.r, point->disabledObjectColor.g, point->disabledObjectColor.b, point->disabledObjectColor.a };
+									material->color = { point->disabledColor.r, point->disabledColor.g, point->disabledColor.b, point->disabledColor.a };
 								}
 
 								material->surfaceProps.ambient = m_MatAmbient;
@@ -232,6 +232,7 @@ void Vehicle::SetAllLightGroupState(bool enabled) {
 		auto vehiclePatternData = pair.second;
 
 		vehiclePatternData->patternLoop->Reset();
+		vehiclePatternData->stepLoop->Clear();
 		vehiclePatternData->stepLoop->Reset();
 
 		if (lightGroup->turnOnSiren) {
@@ -252,7 +253,7 @@ void Vehicle::CheckForLightGroups() {
 
 				if (lightGroup->turnOnSiren) vehiclePatternData->enabled = GetSirenState();
 
-				Log::file << "Adding " << lightGroup->patternCycleSteps.size() << " cycle steps" << std::endl;
+				//Log::file << "[Vehicle " << m_Vehicle << "] Adding " << lightGroup->patternCycleSteps.size() << " cycle steps" << std::endl;
 
 				for (auto patternCycleStep : lightGroup->patternCycleSteps) {
 					vehiclePatternData->patternLoop->AddStep(&patternCycleStep->duration);
@@ -333,7 +334,7 @@ void Vehicle::RegisterCoronas() {
 
 			CVector position = point->position;
 
-			CRGBA color = point->GetColor(step);
+			CRGBA color = lightGroup->usePatternColors ? point->GetColor(step) : point->color;
 			bool enabled = point->GetIsEnabled(step);
 
 			if (!m_FreezeLights) {

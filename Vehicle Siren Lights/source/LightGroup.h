@@ -19,8 +19,9 @@ enum class eSirenDirection {
 class Point {
 public:
 	CVector position = CVector(0, 0, 0);
-	std::string object = "";
-	CRGBA disabledObjectColor = CRGBA(255, 255, 255);
+	std::string object = "chassis"; //CHANGE
+	CRGBA color = CRGBA(255, 0, 0);
+	CRGBA disabledColor = CRGBA(0, 0, 0);
 	eSirenPosition sirenPosition = eSirenPosition::LEFT;
 
 	CRGBA GetColor(PatternStep* step) {
@@ -55,7 +56,8 @@ public:
 
 		value["position"] = CVectorToJSON(position);
 		value["object"] = object;
-		value["disabledObjectColor"] = ColorToJSON(disabledObjectColor);
+		value["color"] = ColorToJSON(color);
+		value["disabledColor"] = ColorToJSON(disabledColor);
 		value["sirenPosition"] = (int)sirenPosition;
 
 		return value;
@@ -64,7 +66,8 @@ public:
 	void FromJSON(Json::Value value) {
 		position = CVectorFromJSON(value["position"]);
 		object = value["object"].asString();
-		disabledObjectColor = ColorFromJSON(value["disabledObjectColor"]);
+		color = ColorFromJSON(value["color"]);
+		disabledColor = ColorFromJSON(value["disabledColor"]);
 		sirenPosition = (eSirenPosition)value["sirenPosition"].asInt();
 	}
 };
@@ -74,7 +77,6 @@ public:
 	std::string name = "Light group";
 	int modelId;
 	bool reflect = false;
-	//bool cReflect = false;
 	bool turnOnSiren = true;
 	float reflectionDistance = 20.0f;
 	float size = 0.2f;
@@ -82,7 +84,7 @@ public:
 	eCoronaFlareType flareType = eCoronaFlareType::FLARETYPE_NONE;
 	eCoronaType type = eCoronaType::CORONATYPE_SHINYSTAR;
 	eSirenDirection direction = eSirenDirection::BOTH;
-
+	bool usePatternColors = false;
 	CVector position = CVector(0, 0, 0);
 	std::vector<Point*> points;
 	std::vector<PatternCycleStep*> patternCycleSteps;
@@ -91,16 +93,17 @@ public:
 		this->modelId = modelId;
 	}
 
-	Point* AddPoint(CVector position, eSirenPosition sirenPosition) {
+	Point* AddPoint(CVector position, CRGBA color, eSirenPosition sirenPosition) {
 		Point* point = new Point();
 		point->position = position;
 		point->sirenPosition = sirenPosition;
+		point->color = color;
 		points.push_back(point);
 		return point;
 	}
 
-	Point* AddPoint(CVector position) {
-		return AddPoint(position, eSirenPosition::LEFT);
+	Point* AddPoint(CVector position, CRGBA color) {
+		return AddPoint(position, color, eSirenPosition::LEFT);
 	}
 
 	void RemovePoint(Point* point) {
@@ -147,6 +150,7 @@ public:
 		value["flareType"] = (int)flareType;
 		value["type"] = (int)type;
 		value["direction"] = (int)direction;
+		value["usePatternColors"] = usePatternColors;
 		value["position"] = CVectorToJSON(position);
 
 		value["points"] = Json::arrayValue;
@@ -172,6 +176,7 @@ public:
 		flareType = (eCoronaFlareType)value["flareType"].asInt();
 		type = (eCoronaType)value["type"].asInt();
 		direction = (eSirenDirection)value["direction"].asInt();
+		usePatternColors = value["usePatternColors"].asBool();
 		position = CVectorFromJSON(value["position"]);
 
 		for (size_t i = 0; i < value["points"].size(); i++)

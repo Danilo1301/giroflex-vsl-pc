@@ -9,8 +9,8 @@
 #include "LightGroups.h"
 #include "Config.h"
 
-int Mod::testInt = 500;
-bool Mod::m_DebugEnabled = false;
+bool Mod::m_DebugEnabled = true;
+bool Mod::m_IsSamp = false;
 
 void Mod::Update() {
 	Input::Update();
@@ -20,8 +20,10 @@ void Mod::Update() {
 		if (Input::GetKeyDown(74)) {
 			auto veh = FindPlayerVehicle(0, false);
 			if (veh) {
-				auto vehicle = Vehicles::m_Vehicles[veh];
-				vehicle->SetAllLightGroupState(!vehicle->m_PrevLightState);
+				if (Vehicles::HasVehicle(veh)) {
+					auto vehicle = Vehicles::m_Vehicles[veh];
+					vehicle->SetAllLightGroupState(!vehicle->m_PrevLightState);
+				}
 			}
 		}
 	}
@@ -97,17 +99,19 @@ void Mod::SetPlayerControl(bool enabled) {
 }
 
 void Mod::ToggleMenu() {
-	Menu::m_Visible = !Menu::m_Visible;
-	Menu::m_Hide = false;
 
-	if (Menu::m_Visible) {
-
+	if (!Menu::m_Visible) {
 		WindowMain::m_Vehicle = FindPlayerVehicle(0, false);
 		if (!WindowMain::m_Vehicle) {
 			CMessages::AddMessageJumpQ("You must be in a vehicle!", 1000, 0, false);
 			return;
 		}
+	}
 
+	Menu::m_Visible = !Menu::m_Visible;
+	Menu::m_Hide = false;
+
+	if (Menu::m_Visible) {
 		WindowMain::CreateMain();
 		//WindowTest::Create();
 
@@ -125,6 +129,12 @@ void Mod::ToggleMenu() {
 Mod::Mod() {
 	Log::Open();
 	Log::file << "Initialized" << std::endl;
+
+	if (GetModuleHandle("SAMP.dll"))
+	{
+		m_IsSamp = true;
+		Menu::m_DefaultPosition.y += 140.0f;
+	}
 
 	Config::LoadJSON();
 

@@ -5,8 +5,8 @@
 class Mod {
 private:
 public:
-    static int testInt;
     static bool m_DebugEnabled;
+    static bool m_IsSamp;
 
     static void Update();
     static void Draw();

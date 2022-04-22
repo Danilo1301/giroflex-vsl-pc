@@ -6,6 +6,8 @@ class PatternLoop {
 private:
 	std::vector<int*> m_Steps;
 public:
+	std::string name = "";
+
 	int m_Time = 0;
 	int m_TotalTime = 0;
 	int m_StepIndex = 0;
@@ -30,10 +32,14 @@ public:
 
 		int maxtime = *m_Steps[m_StepIndex];
 
+		bool stepChanged = false;
+
 		while (m_Time >= maxtime)
 		{
 			m_Time -= maxtime;
 			m_StepIndex++;
+
+			stepChanged = true;
 
 			if (m_StepIndex >= (int)m_Steps.size()) {
 				m_StepIndex = 0;
@@ -41,6 +47,10 @@ public:
 			}
 
 			maxtime = *m_Steps[m_StepIndex];
+		}
+
+		if (stepChanged) {
+			//Log::file << "[PatternLoop " << name << "] step=" << m_StepIndex << "/" << m_Steps.size() << ", time " << m_Time << "" << *m_Steps[m_StepIndex] << std::endl;
 		}
 
 		//Log::file << "[] step=" << m_StepIndex << " steps=" << m_Steps.size() << " time " << m_Time << std::endl;

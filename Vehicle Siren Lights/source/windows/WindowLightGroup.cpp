@@ -21,11 +21,11 @@ void WindowLightGroup::CreateLightGroups() {
 
 		auto lightGroup = LightGroups::CreateLightGroup(veh->m_nModelIndex);
 		lightGroup->position = CVector(0, 0, 2);
-		lightGroup->AddPoint(CVector(-0.3f, 0, 0), eSirenPosition::LEFT);
-		//lightGroup->AddPoint(CVector(0, 0, 0), eSirenPosition::MIDDLE);
-		lightGroup->AddPoint(CVector(0.3f, 0, 0), eSirenPosition::RIGHT);
+		lightGroup->AddPoint(CVector(-0.3f, 0, 0), CRGBA(255, 0, 0), eSirenPosition::LEFT);
+		//lightGroup->AddPoint(CVector(0, 0, 0), CRGBA(255, 255, 255), eSirenPosition::MIDDLE);
+		lightGroup->AddPoint(CVector(0.3f, 0, 0), CRGBA(0, 0, 255), eSirenPosition::RIGHT);
 
-		for (size_t i = 0; i < 1; i++)
+		for (size_t i = 0; i < 2; i++)
 		{
 			if (i <= Patterns::m_Patterns.size() - 1) {
 				lightGroup->AddPatternCycleStep(Patterns::m_Patterns[i], 5000);
@@ -135,6 +135,8 @@ void WindowLightGroup::CreateEditLightGroup() {
 	auto nearClip = window->AddNumberRange("Near clip", &lightGroup->nearClip, 0.0f, 10.0f);
 
 	auto checkBoxReflect = window->AddCheckBox("Reflect", &lightGroup->reflect);
+
+	auto checkBoxUsePatternColors = window->AddCheckBox("Use pattern colors", &lightGroup->usePatternColors);
 
 	auto reflectionDistance = window->AddNumberRange("Reflection distance", &lightGroup->reflectionDistance, 0.0f, 50.0f);
 	reflectionDistance->m_HoldToChange = true;

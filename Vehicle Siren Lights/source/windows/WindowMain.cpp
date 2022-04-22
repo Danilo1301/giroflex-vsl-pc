@@ -5,12 +5,15 @@
 #include "../menu/Menu.h"
 #include "../Vehicle.h"
 
-
 CVehicle* WindowMain::m_Vehicle = nullptr;
 
 void WindowMain::CreateMain() {
 	auto window = Menu::AddWindow("Vehicle Siren Lights", "Vehicle ID: " + std::to_string(m_Vehicle->m_nModelIndex));
 
+	window->AddItem("- Press [ALT] to move the camera");
+
+	if (Mod::m_IsSamp) window->AddItem("- Press [F7] to hide samp chat");
+	
 	auto buttonEditLightGroups = window->AddButton("Edit Light Groups");
 	buttonEditLightGroups->m_OnClick = [window]() {
 		Menu::RemoveWindow(window);
