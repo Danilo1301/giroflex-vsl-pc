@@ -1,8 +1,8 @@
 #include "WindowSelectPattern.h"
 
-#include "../menu/TextEditor.h"
-
 #include "../Vehicles.h"
+#include "../menu/TextEditor.h"
+#include "../localization/Localization.h"
 
 std::vector<PatternCycleStep*>* WindowSelectPattern::m_PatternCycleSteps = nullptr;
 PatternCycleStep* WindowSelectPattern::m_PatternCycleStep = nullptr;
@@ -28,7 +28,7 @@ void WindowSelectPattern::CreatePatterns() {
 	if (patternCycleSteps.size() > 0) {
 		for (auto patternCycleStep : patternCycleSteps)
 		{
-			auto button = window->AddButton("[ Time: " + std::to_string(patternCycleStep->duration) + ", Pattern: " + patternCycleStep->pattern->name + " ]");
+			auto button = window->AddButton(Localization::GetLineFormatted("select_edit_pattern", patternCycleStep->pattern->name, patternCycleStep->duration));
 			button->m_OnClick = [window, patternCycleStep]() mutable {
 
 				WindowSelectPattern::m_PatternCycleStep = patternCycleStep;
@@ -38,13 +38,13 @@ void WindowSelectPattern::CreatePatterns() {
 		}
 	}
 
-	auto addPattern = window->AddButton("Add pattern");
+	auto addPattern = window->AddButton(Localization::GetLine("add_pattern"));
 	addPattern->m_OnClick = [window]() {
 		WindowSelectPattern::RemoveMainWindow();
 		WindowSelectPattern::CreateAddPattern();
 	};
 
-	auto buttonBack = window->AddButton("Back");
+	auto buttonBack = window->AddButton(Localization::GetLine("back"));
 	buttonBack->m_OnClick = [window]() {
 		Menu::RemoveWindow(window);
 
@@ -53,7 +53,7 @@ void WindowSelectPattern::CreatePatterns() {
 }
 
 void WindowSelectPattern::CreateAddPattern() {
-	auto window = Menu::AddWindow("Add pattern");
+	auto window = Menu::AddWindow(Localization::GetLine("add_pattern"));
 
 	//
 
@@ -63,11 +63,11 @@ void WindowSelectPattern::CreateAddPattern() {
 	static std::string patternName;
 	patternName = pattern->name;
 
-	auto buttonObjName = window->AddButton("Select pattern");
+	auto buttonObjName = window->AddButton(Localization::GetLine("select_pattern"));
 	buttonObjName->AddTextStr(&patternName, CVector2D(10, 0));
 	buttonObjName->m_OnClick = [window]() {
 
-		auto window2 = Menu::AddWindow("", "Select pattern");
+		auto window2 = Menu::AddWindow("", Localization::GetLine("select_pattern"));
 		window2->m_Position.x += window2->m_Size.x + 5.0f;
 
 		int i = 0;
@@ -91,16 +91,16 @@ void WindowSelectPattern::CreateAddPattern() {
 	static int timeVal = 0;
 	timeVal = 5000;
 
-	auto time = window->AddNumberRange("Time", &timeVal, 1, 999999);
+	auto time = window->AddNumberRange(Localization::GetLine("time"), &timeVal, 1, 999999);
 	time->m_OnClick = []() mutable {
-		TextEditor::Open("Edit Time", true, &timeVal);
+		TextEditor::Open(Localization::GetLine("time"), true, &timeVal);
 	};
 	time->m_HoldToChange = true;
 	time->m_AddBy = 5;
 
 	//
 
-	auto add = window->AddButton("Add");
+	auto add = window->AddButton(Localization::GetLine("add"));
 	add->m_OnClick = [window]() {
 		if (m_OnAddPatternCycleStep) m_OnAddPatternCycleStep(pattern, timeVal);
 
@@ -108,7 +108,7 @@ void WindowSelectPattern::CreateAddPattern() {
 		CreatePatterns();
 	};
 
-	auto cancel = window->AddButton("Cancel");
+	auto cancel = window->AddButton(Localization::GetLine("cancel"));
 	cancel->m_OnClick = [window]() {
 		Menu::RemoveWindow(window);
 		CreatePatterns();
@@ -124,11 +124,11 @@ void WindowSelectPattern::CreateEditPattern() {
 	static std::string patternName;
 	patternName = patternCycleStep->pattern->name;
 
-	auto buttonObjName = window->AddButton("Select pattern");
+	auto buttonObjName = window->AddButton(Localization::GetLine("select_pattern"));
 	buttonObjName->AddTextStr(&patternName, CVector2D(10, 0));
 	buttonObjName->m_OnClick = [window, patternCycleStep]() {
 
-		auto window2 = Menu::AddWindow("", "Select pattern");
+		auto window2 = Menu::AddWindow("", Localization::GetLine("select_pattern"));
 		window2->m_Position.x += window2->m_Size.x + 5.0f;
 
 		int i = 0;
@@ -149,14 +149,14 @@ void WindowSelectPattern::CreateEditPattern() {
 		}
 	};
 
-	auto time = window->AddNumberRange("Time", &patternCycleStep->duration, 1, 999999);
+	auto time = window->AddNumberRange(Localization::GetLine("time"), &patternCycleStep->duration, 1, 999999);
 	time->m_OnClick = [patternCycleStep]() mutable {
-		TextEditor::Open("Edit Time", false, &patternCycleStep->duration);
+		TextEditor::Open(Localization::GetLine("time"), false, &patternCycleStep->duration);
 	};
 	time->m_HoldToChange = true;
 	time->m_AddBy = 5;
 
-	auto buttonDelete = window->AddButton("Delete");
+	auto buttonDelete = window->AddButton(Localization::GetLine("delete"));
 	buttonDelete->m_OnClick = [window, patternCycleStep]() {
 		if (m_OnDeletePatternCycleStep) m_OnDeletePatternCycleStep(patternCycleStep);
 		
@@ -164,7 +164,7 @@ void WindowSelectPattern::CreateEditPattern() {
 		CreatePatterns();
 	};
 
-	auto back = window->AddButton("Back");
+	auto back = window->AddButton(Localization::GetLine("back"));
 	back->m_OnClick = [window]() {
 		Menu::RemoveWindow(window);
 		CreatePatterns();

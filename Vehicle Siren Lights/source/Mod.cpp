@@ -9,6 +9,8 @@
 #include "LightGroups.h"
 #include "Config.h"
 
+#include "localization/Localization.h"
+
 bool Mod::m_DebugEnabled = false;
 bool Mod::m_IsSamp = false;
 
@@ -16,15 +18,15 @@ void Mod::Update() {
 	Input::Update();
 
 	//
+
 	if (Input::GetKey(17)) {
 		if (Input::GetKeyDown(82)) {
-
 			ReloadConfig();
 		}
 	}
-	//
 
 	//
+
 	if (Input::GetKey(17)) {
 		if (Input::GetKeyDown(74)) {
 			auto veh = FindPlayerVehicle(0, false);
@@ -36,6 +38,7 @@ void Mod::Update() {
 			}
 		}
 	}
+
 	//
 
 	if (Input::GetKey(17) && Input::GetKey(16)) {
@@ -112,7 +115,7 @@ void Mod::ToggleMenu() {
 	if (!Menu::m_Visible) {
 		WindowMain::m_Vehicle = FindPlayerVehicle(0, false);
 		if (!WindowMain::m_Vehicle) {
-			CMessages::AddMessageJumpQ("You must be in a vehicle!", 1000, 0, false);
+			Localization::PrintString("error_need_vehicle", 1000);
 			return;
 		}
 	}

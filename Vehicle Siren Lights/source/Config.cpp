@@ -1,9 +1,12 @@
 #include "Config.h"
 #include <filesystem>
 
+#include "localization/Localization.h"
+
 std::string Config::m_DataPath = "\\data\\";
 std::string Config::m_VehiclesPath = "\\vehicles\\";
 std::string Config::m_PatternsPath = "\\patterns\\";
+std::string Config::m_LocalizationPath = "\\localization\\";
 std::string Config::m_LightGroupsPath = "\\lightgroups\\";
 
 void Config::SaveJSON() {
@@ -12,6 +15,7 @@ void Config::SaveJSON() {
 	CreatePath(m_DataPath);
 	CreatePath(m_DataPath + m_PatternsPath);
 	CreatePath(m_DataPath + m_VehiclesPath);
+	CreatePath(m_DataPath + m_LocalizationPath);
 
 	DeleteAllConfig();
 
@@ -38,6 +42,7 @@ void Config::LoadJSON() {
 	CreatePath(m_DataPath);
 	CreatePath(m_DataPath + m_PatternsPath);
 	CreatePath(m_DataPath + m_VehiclesPath);
+	CreatePath(m_DataPath + m_LocalizationPath);
 
 	std::string pathPatterns = GetFullPath(m_DataPath + m_PatternsPath);
 
@@ -68,6 +73,23 @@ void Config::LoadJSON() {
 			LoadLightGroup(index, modelId);
 		}
 	}
+
+	//
+
+
+	Localization::RemoveAllLines();
+	Localization::m_AvailableLanguages.clear();
+
+	std::string pathLocalization = GetFullPath(m_DataPath + m_LocalizationPath);
+
+	for (const auto& entry : std::filesystem::directory_iterator(pathLocalization)) {
+		std::string language = entry.path().filename().replace_extension().string();
+
+		Log::file << "[Config] Localization " << language << std::endl;
+
+		Localization::m_AvailableLanguages.push_back(language);
+		LoadLocalization(language);
+	}
 }
 
 std::string Config::GetFullPath(std::string path) {
@@ -91,7 +113,7 @@ void Config::WriteToFile(std::string path, Json::Value value) {
 	std::string pluginPath = PLUGIN_PATH("\\");
 	std::string finalPath = pluginPath + path;
 
-	Log::file << "[Config] WriteToFile " << finalPath << std::endl;
+	//Log::file << "[Config] WriteToFile " << finalPath << std::endl;
 
 	Json::StyledWriter writer;
 	std::string strJson = writer.write(value);
@@ -105,7 +127,7 @@ Json::Value Config::ReadFile(std::string path) {
 	std::string pluginPath = PLUGIN_PATH("\\");
 	std::string finalPath = pluginPath + path;
 
-	Log::file << "[Config] ReadFile " << finalPath << std::endl;
+	//Log::file << "[Config] ReadFile " << finalPath << std::endl;
 
 	std::ifstream file(finalPath);
 
@@ -181,4 +203,12 @@ LightGroup* Config::LoadLightGroup(int index, int modelId) {
 	lightGroup->FromJSON(value);
 
 	return lightGroup;
+}
+
+void Config::LoadLocalization(std::string key) {
+	Json::Value value = ReadFile(m_DataPath + m_LocalizationPath + key + ".json");
+
+	for (auto member : value.getMemberNames()) {
+		Localization::RegisterLine(member, key, value[member].asString());
+	}
 }

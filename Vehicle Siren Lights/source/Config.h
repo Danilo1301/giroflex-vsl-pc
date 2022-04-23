@@ -9,6 +9,7 @@ public:
 	static std::string m_DataPath;
 	static std::string m_VehiclesPath;
 	static std::string m_PatternsPath;
+	static std::string m_LocalizationPath;
 	static std::string m_LightGroupsPath;
 
 	static void SaveJSON();
@@ -24,4 +25,6 @@ public:
 
 	static void SaveLightGroup(int index, LightGroup* lightGroup);
 	static LightGroup* LoadLightGroup(int index, int modelId);
+
+	static void LoadLocalization(std::string key);
 };

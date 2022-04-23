@@ -4,14 +4,16 @@
 #include "../menu/TextEditor.h"
 
 #include "../Vehicles.h"
- 
+
+#include "../localization/Localization.h"
+
 Pattern* WindowPattern::m_Pattern = nullptr;
 PatternStep* WindowPattern::m_PatternStep = nullptr;
 
 static CRGBA disabledColor = CRGBA(0, 0, 0, 255);
 
 void WindowPattern::CreatePatterns() {
-	auto window = Menu::AddWindow("Title", "Patterns");
+	auto window = Menu::AddWindow("Vehicle Siren Lights", "Patterns");
 
 	int numPatterns = Patterns::m_Patterns.size();
 
@@ -20,7 +22,7 @@ void WindowPattern::CreatePatterns() {
 	if (Patterns::m_Patterns.size() > 0) {
 		for (auto pattern : Patterns::m_Patterns)
 		{
-			auto button = window->AddButton("[ Edit '" + pattern->name + "' ]");
+			auto button = window->AddButton(Localization::GetLineFormatted("edit_pattern", pattern->name));
 			button->m_OnClick = [window, pattern]() {
 				Menu::RemoveWindow(window);
 				m_Pattern = pattern;
@@ -32,7 +34,7 @@ void WindowPattern::CreatePatterns() {
 	window->AddItem("--------------------------------------");
 
 
-	auto addPattern = window->AddButton("Add pattern");
+	auto addPattern = window->AddButton(Localization::GetLine("add_pattern"));
 	addPattern->m_OnClick = [window]() mutable {
 		auto pattern = Patterns::CreatePattern("New pattern");
 		pattern->AddStep(true, false, false, CRGBA(255, 0, 0), 250);
@@ -44,7 +46,7 @@ void WindowPattern::CreatePatterns() {
 		CreatePatterns();
 	};
 
-	auto back = window->AddButton("Back");
+	auto back = window->AddButton(Localization::GetLine("back"));
 	back->m_OnClick = [window]() {
 		Menu::RemoveWindow(window);
 		WindowMain::CreateMain();
@@ -55,12 +57,10 @@ void WindowPattern::CreateEditPattern() {
 	auto pattern = m_Pattern;
 	auto window = Menu::AddWindow("Vehicle Siren Lights", "Patterns > " + pattern->name);
 
-	
-
 	int i = 0;
 	for (auto step : pattern->steps)
 	{
-		auto button = window->AddButton("[ Edit - Time: " + std::to_string(step->duration) + " ]");
+		auto button = window->AddButton(Localization::GetLineFormatted("edit_pattern_step", step->duration));
 		button->AddColorIndicator(step->leftState ? &step->leftColor : &disabledColor, CVector2D(70, 0));
 		button->AddColorIndicator(step->middleState ? &step->middleColor : &disabledColor, CVector2D(45, 0));
 		button->AddColorIndicator(step->rightState ? &step->rightColor : &disabledColor, CVector2D(20, 0));
@@ -72,20 +72,20 @@ void WindowPattern::CreateEditPattern() {
 		i++;
 	}
 
-	auto buttonAddStep = window->AddButton("Add step");
+	auto buttonAddStep = window->AddButton(Localization::GetLine("add_step"));
 	buttonAddStep->m_OnClick = [window, pattern]() {
 		Menu::RemoveWindow(window);
 		pattern->AddStep(true, false, false, CRGBA(255, 0, 0), 250);
 		CreateEditPattern();
 	};
 
-	auto buttonName = window->AddButton("Edit name");
+	auto buttonName = window->AddButton(Localization::GetLine("edit_name"));
 	buttonName->AddTextStr(&pattern->name, CVector2D(10, 0));
 	buttonName->m_OnClick = [pattern]() {
 		TextEditor::Open("Edit name", true, &pattern->name);
 	};
 
-	auto buttonClone = window->AddButton("Clone");
+	auto buttonClone = window->AddButton(Localization::GetLine("clone"));
 	buttonClone->m_OnClick = [window, pattern]() {
 
 		auto newPattern = Patterns::CreatePattern("");
@@ -96,12 +96,12 @@ void WindowPattern::CreateEditPattern() {
 		CreatePatterns();
 	};
 
-	auto buttonDelete = window->AddButton("Delete");
+	auto buttonDelete = window->AddButton(Localization::GetLine("delete"));
 	buttonDelete->m_BackgroundColor = CRGBA(255, 0, 0, 80);
 	buttonDelete->m_BackgroundColorSelected = CRGBA(255, 0, 0, 172);
 	buttonDelete->m_OnClick = [window, pattern]() {
 		if (Patterns::m_Patterns.size() == 1) {
-			CMessages::AddMessageJumpQ("Need at least 1 pattern", 1000, 0, false);
+			Localization::PrintString("error_need_at_least_one", 1000);
 			return;
 		}
 
@@ -117,7 +117,7 @@ void WindowPattern::CreateEditPattern() {
 		CreatePatterns();
 	};
 
-	auto back = window->AddButton("Back");
+	auto back = window->AddButton(Localization::GetLine("back"));
 	back->m_OnClick = [window]() {
 		Menu::RemoveWindow(window);
 		CreatePatterns();
@@ -186,9 +186,9 @@ void WindowPattern::CreateEditStep() {
 		Menu::RestoreIndex();
 	};
 
-	auto time = window->AddNumberRange("Time", &step->duration, 1, 999999);
+	auto time = window->AddNumberRange(Localization::GetLine("time"), &step->duration, 1, 999999);
 	time->m_OnClick = [step]() mutable {
-		TextEditor::Open("Edit Time", true, &step->duration);
+		TextEditor::Open(Localization::GetLine("time"), true, &step->duration);
 	};
 	time->m_HoldToChange = true;
 	time->m_AddBy = 5;
@@ -198,12 +198,12 @@ void WindowPattern::CreateEditStep() {
 	button->AddColorIndicator(step->middleState ? &step->middleColor : &disabledColor, CVector2D(45, 0));
 	button->AddColorIndicator(step->rightState ? &step->rightColor : &disabledColor, CVector2D(20, 0));
 
-	auto buttonDelete = window->AddButton("Delete");
+	auto buttonDelete = window->AddButton(Localization::GetLine("delete"));
 	buttonDelete->m_BackgroundColor = CRGBA(255, 0, 0, 80);
 	buttonDelete->m_BackgroundColorSelected = CRGBA(255, 0, 0, 172);
 	buttonDelete->m_OnClick = [window, pattern, step]() {
 		if (pattern->steps.size() == 1) {
-			CMessages::AddMessageJumpQ("Need at least 1 step", 1000, 0, false);
+			Localization::PrintString("error_need_at_least_one", 1000);
 			return;
 		}
 
@@ -216,7 +216,7 @@ void WindowPattern::CreateEditStep() {
 		CreateEditPattern();
 	};
 
-	auto back = window->AddButton("Back");
+	auto back = window->AddButton(Localization::GetLine("back"));
 	back->m_OnClick = [window]() {
 		Menu::RemoveWindow(window);
 		CreateEditPattern();

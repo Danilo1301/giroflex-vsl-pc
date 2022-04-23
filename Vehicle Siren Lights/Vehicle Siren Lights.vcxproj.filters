@@ -19,6 +19,9 @@
     <Filter Include="source\json">
       <UniqueIdentifier>{1bc9946e-4caf-42a3-a6b3-277efacb1cb3}</UniqueIdentifier>
     </Filter>
+    <Filter Include="source\localization">
+      <UniqueIdentifier>{4ddb84b4-b44b-44d9-a00c-b3c11c4bdd3f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="source\Mod.cpp">
@@ -101,6 +104,9 @@
     </ClCompile>
     <ClCompile Include="..\include\json_writer.cpp">
       <Filter>source\json</Filter>
+    </ClCompile>
+    <ClCompile Include="source\localization\Localization.cpp">
+      <Filter>source\localization</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -193,6 +199,9 @@
     </ClInclude>
     <ClInclude Include="source\Point.h">
       <Filter>source</Filter>
+    </ClInclude>
+    <ClInclude Include="source\localization\Localization.h">
+      <Filter>source\localization</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -10,13 +10,15 @@
 #include "../menu/PositionEditor.h"
 #include "../menu/TextEditor.h"
 
+#include "../localization/Localization.h"
+
 LightGroup* WindowLightGroup::m_LightGroup = nullptr;
 
 void WindowLightGroup::CreateLightGroups() {
 	auto veh = WindowMain::m_Vehicle;
 	auto window = Menu::AddWindow("Vehicle Siren Lights", "LightGroups");
 
-	auto buttonAddLightGroupSiren = window->AddButton("Add light group");
+	auto buttonAddLightGroupSiren = window->AddButton(Localization::GetLine("add_light_group"));
 	buttonAddLightGroupSiren->m_OnClick = [veh, window]() mutable {
 
 		auto lightGroup = LightGroups::CreateLightGroup(veh->m_nModelIndex);
@@ -46,7 +48,7 @@ void WindowLightGroup::CreateLightGroups() {
 
 		for (auto lightGroup : lightGroups)
 		{
-			auto button1 = window->AddButton("[ Edit '" + lightGroup->name + "' ]");
+			auto button1 = window->AddButton(Localization::GetLineFormatted("edit_light_group", lightGroup->name));
 			button1->m_OnClick = [window, lightGroup]() mutable {
 				m_LightGroup = lightGroup;
 				Menu::RemoveWindow(window);
@@ -58,7 +60,7 @@ void WindowLightGroup::CreateLightGroups() {
 
 	window->AddItem("--------------------------------------");
 
-	auto buttonBack = window->AddButton("Back");
+	auto buttonBack = window->AddButton(Localization::GetLine("back"));
 	buttonBack->m_OnClick = [window]() {
 		Menu::RemoveWindow(window);
 		WindowMain::CreateMain();
@@ -71,22 +73,21 @@ void WindowLightGroup::CreateEditLightGroup() {
 
 	auto window = Menu::AddWindow("Vehicle Siren Lights", "LightGroups > " + lightGroup->name);
 
-	auto checkBoxFreezeLights = window->AddCheckBox("Freeze lights", &Vehicle::m_FreezeLights);
+	auto checkBoxFreezeLights = window->AddCheckBox(Localization::GetLine("freeze_lights"), &Vehicle::m_FreezeLights);
 
-	auto buttonName = window->AddButton("Edit name");
+	auto buttonName = window->AddButton(Localization::GetLine("edit_name"));
 	buttonName->AddTextStr(&lightGroup->name, CVector2D(10, 0));
 	buttonName->m_OnClick = [lightGroup]() {
-		TextEditor::Open("Edit name", true, &lightGroup->name);
+		TextEditor::Open(Localization::GetLine("edit_name"), true, &lightGroup->name);
 	};
 
-	auto buttonEditPoints = window->AddButton("Edit points (" + std::to_string(lightGroup->points.size()) + " points)");
+	auto buttonEditPoints = window->AddButton(Localization::GetLineFormatted("edit_points", lightGroup->points.size()));
 	buttonEditPoints->m_OnClick = [window]() {
 		Menu::RemoveWindow(window);
 		WindowPoint::CreatePoints();
 	};
 
-	
-	auto editPatterns = window->AddButton("Edit patterns (" + std::to_string(lightGroup->patternCycleSteps.size()) + " patterns)");
+	auto editPatterns = window->AddButton(Localization::GetLineFormatted("edit_patterns", lightGroup->patternCycleSteps.size()));
 	editPatterns->m_OnClick = [window, lightGroup]() mutable {
 		Menu::RemoveWindow(window);
 
@@ -99,7 +100,7 @@ void WindowLightGroup::CreateEditLightGroup() {
 		WindowSelectPattern::m_OnDeletePatternCycleStep = [lightGroup](PatternCycleStep* patternCycleStep) {
 
 			if (lightGroup->patternCycleSteps.size() == 1) {
-				CMessages::AddMessageJumpQ("Need at least 1 step", 1000, 0, false);
+				Localization::PrintString("error_need_at_least_one", 1000);
 				return;
 			}
 
@@ -113,9 +114,8 @@ void WindowLightGroup::CreateEditLightGroup() {
 		};
 		WindowSelectPattern::CreatePatterns();
 	};
-	
 
-	auto positionButton = window->AddButton("Edit position (all points)");
+	auto positionButton = window->AddButton(Localization::GetLine("edit_position_points"));
 	positionButton->m_OnClick = [lightGroup]() {
 		PositionEditor::Toggle(&lightGroup->position);
 	};
@@ -130,15 +130,15 @@ void WindowLightGroup::CreateEditLightGroup() {
 	offsetId->m_HoldToChange = true;
 	*/
 
-	auto size = window->AddNumberRange("Size", &lightGroup->size, 0.0f, 10.0f);
+	auto size = window->AddNumberRange(Localization::GetLine("size"), &lightGroup->size, 0.0f, 10.0f);
 
-	auto nearClip = window->AddNumberRange("Near clip", &lightGroup->nearClip, 0.0f, 10.0f);
+	auto nearClip = window->AddNumberRange(Localization::GetLine("near_clip"), &lightGroup->nearClip, 0.0f, 10.0f);
 
-	auto checkBoxReflect = window->AddCheckBox("Reflect", &lightGroup->reflect);
+	auto checkBoxReflect = window->AddCheckBox(Localization::GetLine("reflect"), &lightGroup->reflect);
 
-	auto checkBoxUsePatternColors = window->AddCheckBox("Use pattern colors", &lightGroup->usePatternColors);
+	auto checkBoxUsePatternColors = window->AddCheckBox(Localization::GetLine("use_pattern_colors"), &lightGroup->usePatternColors);
 
-	auto reflectionDistance = window->AddNumberRange("Reflection distance", &lightGroup->reflectionDistance, 0.0f, 50.0f);
+	auto reflectionDistance = window->AddNumberRange(Localization::GetLine("reflection_distance"), &lightGroup->reflectionDistance, 0.0f, 50.0f);
 	reflectionDistance->m_HoldToChange = true;
 	reflectionDistance->m_AddBy = 0.1f;
 
@@ -146,10 +146,10 @@ void WindowLightGroup::CreateEditLightGroup() {
 
 	static int directionVal;
 	directionVal = (int)lightGroup->direction;
-	auto optionsDirection = window->AddOptions("Light direction", &directionVal);
-	optionsDirection->AddOption("Back only", (int)eSirenDirection::BACK);
-	optionsDirection->AddOption("All directions", (int)eSirenDirection::BOTH);
-	optionsDirection->AddOption("Front only", (int)eSirenDirection::FRONT);
+	auto optionsDirection = window->AddOptions(Localization::GetLine("light_direction"), &directionVal);
+	optionsDirection->AddOption(Localization::GetLine("light_direction_back"), (int)eSirenDirection::BACK);
+	optionsDirection->AddOption(Localization::GetLine("light_direction_both"), (int)eSirenDirection::BOTH);
+	optionsDirection->AddOption(Localization::GetLine("light_direction_front"), (int)eSirenDirection::FRONT);
 	optionsDirection->m_OnChange = [lightGroup]() {
 		lightGroup->direction = (eSirenDirection)directionVal;
 	};
@@ -157,7 +157,7 @@ void WindowLightGroup::CreateEditLightGroup() {
 
 	static int typeVal;
 	typeVal = (int)lightGroup->type;
-	auto optionsType = window->AddOptions("Type", &typeVal);
+	auto optionsType = window->AddOptions(Localization::GetLine("corona_type"), &typeVal);
 	optionsType->AddOption("Circle", (int)eCoronaType::CORONATYPE_CIRCLE);
 	optionsType->AddOption("Headlight", (int)eCoronaType::CORONATYPE_HEADLIGHT);
 	optionsType->AddOption("Headlight Line", (int)eCoronaType::CORONATYPE_HEADLIGHTLINE);
@@ -174,7 +174,7 @@ void WindowLightGroup::CreateEditLightGroup() {
 
 	static int flareTypeVal;
 	flareTypeVal = (int)lightGroup->flareType;
-	auto optionsFlareType = window->AddOptions("Flare type", &flareTypeVal);
+	auto optionsFlareType = window->AddOptions(Localization::GetLine("flare_type"), &flareTypeVal);
 	optionsFlareType->AddOption("None", (int)eCoronaFlareType::FLARETYPE_NONE);
 	optionsFlareType->AddOption("Headlights", (int)eCoronaFlareType::FLARETYPE_HEADLIGHTS);
 	optionsFlareType->AddOption("Sun", (int)eCoronaFlareType::FLARETYPE_SUN);
@@ -191,7 +191,7 @@ void WindowLightGroup::CreateEditLightGroup() {
 	auto buttonKey = window->AddButtonKey("Key to toggle", lightGroup->keys);
 	*/
 
-	auto buttonDelete = window->AddButton("Delete light group");
+	auto buttonDelete = window->AddButton(Localization::GetLine("delete"));
 	buttonDelete->m_BackgroundColor = CRGBA(255, 0, 0, 80);
 	buttonDelete->m_BackgroundColorSelected = CRGBA(255, 0, 0, 172);
 	buttonDelete->m_OnClick = [window, lightGroup]() {
@@ -203,7 +203,7 @@ void WindowLightGroup::CreateEditLightGroup() {
 		CreateLightGroups();
 	};
 
-	auto buttonBack = window->AddButton("Back");
+	auto buttonBack = window->AddButton(Localization::GetLine("back"));
 	buttonBack->m_OnClick = [window]() {
 		Menu::RemoveWindow(window);
 		CreateLightGroups();
