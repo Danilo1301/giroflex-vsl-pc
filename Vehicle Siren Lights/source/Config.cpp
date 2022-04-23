@@ -103,7 +103,7 @@ void Config::CreatePath(std::string path) {
 	std::string finalPath = pluginPath + path;
 
 	if (!std::filesystem::is_directory(finalPath) || !std::filesystem::exists(finalPath)) {
-		Log::file << "[Config] CreatePath " << finalPath << std::endl;
+		//Log::file << "[Config] CreatePath " << finalPath << std::endl;
 
 		std::filesystem::create_directory(finalPath);
 	}

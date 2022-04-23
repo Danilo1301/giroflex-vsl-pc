@@ -24,7 +24,7 @@ void WindowPoint::CreatePoints() {
 	int i = 0;
 	for (auto point : lightGroup->points)
 	{
-		auto buttonEditPoint = window->AddButton(Localization::GetLineFormatted("edit_point", point->name));
+		auto buttonEditPoint = window->AddButton(Localization::GetLineFormatted("edit_point", point->name, (i + 1)));
 		buttonEditPoint->AddColorIndicator(&point->color, CVector2D(20, 0));
 		buttonEditPoint->m_OnClick = [window, point]() {
 			m_Point = point;

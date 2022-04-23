@@ -5,7 +5,7 @@
 #include "CMessages.h"
 
 std::map<std::string, LocalizationLine*> Localization::m_Lines;
-std::string Localization::m_CurrentLanguage = "pt-br";
+std::string Localization::m_CurrentLanguage = "en";
 std::vector<std::string> Localization::m_AvailableLanguages;
 
 void Localization::RegisterLine(std::string key, std::string language, std::string text) {
