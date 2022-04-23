@@ -11,8 +11,10 @@ public:
     static void Update();
     static void Draw();
 
+
     static void SetPlayerControl(bool enabled);
     static void ToggleMenu();
+    static void DisableOriginalLights();
 
     Mod();
 };
