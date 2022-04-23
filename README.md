@@ -13,6 +13,8 @@ Press CTRL + L inside a vehicle to open the menu
 
 Press CTRL + J to enable/disable lights only
 
+Press CTRL + R to reload config
+
 ----------------------------------------------------------------------
 ----------------------------------------------------------------------
 ----------------------------------------------------------------------
@@ -34,3 +36,5 @@ Press CTRL + J to enable/disable lights only
 Aperte CTRL + L dentro de um veículo para abrir o menu
 
 Aperte CTRL + J para ativar/desativar somente as luzes
+
+Aperte CTRL + R para recarregar a config
