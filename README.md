@@ -5,13 +5,15 @@
 4. Open Limit Adjuster
 
 ## How to install
-1. [Download here](https://github.com/Danilo1301/vehicle-siren-lights-v2/releases/download/v1.0.1/Vehicle.Siren.Lights.v1.0.1.zip)
+1. [Download here](https://github.com/Danilo1301/vehicle-siren-lights-v2/releases/download/v1.1.0/Vehicle.Siren.Lights.v1.1.0.zip)
 2. Drag and drop the **modloader** folder to your GTA folder
 
 ## How to use
 Press CTRL + L inside a vehicle to open the menu
 
 Press CTRL + J to enable/disable lights only
+
+Press CTRL + R to reload config
 
 ----------------------------------------------------------------------
 ----------------------------------------------------------------------
@@ -27,10 +29,12 @@ Press CTRL + J to enable/disable lights only
 4. Open Limit Adjuster
 
 ## Como instalar
-1. [Baixe aqui](https://github.com/Danilo1301/vehicle-siren-lights-v2/releases/download/v1.0.1/Vehicle.Siren.Lights.v1.0.1.zip)
+1. [Baixe aqui](https://github.com/Danilo1301/vehicle-siren-lights-v2/releases/download/v1.1.0/Vehicle.Siren.Lights.v1.1.0.zip)
 2. Arraste a pasta **modloader** para a pasta raíz do seu GTA
 
 ## Como usar
 Aperte CTRL + L dentro de um veículo para abrir o menu
 
 Aperte CTRL + J para ativar/desativar somente as luzes
+
+Aperte CTRL + R para recarregar a config
