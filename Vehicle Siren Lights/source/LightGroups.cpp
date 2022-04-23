@@ -3,12 +3,16 @@
 std::map<int, std::vector<LightGroup*>> LightGroups::m_LightGroups;
 
 LightGroup* LightGroups::CreateLightGroup(int modelId) {
+	Log::file << "[LightGroups] CreateLightGroup " << modelId << std::endl;
+
 	LightGroup* lightGroup = new LightGroup(modelId);
 	m_LightGroups[modelId].push_back(lightGroup);
 	return lightGroup;
 }
 
 void LightGroups::RemoveLightGroup(LightGroup* lightGroup) {
+	Log::file << "[LightGroups] RemoveLightGroup" << lightGroup->modelId << std::endl;
+
 	for (auto pair : m_LightGroups) {
 		auto id = pair.first;
 
@@ -37,7 +41,7 @@ bool LightGroups::HasLightGroups(int modelId) {
 }
 
 void LightGroups::RemovePatternReferences(Pattern* pattern) {
-	Log::file << "[LightGroups] Trying to remove pattern " << pattern->name << " references" << std::endl;
+	Log::file << "[LightGroups] Trying to remove pattern '" << pattern->name << "' references" << std::endl;
 
 	for (auto pair : m_LightGroups) {
 		auto lightGroups = pair.second;
@@ -54,6 +58,17 @@ void LightGroups::RemovePatternReferences(Pattern* pattern) {
 			for (auto item : toRemove) {
 				lightGroup->RemovePatternCycleStep(item);
 			}
+		}
+	}
+}
+
+void LightGroups::RemoveAllLightGroups() {
+	Log::file << "[LightGroups] RemoveAllLightGroups" << std::endl;
+
+	std::vector<LightGroup*> toremove;
+	for (auto pair : m_LightGroups) {
+		while (m_LightGroups[pair.first].size() > 0) {
+			RemoveLightGroup(m_LightGroups[pair.first][0]);
 		}
 	}
 }

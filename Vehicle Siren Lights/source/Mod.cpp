@@ -17,6 +17,15 @@ void Mod::Update() {
 
 	//
 	if (Input::GetKey(17)) {
+		if (Input::GetKeyDown(82)) {
+
+			ReloadConfig();
+		}
+	}
+	//
+
+	//
+	if (Input::GetKey(17)) {
 		if (Input::GetKeyDown(74)) {
 			auto veh = FindPlayerVehicle(0, false);
 			if (veh) {
@@ -124,6 +133,24 @@ void Mod::ToggleMenu() {
 
 		Config::SaveJSON();
 	}
+}
+
+void Mod::ReloadConfig() {
+	if (Menu::m_Visible) {
+		ToggleMenu();
+	}
+
+	CMessages::AddMessageJumpQ("Reloading config...", 1000, 0, false);
+
+	Vehicles::RemoveAllVehicles();
+	LightGroups::RemoveAllLightGroups();
+	Patterns::RemoveAllPatterns();
+
+	Config::LoadJSON();
+
+	Vehicles::TryAddAllVehicles();
+
+	CMessages::AddMessageJumpQ("Config reloaded", 1000, 0, false);
 }
 
 void Mod::DisableOriginalLights() {

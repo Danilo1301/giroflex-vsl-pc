@@ -13,7 +13,15 @@ Pattern* Patterns::CreatePattern(std::string name) {
 void Patterns::RemovePattern(Pattern* pattern) {
 	m_Patterns.erase(std::find(m_Patterns.begin(), m_Patterns.end(), pattern));
 
-	Log::file << "RemovePattern " << pattern->name << " - total " << std::to_string(m_Patterns.size()) << std::endl;
+	Log::file << "[Patterns] RemovePattern " << pattern->name << " (" << std::to_string(m_Patterns.size()) + " total)" << std::endl;
 
 	delete pattern;
+}
+
+void Patterns::RemoveAllPatterns() {
+	Log::file << "[Patterns] RemoveAllPatterns" << std::endl;
+
+	while (m_Patterns.size() > 0) {
+		RemovePattern(m_Patterns[0]);
+	}
 }

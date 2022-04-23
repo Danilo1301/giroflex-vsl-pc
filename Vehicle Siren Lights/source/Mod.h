@@ -14,6 +14,7 @@ public:
 
     static void SetPlayerControl(bool enabled);
     static void ToggleMenu();
+    static void ReloadConfig();
     static void DisableOriginalLights();
 
     Mod();

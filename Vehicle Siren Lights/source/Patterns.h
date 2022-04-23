@@ -9,6 +9,7 @@ public:
 
 	static Pattern* CreatePattern(std::string name);
 	static void RemovePattern(Pattern* pattern);
+	static void RemoveAllPatterns();
 };
 
 static Json::Value PatternCycleStepToJSON(PatternCycleStep* patternCycleStep) {
