@@ -18,7 +18,7 @@
     <ClCompile Include="source\input\Input.cpp" />
     <ClCompile Include="source\LightGroups.cpp" />
     <ClCompile Include="source\localization\Localization.cpp" />
-    <ClCompile Include="source\Log.cpp" />
+    <ClCompile Include="source\log\Log.cpp" />
     <ClCompile Include="source\menu\item\ButtonKey.cpp" />
     <ClCompile Include="source\menu\item\CheckBox.cpp" />
     <ClCompile Include="source\menu\item\Item.cpp" />
@@ -39,6 +39,7 @@
     <ClCompile Include="source\windows\WindowPattern.cpp" />
     <ClCompile Include="source\windows\WindowPoint.cpp" />
     <ClCompile Include="source\windows\WindowSelectPattern.cpp" />
+    <ClCompile Include="source\windows\WindowSettings.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\include\json_tool.h" />
@@ -47,7 +48,7 @@
     <ClInclude Include="source\LightGroup.h" />
     <ClInclude Include="source\LightGroups.h" />
     <ClInclude Include="source\localization\Localization.h" />
-    <ClInclude Include="source\Log.h" />
+    <ClInclude Include="source\log\Log.h" />
     <ClInclude Include="source\menu\item\ButtonKey.h" />
     <ClInclude Include="source\menu\item\CheckBox.h" />
     <ClInclude Include="source\menu\item\Item.h" />
@@ -71,6 +72,7 @@
     <ClInclude Include="source\windows\WindowPattern.h" />
     <ClInclude Include="source\windows\WindowPoint.h" />
     <ClInclude Include="source\windows\WindowSelectPattern.h" />
+    <ClInclude Include="source\windows\WindowSettings.h" />
     <ClInclude Include="source\windows\WindowTest.h" />
   </ItemGroup>
   <ItemGroup>

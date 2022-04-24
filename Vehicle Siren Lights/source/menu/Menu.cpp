@@ -9,7 +9,7 @@ Item* Menu::m_ItemClicked = nullptr;
 bool Menu::m_Visible = false;
 bool Menu::m_Hide = false;
 int Menu::m_OpenAtIndex = -1;
-CVector2D Menu::m_DefaultPosition = CVector2D(10.0f, 10.0f);
+CVector2D Menu::m_DefaultPosition = CVector2D(20.0f, 20.0f);
 eFontAlignment Menu::m_FontAlign = eFontAlignment::ALIGN_LEFT;
 
 void Menu::DrawRect(float x, float y, float width, float height, CRGBA color) {

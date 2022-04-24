@@ -1,7 +1,7 @@
 #include "Config.h"
 #include <filesystem>
 
-#include "localization/Localization.h"
+#include "Vehicle.h"
 
 std::string Config::m_DataPath = "\\data\\";
 std::string Config::m_VehiclesPath = "\\vehicles\\";
@@ -18,6 +18,8 @@ void Config::SaveJSON() {
 	CreatePath(m_DataPath + m_LocalizationPath);
 
 	DeleteAllConfig();
+
+	SaveSettings();
 
 	for (size_t i = 0; i < Patterns::m_Patterns.size(); i++)
 	{
@@ -43,6 +45,8 @@ void Config::LoadJSON() {
 	CreatePath(m_DataPath + m_PatternsPath);
 	CreatePath(m_DataPath + m_VehiclesPath);
 	CreatePath(m_DataPath + m_LocalizationPath);
+
+	LoadSettings();
 
 	std::string pathPatterns = GetFullPath(m_DataPath + m_PatternsPath);
 
@@ -103,11 +107,16 @@ void Config::CreatePath(std::string path) {
 	std::string finalPath = pluginPath + path;
 
 	if (!std::filesystem::is_directory(finalPath) || !std::filesystem::exists(finalPath)) {
-		//Log::file << "[Config] CreatePath " << finalPath << std::endl;
-
 		std::filesystem::create_directory(finalPath);
 	}
 }
+
+bool Config::Exists(std::string path) {
+	std::string pluginPath = PLUGIN_PATH("\\");
+	std::string finalPath = pluginPath + path;
+	return std::filesystem::exists(finalPath);
+}
+
 
 void Config::WriteToFile(std::string path, Json::Value value) {
 	std::string pluginPath = PLUGIN_PATH("\\");
@@ -143,6 +152,10 @@ Json::Value Config::ReadFile(std::string path) {
 
 void Config::DeleteAllConfig() {
 	Log::file << "[Config] DeleteAllConfig" << std::endl;
+
+	std::filesystem::remove_all(m_DataPath + "settings.json");
+
+	//
 
 	std::string pathPatterns = GetFullPath(m_DataPath + m_PatternsPath);
 
@@ -211,4 +224,29 @@ void Config::LoadLocalization(std::string key) {
 	for (auto member : value.getMemberNames()) {
 		Localization::RegisterLine(member, key, value[member].asString());
 	}
+}
+
+void Config::SaveSettings() {
+	auto path = m_DataPath + "settings.json";
+
+	CreatePath(m_DataPath);
+
+	Json::Value value = Json::objectValue;
+
+	value["material_ambient"] = Vehicle::m_MatAmbient;
+
+	WriteToFile(path, value);
+}
+
+void Config::LoadSettings() {
+	auto path = m_DataPath + "settings.json";
+
+	if (!Exists(path)) {
+		Log::file << "Config not found";
+		return;
+	}
+
+	Json::Value value = ReadFile(path);
+
+	Vehicle::m_MatAmbient = value["material_ambient"].asFloat();
 }

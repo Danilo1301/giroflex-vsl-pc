@@ -1,6 +1,4 @@
 #include "Input.h"
-#include "vector"
-#include "windows.h"
 
 std::vector<int> keysPressed;
 std::vector<int> keysDown;

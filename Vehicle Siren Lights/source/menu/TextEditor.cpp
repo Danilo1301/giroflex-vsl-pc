@@ -86,6 +86,7 @@ void TextEditor::Open(std::string title, bool autoUpdate, std::string* value) {
 
 	m_Visible = true;
 	m_NumbersOnly = false;
+	m_AutoUpdate = autoUpdate;
 }
 
 void TextEditor::Open(std::string title, bool autoUpdate, int* value) {

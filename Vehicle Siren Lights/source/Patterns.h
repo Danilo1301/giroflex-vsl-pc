@@ -26,7 +26,16 @@ static Json::Value PatternCycleStepToJSON(PatternCycleStep* patternCycleStep) {
 
 static PatternCycleStep* PatternCycleStepFromJSON(Json::Value value) {
 	PatternCycleStep* patternCycleStep = new PatternCycleStep();
-	patternCycleStep->pattern = Patterns::m_Patterns[value["pattern"].asInt()];
+
+	int index = value["pattern"].asInt();
+
+	if (index <= (int)Patterns::m_Patterns.size() - 1) {
+		patternCycleStep->pattern = Patterns::m_Patterns[value["pattern"].asInt()];
+	}
+	else {
+		patternCycleStep->pattern = nullptr;
+	}
+
 	patternCycleStep->duration = value["duration"].asInt();
 	patternCycleStep->lerpColor = value["lerpColor"].asBool();
 

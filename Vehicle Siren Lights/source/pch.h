@@ -15,8 +15,10 @@
 
 #include "map"
 
-#include "Log.h"
-#include "Input/Input.h"
+#include "log/Log.h"
+#include "input/Input.h"
+#include "menu/Menu.h"
+#include "localization/Localization.h"
 
 using namespace plugin;
 

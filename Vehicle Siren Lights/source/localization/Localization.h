@@ -1,6 +1,7 @@
 #pragma once
 
 #include "plugin.h"
+
 #include "map"
 
 class LocalizationLine {

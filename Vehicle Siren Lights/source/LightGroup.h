@@ -1,6 +1,7 @@
 #pragma once
 
 #include "pch.h"
+
 #include "Patterns.h"
 #include "Point.h"
 
@@ -125,7 +126,17 @@ public:
 			Json::Value patternCycleStepValue = value["patternCycleSteps"][i];
 
 			PatternCycleStep* patternCycleStep = PatternCycleStepFromJSON(patternCycleStepValue);
-			patternCycleSteps.push_back(patternCycleStep);
+
+			if (patternCycleStep->pattern == nullptr) {
+				Log::file << "[LightGroup] Pattern not found, patternCycleStep not added" << std::endl;
+
+				delete patternCycleStep;
+			}
+			else {
+				patternCycleSteps.push_back(patternCycleStep);
+			}
+
+			
 		}
 	}
 };

@@ -1,5 +1,4 @@
 #include "Mod.h"
-#include "menu/Menu.h"
 
 #include "windows/WindowMain.h"
 #include "windows/WindowTest.h"
@@ -9,10 +8,9 @@
 #include "LightGroups.h"
 #include "Config.h"
 
-#include "localization/Localization.h"
-
 bool Mod::m_DebugEnabled = false;
 bool Mod::m_IsSamp = false;
+std::string Mod::m_Version = "1.2.0";
 
 void Mod::Update() {
 	Input::Update();
@@ -224,7 +222,7 @@ void Mod::DisableOriginalLights() {
 }
 
 Mod::Mod() {
-	Log::Open();
+	Log::Open("Vehicle Siren Lights.log");
 	Log::file << "Initialized" << std::endl;
 
 	if (GetModuleHandle("SAMP.dll"))

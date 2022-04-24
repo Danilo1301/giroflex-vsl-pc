@@ -1,6 +1,6 @@
 #include "Localization.h"
 
-#include "../Log.h"
+#include "../log/Log.h"
 
 #include "CMessages.h"
 

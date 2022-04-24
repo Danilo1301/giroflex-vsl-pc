@@ -7,6 +7,7 @@ private:
 public:
     static bool m_DebugEnabled;
     static bool m_IsSamp;
+    static std::string m_Version;
 
     static void Update();
     static void Draw();
