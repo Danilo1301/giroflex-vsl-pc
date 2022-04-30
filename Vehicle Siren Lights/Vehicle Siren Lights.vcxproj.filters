@@ -114,6 +114,9 @@
     <ClCompile Include="source\log\Log.cpp">
       <Filter>source\log</Filter>
     </ClCompile>
+    <ClCompile Include="source\TestHelper.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="source\Mod.h">
@@ -211,6 +214,9 @@
     </ClInclude>
     <ClInclude Include="source\log\Log.h">
       <Filter>source\log</Filter>
+    </ClInclude>
+    <ClInclude Include="source\TestHelper.h">
+      <Filter>source</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -19,6 +19,7 @@
 #include "input/Input.h"
 #include "menu/Menu.h"
 #include "localization/Localization.h"
+#include "TestHelper.h"
 
 using namespace plugin;
 

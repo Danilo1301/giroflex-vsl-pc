@@ -31,6 +31,7 @@
     <ClCompile Include="source\Mod.cpp" />
     <ClCompile Include="source\Patterns.cpp" />
     <ClCompile Include="source\pch.cpp" />
+    <ClCompile Include="source\TestHelper.cpp" />
     <ClCompile Include="source\Vehicle.cpp" />
     <ClCompile Include="source\VehicleDummy.cpp" />
     <ClCompile Include="source\Vehicles.cpp" />
@@ -64,6 +65,7 @@
     <ClInclude Include="source\Patterns.h" />
     <ClInclude Include="source\pch.h" />
     <ClInclude Include="source\Point.h" />
+    <ClInclude Include="source\TestHelper.h" />
     <ClInclude Include="source\Vehicle.h" />
     <ClInclude Include="source\VehicleDummy.h" />
     <ClInclude Include="source\Vehicles.h" />

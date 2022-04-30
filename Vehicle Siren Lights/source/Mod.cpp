@@ -10,10 +10,18 @@
 
 bool Mod::m_DebugEnabled = false;
 bool Mod::m_IsSamp = false;
-std::string Mod::m_Version = "1.2.0";
+std::string Mod::m_Version = "1.2.1";
 
 void Mod::Update() {
 	Input::Update();
+
+	//
+
+	if (Input::GetKey(17)) {
+		if (Input::GetKeyDown(83)) {
+			TestHelper::RunNextStep();
+		}
+	}
 
 	//
 
@@ -157,27 +165,6 @@ void Mod::ReloadConfig() {
 void Mod::DisableOriginalLights() {
 	//https://gtaforums.com/topic/757430-block-siren-lights-memory-address-for-it/
 
-	/*
-	//0A8C: write_memory 0x70026C size 4 value 0x90909090 virtual_protect 0
-	plugin::patch::SetUInt(0x70026C, 0x90909090);
-	//0A8C : write_memory 0x700270 size 1 value 0x90 virtual_protect 0
-	plugin::patch::SetUChar(0x700270, 0x90);
-	//0A8C : write_memory 0x700271 size 1 value 0x90 virtual_protect 0
-	plugin::patch::SetUChar(0x700271, 0x90);
-	//0A8C : write_memory 0x700261 size 4 value 0x90909090 virtual_protect 0
-	plugin::patch::SetUInt(0x700261, 0x90909090);
-	//0A8C : write_memory 0x700265 size 1 value 0x90 virtual_protect 0
-	plugin::patch::SetUChar(0x700265, 0x90);
-	//0A8C : write_memory 0x700266 size 1 value 0x90 virtual_protect 0
-	plugin::patch::SetUChar(0x700266, 0x90);
-	//0A8C : write_memory 0x700257 size 4 value 0x90909090 virtual_protect 0
-	plugin::patch::SetUInt(0x700257, 0x90909090);
-	//0A8C : write_memory 0x70025B size 1 value 0x90 virtual_protect 0
-	plugin::patch::SetUChar(0x70025B, 0x90);
-	//0A8C : write_memory 0x70025C size 1 value 0x90 virtual_protect 0
-	plugin::patch::SetUChar(0x70025C, 0x90);
-	*/
-
 	//0@ = 0xC3F12C //CPointLight => RGB
 	int pointLight = 0xC3F12C;
 
@@ -204,18 +191,39 @@ void Mod::DisableOriginalLights() {
 	//0A8C: write_memory 0x6ABA64 size 1 value 0x90 virtual_protect 0
 	plugin::patch::SetUChar(0x6ABA64, 0x90);
 
-
 	/*
-	//NOPs the function that checks wether the siren was activated or not
-	//0A8C: write_memory 0x6FFDFC size 1 value 0x90 virtual_protect 0
-	plugin::patch::SetUChar(0x6FFDFC, 0x90);
-	//0A8C: write_memory 0x6FFDFD size 1 value 0x90 virtual_protect 0
-	plugin::patch::SetUChar(0x6FFDFD, 0x90);
-	//0A8C: write_memory 0x6FFDFE size 1 value 0x90 virtual_protect 0
-	plugin::patch::SetUChar(0x6FFDFE, 0x90);
+	TestHelper::AddStep("test1", []() {
+		//NOPs the function that checks wether the siren was activated or not
+		//0A8C: write_memory 0x6FFDFC size 1 value 0x90 virtual_protect 0
+		plugin::patch::SetUChar(0x6FFDFC, 0x90);
+
+		//0A8C: write_memory 0x6FFDFD size 1 value 0x90 virtual_protect 0
+		plugin::patch::SetUChar(0x6FFDFD, 0x90);
+
+		//0A8C: write_memory 0x6FFDFE size 1 value 0x90 virtual_protect 0
+		plugin::patch::SetUChar(0x6FFDFE, 0x90);
+	});
 	*/
 
-	
+	//0A8C: write_memory 0x70026C size 4 value 0x90909090 virtual_protect 0
+	plugin::patch::SetUInt(0x70026C, 0x90909090);
+	//0A8C : write_memory 0x700270 size 1 value 0x90 virtual_protect 0
+	plugin::patch::SetUChar(0x700270, 0x90);
+	//0A8C : write_memory 0x700271 size 1 value 0x90 virtual_protect 0
+	plugin::patch::SetUChar(0x700271, 0x90);
+	//0A8C : write_memory 0x700261 size 4 value 0x90909090 virtual_protect 0
+	plugin::patch::SetUInt(0x700261, 0x90909090);
+	//0A8C : write_memory 0x700265 size 1 value 0x90 virtual_protect 0
+	plugin::patch::SetUChar(0x700265, 0x90);
+	//0A8C : write_memory 0x700266 size 1 value 0x90 virtual_protect 0
+	plugin::patch::SetUChar(0x700266, 0x90);
+	//0A8C : write_memory 0x700257 size 4 value 0x90909090 virtual_protect 0
+	plugin::patch::SetUInt(0x700257, 0x90909090);
+	//0A8C : write_memory 0x70025B size 1 value 0x90 virtual_protect 0
+	plugin::patch::SetUChar(0x70025B, 0x90);
+	//0A8C : write_memory 0x70025C size 1 value 0x90 virtual_protect 0
+	plugin::patch::SetUChar(0x70025C, 0x90);
+
 	//NOPs the function that activates the shadow drawing under the vehicle
 	//0A8C: write_memory 0x70802D size 4 value 0x90909090 virtual_protect 0
 	plugin::patch::SetUInt(0x70802D, 0x90909090);
