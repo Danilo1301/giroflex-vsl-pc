@@ -10,11 +10,10 @@ bool Vehicles::HasVehicle(CVehicle* veh) {
 }
 
 Vehicle* Vehicles::AddVehicle(CVehicle* veh) {
+	Log::file << "[Vehicles] AddVehicle " << veh << " [" << std::to_string(veh->m_nModelIndex) << "] (" << std::to_string(m_Vehicles.size()+1) << " total)" << std::endl;
 
 	Vehicle* vehicle = new Vehicle(veh);
 	m_Vehicles.insert(std::pair<CVehicle*, Vehicle*>(veh, vehicle));
-
-	Log::file << "[Vehicles] AddVehicle " << veh << " [" << std::to_string(veh->m_nModelIndex) << "] (" << std::to_string(m_Vehicles.size()) << " total)" << std::endl;
 
 	return vehicle;
 }
@@ -34,13 +33,14 @@ void Vehicles::TryAddAllVehicles() {
 }
 
 void Vehicles::RemoveVehicle(CVehicle* veh) {
+	Log::file << "[Vehicles] RemoveVehicle " << veh << " (" << std::to_string(m_Vehicles.size()-1) << " total)" << std::endl;
+
 	Vehicle* vehicle = m_Vehicles[veh];
 	m_Vehicles.erase(veh);
 	vehicle->Destroy();
 
 	delete vehicle;
 
-	Log::file << "[Vehicles] RemoveVehicle " << veh << " (" << std::to_string(m_Vehicles.size()) << " total)" << std::endl;
 }
 
 void Vehicles::RemoveAllVehicles() {

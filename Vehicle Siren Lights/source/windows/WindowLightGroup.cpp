@@ -98,10 +98,8 @@ void WindowLightGroup::CreateEditLightGroup() {
 			Vehicles::TryAddAllVehicles();
 		};
 		WindowSelectPattern::m_OnDeletePatternCycleStep = [lightGroup](PatternCycleStep* patternCycleStep) {
-
 			if (lightGroup->patternCycleSteps.size() == 1) {
 				Localization::PrintString("error_need_at_least_one", 1000);
-				return;
 			}
 
 			Vehicles::RemoveAllVehicles();

@@ -60,7 +60,7 @@ public:
 		patternCycleSteps.erase(it);
 		delete patternCycleStep;
 
-		Log::file << "[LightGroup] Pattern removed" << std::endl;
+		Log::file << "[LightGroup : " << name << "] Pattern '"<< patternCycleStep->pattern->name <<"' removed" << std::endl;
 	}
 
 	void Destroy() {

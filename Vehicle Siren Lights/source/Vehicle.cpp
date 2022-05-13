@@ -29,6 +29,8 @@ void Vehicle::Update() {
 }
 
 void Vehicle::UpdateSirenState() {
+	//Log::file << "[Vehicle " << m_Vehicle << "] UpdateSirenState" << std::endl;
+
 	bool currentSirenState = GetSirenState();
 
 	if (currentSirenState != m_PrevSirenState)
@@ -251,6 +253,8 @@ void Vehicle::UpdateVehicleMaterial(RpMaterial* material, std::string frameName)
 }
 
 void Vehicle::SetAllLightGroupState(bool enabled) {
+	//Log::file << "[Vehicle " << m_Vehicle << "] SetAllLightGroupState" << std::endl;
+
 	m_PrevLightState = enabled;
 
 	for (auto pair : m_LightGroupData)
@@ -269,32 +273,39 @@ void Vehicle::SetAllLightGroupState(bool enabled) {
 }
 
 void Vehicle::CheckForLightGroups() {
+	//Log::file << "[Vehicle " << m_Vehicle << "] CheckForLightGroups" << std::endl;
+
 	if (LightGroups::HasLightGroups(m_Vehicle->m_nModelIndex)) {
 		auto lightGroups = LightGroups::GetLightGroups(m_Vehicle->m_nModelIndex);
 		for (auto lightGroup : lightGroups) {
 			if (!m_LightGroupData[lightGroup]) {
-				if (lightGroup->patternCycleSteps.size() == 0) continue;
+				if (lightGroup->patternCycleSteps.size() == 0) {
+					m_LightGroupData.erase(lightGroup);
+					continue;
+				}
+
+				Log::file << "[Vehicle " << m_Vehicle << "] Add VehiclePatternData for light group '" << lightGroup->name << "' (" << std::to_string(m_LightGroupData.size()) << " total) with " << lightGroup->patternCycleSteps.size() << " patterns" << std::endl;
 
 				auto vehiclePatternData = new VehiclePatternData();
 
-
 				if (lightGroup->turnOnSiren) vehiclePatternData->enabled = GetSirenState();
-
-				//Log::file << "[Vehicle " << m_Vehicle << "] Adding " << lightGroup->patternCycleSteps.size() << " cycle steps" << std::endl;
 
 				for (auto patternCycleStep : lightGroup->patternCycleSteps) {
 					vehiclePatternData->patternLoop->AddStep(&patternCycleStep->duration);
 				}
 
 				m_LightGroupData[lightGroup] = vehiclePatternData;
-
-				Log::file << "[Vehicle " << m_Vehicle << "] Added vehiclePatternData for LightGroup (" << std::to_string(m_LightGroupData.size()) << " total)" << std::endl;
+			
 			}
 		}
 	}
+
+	//Log::file << "[Vehicle " << m_Vehicle << "] CheckForLightGroups, found" << m_LightGroupData.size() << std::endl;
 }
 
 void Vehicle::UpdatePatternAndSteps() {
+	//Log::file << "[Vehicle " << m_Vehicle << "] UpdatePatternAndSteps " << m_LightGroupData.size() << " light groups" << std::endl;
+
 	int updateMs = CTimer::m_snTimeInMilliseconds - m_PrevTime;
 
 	for (auto pair : m_LightGroupData) {
@@ -343,6 +354,8 @@ void Vehicle::UpdatePatternAndSteps() {
 }
 
 void Vehicle::RegisterCoronas() {
+	//Log::file << "[Vehicle " << m_Vehicle << "] RegisterCoronas" << std::endl;
+
 	int lightId = reinterpret_cast<unsigned int>(m_Vehicle) + 50;
 
 	for (auto pair : m_LightGroupData) {

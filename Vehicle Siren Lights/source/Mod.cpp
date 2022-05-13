@@ -165,6 +165,7 @@ void Mod::ReloadConfig() {
 void Mod::DisableOriginalLights() {
 	//https://gtaforums.com/topic/757430-block-siren-lights-memory-address-for-it/
 
+	
 	//0@ = 0xC3F12C //CPointLight => RGB
 	int pointLight = 0xC3F12C;
 
@@ -182,6 +183,8 @@ void Mod::DisableOriginalLights() {
 
 	//0A8C: write_memory 2@ size 4 value 0.0 virtual_protect 0 
 	plugin::patch::SetUInt(pointLight, 0);
+	
+
 
 
 	//NOPs the function that draws the coronnas
@@ -190,6 +193,8 @@ void Mod::DisableOriginalLights() {
 
 	//0A8C: write_memory 0x6ABA64 size 1 value 0x90 virtual_protect 0
 	plugin::patch::SetUChar(0x6ABA64, 0x90);
+
+
 
 	/*
 	TestHelper::AddStep("test1", []() {
@@ -205,24 +210,40 @@ void Mod::DisableOriginalLights() {
 	});
 	*/
 
+
+
+
+	//blue
+	/*
 	//0A8C: write_memory 0x70026C size 4 value 0x90909090 virtual_protect 0
 	plugin::patch::SetUInt(0x70026C, 0x90909090);
 	//0A8C : write_memory 0x700270 size 1 value 0x90 virtual_protect 0
 	plugin::patch::SetUChar(0x700270, 0x90);
 	//0A8C : write_memory 0x700271 size 1 value 0x90 virtual_protect 0
 	plugin::patch::SetUChar(0x700271, 0x90);
+	*/
+	
+
+	/*
 	//0A8C : write_memory 0x700261 size 4 value 0x90909090 virtual_protect 0
 	plugin::patch::SetUInt(0x700261, 0x90909090);
 	//0A8C : write_memory 0x700265 size 1 value 0x90 virtual_protect 0
 	plugin::patch::SetUChar(0x700265, 0x90);
 	//0A8C : write_memory 0x700266 size 1 value 0x90 virtual_protect 0
 	plugin::patch::SetUChar(0x700266, 0x90);
+	*/
+	
+	
+	/*
 	//0A8C : write_memory 0x700257 size 4 value 0x90909090 virtual_protect 0
 	plugin::patch::SetUInt(0x700257, 0x90909090);
 	//0A8C : write_memory 0x70025B size 1 value 0x90 virtual_protect 0
 	plugin::patch::SetUChar(0x70025B, 0x90);
 	//0A8C : write_memory 0x70025C size 1 value 0x90 virtual_protect 0
 	plugin::patch::SetUChar(0x70025C, 0x90);
+	*/
+	
+	
 
 	//NOPs the function that activates the shadow drawing under the vehicle
 	//0A8C: write_memory 0x70802D size 4 value 0x90909090 virtual_protect 0
