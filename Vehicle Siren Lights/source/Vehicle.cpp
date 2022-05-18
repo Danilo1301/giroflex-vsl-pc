@@ -169,7 +169,7 @@ void Vehicle::RenderBefore() {
 					//lightId += lightGroup->offsetId;
 
 					for (auto point : lightGroup->points) {
-						if (name.compare(point->object) == 0) {
+						if (StringToUpper(name).compare(StringToUpper(point->object)) == 0) {
 
 							/*
 							char text[512];

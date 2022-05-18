@@ -177,10 +177,16 @@ static double GetAngleBetweenVectors(CVector v1, CVector v2, CVector v3) {
 	return acos((pow(v12, 2) + pow(v13, 2) - pow(v23, 2)) / (2 * (v12 * v13)));
 }
 
-
 template<class T>
 static Json::Value ValidateValue(Json::Value value, T defaultValue)
 {
 	if (value.empty()) return defaultValue;
 	return value;
+}
+
+static std::string StringToUpper(std::string data) {
+	std::for_each(data.begin(), data.end(), [](char& c) {
+		c = ::toupper(c);
+		});
+	return data;
 }

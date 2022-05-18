@@ -10,7 +10,7 @@
 
 bool Mod::m_DebugEnabled = false;
 bool Mod::m_IsSamp = false;
-std::string Mod::m_Version = "1.2.1";
+std::string Mod::m_Version = "1.2.2";
 
 /*
 
@@ -330,7 +330,7 @@ void Mod::DisableOriginalLights() {
 
 Mod::Mod() {
 	Log::Open("Vehicle Siren Lights.log");
-	Log::file << "Initialized" << std::endl;
+	Log::file << "Initialized v" << m_Version << std::endl;
 
 	if (GetModuleHandle("SAMP.dll"))
 	{
