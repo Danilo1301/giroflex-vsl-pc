@@ -166,8 +166,6 @@ void Vehicle::RenderBefore() {
 
 					auto step = pattern->steps[vehiclePatternData->stepLoop->m_StepIndex];
 
-					//lightId += lightGroup->offsetId;
-
 					for (auto point : lightGroup->points) {
 						if (StringToUpper(name).compare(StringToUpper(point->object)) == 0) {
 
@@ -368,8 +366,6 @@ void Vehicle::RegisterCoronas() {
 		auto pattern = patternCycleStep->pattern;
 
 		auto step = pattern->steps[vehiclePatternData->stepLoop->m_StepIndex];
-
-		//lightId += lightGroup->offsetId;
 
 		for (auto point : lightGroup->points) {
 
