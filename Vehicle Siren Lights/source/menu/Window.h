@@ -21,7 +21,7 @@ public:
 
 	int m_ListStartIndex = 0; //remove
 	int m_ListIndex = 0;
-	int m_MaxItems = 15;
+	int m_MaxItems = 17;
 
 	void Draw();
 	void GoUp();

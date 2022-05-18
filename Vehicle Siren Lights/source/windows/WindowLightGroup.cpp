@@ -134,11 +134,14 @@ void WindowLightGroup::CreateEditLightGroup() {
 
 	auto checkBoxReflect = window->AddCheckBox(Localization::GetLine("reflect"), &lightGroup->reflect);
 
-	auto checkBoxUsePatternColors = window->AddCheckBox(Localization::GetLine("use_pattern_colors"), &lightGroup->usePatternColors);
-
 	auto reflectionDistance = window->AddNumberRange(Localization::GetLine("reflection_distance"), &lightGroup->reflectionDistance, 0.0f, 50.0f);
 	reflectionDistance->m_HoldToChange = true;
 	reflectionDistance->m_AddBy = 0.1f;
+
+	auto checkBoxUsePatternColors = window->AddCheckBox(Localization::GetLine("use_pattern_colors"), &lightGroup->usePatternColors);
+
+	auto offsetId = window->AddNumberRange("Light ID offset", &lightGroup->offsetId, -999999, 999999);
+	offsetId->m_HoldToChange = true;
 
 	//auto checkBoxCReflect = window->AddCheckBox("Corona reflection", &lightGroup->cReflect);
 

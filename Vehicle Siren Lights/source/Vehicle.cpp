@@ -87,17 +87,17 @@ void Vehicle::DrawDebug() {
 }
 
 void Vehicle::DrawFrames() {
-	return;
-
 	char text[512];
+
+	RwFrame* froot = (RwFrame*)m_Vehicle->m_pRwClump->object.parent;
 
 	auto frames = VehicleDummy::GetFramesOnVehicle(m_Vehicle);
 	for (auto frame : frames) {
-		if (frame == m_Vehicle->m_pRwClump->object.parent) continue;
+		if (frame == froot) continue;
+
+		CVector position = VehicleDummy::GetTransformedDummyPosition(m_Vehicle, frame, CVector(0, 0, 0));
 
 		std::string name = GetFrameNodeName(frame);
-
-		CVector position = m_Vehicle->TransformFromObjectSpace(GetFrameNodePosition(frame));
 
 		sprintf(text, "%s", name.c_str());
 		DrawWorldText(text, position);
@@ -115,10 +115,9 @@ void Vehicle::DrawPoints() {
 
 		int i = 0;
 		for (auto point : lightGroup->points) {
-			auto position = m_Vehicle->TransformFromObjectSpace(lightGroup->position + point->position);
+			auto position = VehicleDummy::GetTransformedPosition(m_Vehicle, lightGroup->position + point->position);
 
-
-			sprintf(text, "[%d]", i + 1);
+			sprintf(text, "(%d)", i + 1);
 			DrawWorldText(text, position);
 
 			i++;
@@ -361,6 +360,8 @@ void Vehicle::RegisterCoronas() {
 	for (auto pair : m_LightGroupData) {
 		auto lightGroup = pair.first;
 		auto vehiclePatternData = pair.second;
+
+		lightId += lightGroup->offsetId;
 
 		auto patternCycleStep = lightGroup->patternCycleSteps[vehiclePatternData->patternLoop->m_StepIndex];
 		auto patternDuration = patternCycleStep->duration;

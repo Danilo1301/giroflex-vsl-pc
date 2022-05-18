@@ -12,8 +12,84 @@ bool Mod::m_DebugEnabled = false;
 bool Mod::m_IsSamp = false;
 std::string Mod::m_Version = "1.2.1";
 
+/*
+
+CVehicle* testVehicle = NULL;
+#include "VehicleDummy.h"
+
+
+void TestUpdate() {
+	if (Input::GetKeyDown(74)) {
+		testVehicle = FindPlayerVehicle(0, false);
+
+		if (testVehicle) {
+			auto frames = VehicleDummy::GetFramesOnVehicle(testVehicle);
+
+			for (auto frame : frames) {
+				std::string name = GetFrameNodeName(frame);
+
+				auto p = frame->modelling.pos;
+				auto parent = RwFrameGetParent(frame);
+
+				Log::file << "---------------" << std::endl;
+				Log::file << GetFrameInfo(frame) + "\nchild=" << GetFrameInfo(frame->child) << "\nnext=" << GetFrameInfo(frame->next) << "\nparent=" << GetFrameInfo(parent) << std::endl;
+			
+				std::vector<RwFrame*> hie;
+				RwFrame* f = frame;
+
+				while (f != NULL && f != testVehicle->m_pRwClump->object.parent)
+				{
+					hie.insert(hie.begin(), f);
+
+					f = RwFrameGetParent(f);
+				}
+
+				for (auto tf : hie) {
+					std::string tfname = GetFrameNodeName(tf);
+					Log::file << tfname << " | ";
+				}
+				Log::file << std::endl;
+			}
+
+			for (auto frame : frames) {
+				
+				
+			}
+		}
+	}
+}
+
+
+
+void TestDraw() {
+	if (testVehicle) {
+		char text[512];
+		auto frames = VehicleDummy::GetFramesOnVehicle(testVehicle);
+
+		for (auto frame : frames) {
+			if (frame == testVehicle->m_pRwClump->object.parent) continue;
+
+
+			
+			//auto p = frame->modelling.pos;
+
+			//CVector position = m_Vehicle->TransformFromObjectSpace(GetFrameNodePosition(frame));
+
+			//sprintf(text, "%s", GetFrameInfo(frame).c_str());
+			//DrawWorldText(text, position);
+		}
+
+		DrawWorldText("testVeh", testVehicle->GetPosition());
+
+	}
+
+}
+*/
+
 void Mod::Update() {
 	Input::Update();
+
+	//TestUpdate();
 
 	//
 
@@ -87,6 +163,8 @@ void Mod::Update() {
 }
 
 void Mod::Draw() {
+	//TestDraw();
+
 	for (auto pair : Vehicles::m_Vehicles)
 	{
 		Vehicle* vehicle = pair.second;

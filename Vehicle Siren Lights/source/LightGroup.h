@@ -21,6 +21,7 @@ public:
 	CVector position = CVector(0, 0, 0);
 	std::vector<Point*> points;
 	std::vector<PatternCycleStep*> patternCycleSteps;
+	int offsetId = 0;
 
 	LightGroup(int modelId) {
 		this->modelId = modelId;
@@ -85,6 +86,7 @@ public:
 		value["direction"] = (int)direction;
 		value["usePatternColors"] = usePatternColors;
 		value["position"] = CVectorToJSON(position);
+		value["offsetId"] = offsetId;
 
 		value["points"] = Json::arrayValue;
 		for (auto point : points) {
@@ -111,6 +113,7 @@ public:
 		direction = (eSirenDirection)value["direction"].asInt();
 		usePatternColors = value["usePatternColors"].asBool();
 		position = CVectorFromJSON(value["position"]);
+		offsetId = ValidateValue(value["offsetId"], offsetId).asInt();
 
 		for (size_t i = 0; i < value["points"].size(); i++)
 		{

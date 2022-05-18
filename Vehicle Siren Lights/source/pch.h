@@ -160,6 +160,9 @@ static CVector CVectorFromJSON(Json::Value json) {
 	return vec;
 }
 
+static std::string FormatCVector(CVector vec) {
+	return std::to_string(vec.x) + ", " + std::to_string(vec.y) + ", " + std::to_string(vec.z);
+}
 
 static char* (*GetFrameNodeName)(RwFrame* frame) = (char* (*)(RwFrame*))0x72FB30;
 
@@ -172,4 +175,12 @@ static double GetAngleBetweenVectors(CVector v1, CVector v2, CVector v3) {
 	double v13 = sqrt(pow(v1.x - v3.x, 2) + pow(v1.y - v3.y, 2));
 	double v23 = sqrt(pow(v2.x - v3.x, 2) + pow(v2.y - v3.y, 2));
 	return acos((pow(v12, 2) + pow(v13, 2) - pow(v23, 2)) / (2 * (v12 * v13)));
+}
+
+
+template<class T>
+static Json::Value ValidateValue(Json::Value value, T defaultValue)
+{
+	if (value.empty()) return defaultValue;
+	return value;
 }
