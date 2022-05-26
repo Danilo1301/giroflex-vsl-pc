@@ -2,6 +2,8 @@
 
 #include "pch.h"
 
+#include "LightGroupShadow.h"
+
 enum class eSirenPosition {
 	LEFT,
 	MIDDLE,
@@ -22,6 +24,7 @@ public:
 	CRGBA color = CRGBA(255, 0, 0);
 	CRGBA disabledColor = CRGBA(0, 0, 0);
 	eSirenPosition sirenPosition = eSirenPosition::LEFT;
+	LightGroupShadow shadow;
 
 	CRGBA GetColor(PatternStep* step) {
 		switch (sirenPosition)
@@ -60,6 +63,15 @@ public:
 		value["disabledColor"] = ColorToJSON(disabledColor);
 		value["sirenPosition"] = (int)sirenPosition;
 
+		Json::Value shadowValue = Json::objectValue;
+		shadowValue["enabled"] = shadow.enabled;
+		shadowValue["textureIndex"] = shadow.textureIndex;
+		shadowValue["position"] = CVectorToJSON(shadow.position);
+		shadowValue["angle"] = shadow.angle;
+		shadowValue["width"] = shadow.width;
+		shadowValue["height"] = shadow.height;
+		value["shadow"] = shadowValue;
+
 		return value;
 	}
 
@@ -70,6 +82,17 @@ public:
 		color = ColorFromJSON(value["color"]);
 		disabledColor = ColorFromJSON(value["disabledColor"]);
 		sirenPosition = (eSirenPosition)value["sirenPosition"].asInt();
+
+		Json::Value shadowValue = value["shadow"];
+		if (!shadowValue.isNull())
+		{
+			shadow.enabled = shadowValue["enabled"].asBool();
+			shadow.textureIndex = shadowValue["textureIndex"].asInt();
+			shadow.position = CVectorFromJSON(shadowValue["position"]);
+			shadow.angle = shadowValue["angle"].asFloat();
+			shadow.width = shadowValue["width"].asFloat();
+			shadow.height = shadowValue["height"].asFloat();
+		}
 	}
 
 	static double GetAngle(CVehicle* vehicle, CVector position) {

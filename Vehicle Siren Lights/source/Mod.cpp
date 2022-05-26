@@ -6,11 +6,12 @@
 #include "Patterns.h"
 #include "Vehicles.h"
 #include "LightGroups.h"
+#include "LightGroupShadow.h"
 #include "Config.h"
 
 bool Mod::m_DebugEnabled = false;
 bool Mod::m_IsSamp = false;
-std::string Mod::m_Version = "1.2.2";
+std::string Mod::m_Version = "1.3";
 
 /*
 
@@ -86,10 +87,31 @@ void TestDraw() {
 }
 */
 
+static float float1 = 0.0f;
+static float float2 = 7.0f;
+static float float3 = 3.5f;
+static float float4 = 7.0f;
+static float float5 = 0.0f;
+static int int1 = 255;
+
+void TestShadowMenu()
+{
+	auto window = Menu::AddWindow("Vehicle Siren Lights", "test menu");
+
+	window->AddNumberRange("float1", &float1, -9999.0f, 9999.0f);
+	window->AddNumberRange("float2", &float2, -9999.0f, 9999.0f);
+	window->AddNumberRange("float3", &float3, -9999.0f, 9999.0f);
+	window->AddNumberRange("float4", &float4, -9999.0f, 9999.0f);
+	auto float5nr = window->AddNumberRange("float5", &float5, -9999.0f, 9999.0f);
+	float5nr->m_AddBy = 0.5f;
+	auto int1nr = window->AddNumberRange("int1", &int1, 0, 255);
+	int1nr->m_HoldToChange = true;
+
+	Menu::SetOpen(true);
+}
+
 void Mod::Update() {
 	Input::Update();
-
-	//TestUpdate();
 
 	//
 
@@ -332,6 +354,8 @@ Mod::Mod() {
 	Log::Open("Vehicle Siren Lights.log");
 	Log::file << "Initialized v" << m_Version << std::endl;
 
+	TestShadowMenu();
+
 	if (GetModuleHandle("SAMP.dll"))
 	{
 		m_IsSamp = true;
@@ -400,6 +424,10 @@ Mod::Mod() {
 	}
 	
 	Config::SaveJSON();
+
+	Events::initRwEvent += [] {
+		LightGroupShadows::LoadTextures();
+	};
 
 	Events::processScriptsEvent += []() {
 		Update();

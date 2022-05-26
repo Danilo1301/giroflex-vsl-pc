@@ -4,6 +4,7 @@
 
 #include "Patterns.h"
 #include "Point.h"
+#include "LightGroupShadow.h"
 
 class LightGroup {
 public:

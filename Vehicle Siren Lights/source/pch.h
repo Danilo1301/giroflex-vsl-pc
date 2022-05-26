@@ -1,5 +1,7 @@
 #pragma once
 
+# define M_PI           3.14159265358979323846  /* pi */
+
 #include "plugin.h"
 
 #include "CMessages.h"
@@ -190,3 +192,35 @@ static std::string StringToUpper(std::string data) {
 		});
 	return data;
 }
+
+
+static float CVector2D_MagnitudeSqr(CVector2D* vec2d) {
+	return vec2d->x * vec2d->x + vec2d->y * vec2d->y;
+}
+
+static void CVector2D_Normalize(CVector2D* vec2d) {
+	float sq = CVector2D_MagnitudeSqr(vec2d);
+	if (sq > 0.0f) {
+		float invsqrt = 1.0f / sqrt(sq);
+		vec2d->x *= invsqrt;
+		vec2d->y *= invsqrt;
+	}
+	else
+		vec2d->x = 0.0f;
+}
+
+static CVector* GetForward(CPlaceable* placeable) {
+	return (CVector*)&placeable->m_matrix->up;
+}
+
+static void CVector2D_Rotate(CVector2D* vec2d, float ang) {
+	ang = (float)(-ang * (M_PI / 180));
+	auto cos = std::cos(ang);
+	auto sin = std::sin(ang);
+
+	auto x = std::round(10000 * (vec2d->x * cos - vec2d->y * sin)) / 10000;
+	auto y = std::round(10000 * (vec2d->x * sin + vec2d->y * cos)) / 10000;
+
+	vec2d->x = x;
+	vec2d->y = y;
+};

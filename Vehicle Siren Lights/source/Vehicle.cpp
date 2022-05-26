@@ -1,10 +1,12 @@
 #include "Vehicle.h"
 #include "VehicleDummy.h"
 #include "LightGroups.h"
-#include "CVisibilityPlugins.h"
 #include "menu/Menu.h"
 
 #include "windows/WindowLightGroup.h"
+
+#include "CVisibilityPlugins.h"
+#include "CShadows.h"
 
 float Vehicle::m_MatAmbient = 2.5f;
 bool Vehicle::m_FreezeLights = false;
@@ -243,6 +245,71 @@ void Vehicle::RenderBefore() {
 void Vehicle::RenderAfter() {
 	for (auto& p : m_ResetEntries) *p.first = p.second;
 	m_ResetEntries.clear();
+
+	RenderShadows();
+}
+
+void Vehicle::RenderShadows() {
+	int shadowId = (uintptr_t)m_Vehicle + 100;
+	for (auto pair : m_LightGroupData) {
+		auto lightGroup = pair.first;
+		auto vehiclePatternData = pair.second;
+
+		auto patternCycleStep = lightGroup->patternCycleSteps[vehiclePatternData->patternLoop->m_StepIndex];
+		auto patternDuration = patternCycleStep->duration;
+		auto pattern = patternCycleStep->pattern;
+
+		auto step = pattern->steps[vehiclePatternData->stepLoop->m_StepIndex];
+
+		
+		for (auto point : lightGroup->points) {
+			if (!point->shadow.enabled) continue;
+
+			//auto pos = VehicleDummy::GetTransformedPosition(m_Vehicle, lightGroup->position + point->position + CVector(point->shadow.position.x, point->shadow.position.y, 0));
+			CVector pos = m_Vehicle->GetPosition();
+
+			CVector2D fwd(*GetForward(m_Vehicle));
+			CVector2D_Normalize(&fwd);
+			CVector2D_Rotate(&fwd, point->shadow.angle);
+
+			auto offsetPos = lightGroup->position + point->position + point->shadow.position;
+
+			float f = offsetPos.y + 0.0f;
+			pos += CVector(f * fwd.x, f * fwd.y, 2.0f);
+
+			float width = point->shadow.width;
+			float height = point->shadow.height;
+
+			//
+
+			CRGBA color = lightGroup->usePatternColors ? point->GetColor(step) : point->color;
+			bool enabled = point->GetIsEnabled(step);
+
+			if (!m_FreezeLights) {
+				if (!vehiclePatternData->enabled) enabled = false;
+			}
+			else { enabled = true; }
+
+			//
+
+			if (!enabled) continue;
+
+			CShadows::StoreCarLightShadow(
+				m_Vehicle,
+				shadowId++,
+				LightGroupShadows::m_ShadowTextures[point->shadow.textureIndex], // gpShadowExplosionTex, //LightGroupShadows::m_ShadowTexture,
+				&pos,
+				height * fwd.x,
+				height * fwd.y,
+				width * fwd.y,
+				-width * fwd.x,
+				color.r,
+				color.g,
+				color.b,
+				7.0f
+			);
+		}
+	}
 }
 
 void Vehicle::UpdateVehicleMaterial(RpMaterial* material, std::string frameName) {
@@ -377,9 +444,7 @@ void Vehicle::RegisterCoronas() {
 			if (!m_FreezeLights) {
 				if (!vehiclePatternData->enabled) enabled = false;
 			}
-			else {
-				enabled = true;
-			}
+			else { enabled = true; }
 
 			//
 

@@ -1,6 +1,7 @@
 #include "WindowPoint.h"
 #include "WindowLightGroup.h"
 #include "WindowMain.h"
+#include "WindowShadow.h"
 
 #include "../VehicleDummy.h"
 #include "../Vehicles.h"
@@ -132,6 +133,13 @@ void WindowPoint::CreateEditPoint() {
 		Menu::CreateColorPickerWindow(&point->disabledColor, [window]() {
 			Menu::m_ActiveWindow = window;
 		});
+	};
+
+	auto buttonShaadow = window->AddButton(Localization::GetLine("edit_shadow"));
+	buttonShaadow->m_OnClick = [point, window]() {
+		Menu::RemoveWindow(window);
+		WindowShadow::m_LightGroupShadow = &point->shadow;
+		WindowShadow::Create();
 	};
 
 	auto buttonDelete = window->AddButton(Localization::GetLine("delete"));

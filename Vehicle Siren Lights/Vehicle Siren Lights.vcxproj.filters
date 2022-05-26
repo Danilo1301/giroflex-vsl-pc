@@ -117,6 +117,12 @@
     <ClCompile Include="source\TestHelper.cpp">
       <Filter>source</Filter>
     </ClCompile>
+    <ClCompile Include="source\LightGroupShadow.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="source\windows\WindowShadow.cpp">
+      <Filter>source\windows</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="source\Mod.h">
@@ -217,6 +223,12 @@
     </ClInclude>
     <ClInclude Include="source\TestHelper.h">
       <Filter>source</Filter>
+    </ClInclude>
+    <ClInclude Include="source\LightGroupShadow.h">
+      <Filter>source</Filter>
+    </ClInclude>
+    <ClInclude Include="source\windows\WindowShadow.h">
+      <Filter>source\windows</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -48,6 +48,8 @@ public:
 	void RenderBefore();
 	void RenderAfter();
 
+	void RenderShadows();
+
 	void UpdateVehicleMaterial(RpMaterial* material, std::string frameName);
 	void SetAllLightGroupState(bool enabled);
 
