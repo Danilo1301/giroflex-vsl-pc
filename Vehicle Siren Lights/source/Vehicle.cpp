@@ -268,18 +268,25 @@ void Vehicle::RenderShadows() {
 			//auto pos = VehicleDummy::GetTransformedPosition(m_Vehicle, lightGroup->position + point->position + CVector(point->shadow.position.x, point->shadow.position.y, 0));
 			CVector pos = m_Vehicle->GetPosition();
 
-			CVector2D fwd(*GetForward(m_Vehicle));
-			CVector2D_Normalize(&fwd);
-			CVector2D_Rotate(&fwd, point->shadow.angle);
+			CVector2D forward = CVector2D(m_Vehicle->m_matrix->up);
+			CVector2D_Normalize(&forward);
+			
+			CVector2D right = CVector2D(m_Vehicle->m_matrix->right);
+			CVector2D_Normalize(&right);
+			
+			auto offsetPos = lightGroup->position + point->position + CVector(point->shadow.position.x, point->shadow.position.y, 0);
 
-			auto offsetPos = lightGroup->position + point->position + point->shadow.position;
+			float add_Y = offsetPos.y;
+			pos += CVector(add_Y * forward.x, add_Y * forward.y, 0.0f);
 
-			float f = offsetPos.y + 0.0f;
-			pos += CVector(f * fwd.x, f * fwd.y, 2.0f);
+			float add_X = offsetPos.x;
+			pos += CVector(add_X * right.x, add_X * right.y, 0.0f);
 
 			float width = point->shadow.width;
 			float height = point->shadow.height;
 
+			CVector2D_Rotate(&forward, point->shadow.angle);
+			CVector2D_Rotate(&right, point->shadow.angle);
 			//
 
 			CRGBA color = lightGroup->usePatternColors ? point->GetColor(step) : point->color;
@@ -299,10 +306,10 @@ void Vehicle::RenderShadows() {
 				shadowId++,
 				LightGroupShadows::m_ShadowTextures[point->shadow.textureIndex], // gpShadowExplosionTex, //LightGroupShadows::m_ShadowTexture,
 				&pos,
-				height * fwd.x,
-				height * fwd.y,
-				width * fwd.y,
-				-width * fwd.x,
+				height * forward.x,
+				height * forward.y,
+				width * forward.y,
+				-width * forward.x,
 				color.r,
 				color.g,
 				color.b,

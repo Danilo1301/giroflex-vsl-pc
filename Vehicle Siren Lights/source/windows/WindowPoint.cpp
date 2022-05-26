@@ -40,7 +40,8 @@ void WindowPoint::CreatePoints() {
 	auto buttonAddPoint = window->AddButton(Localization::GetLine("add_point"));
 	buttonAddPoint->m_OnClick = [window, lightGroup]() {
 
-		lightGroup->AddPoint(CVector(0, 0, 0), CRGBA(255, 0, 0));
+		auto point = lightGroup->AddPoint(CVector(0, 0, 0), CRGBA(255, 0, 0));
+		point->shadow.enabled = true;
 
 		Menu::RemoveWindow(window);
 		CreatePoints();
