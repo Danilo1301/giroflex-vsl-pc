@@ -354,7 +354,7 @@ Mod::Mod() {
 	Log::Open("Vehicle Siren Lights.log");
 	Log::file << "Initialized v" << m_Version << std::endl;
 
-	TestShadowMenu();
+	//TestShadowMenu();
 
 	if (GetModuleHandle("SAMP.dll"))
 	{
