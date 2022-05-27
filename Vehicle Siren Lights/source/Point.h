@@ -70,6 +70,7 @@ public:
 		shadowValue["angle"] = shadow.angle;
 		shadowValue["width"] = shadow.width;
 		shadowValue["height"] = shadow.height;
+		shadowValue["intensity"] = shadow.intensity;
 		value["shadow"] = shadowValue;
 
 		return value;
@@ -92,6 +93,7 @@ public:
 			shadow.angle = shadowValue["angle"].asFloat();
 			shadow.width = shadowValue["width"].asFloat();
 			shadow.height = shadowValue["height"].asFloat();
+			shadow.intensity = ValidateValue(shadowValue["intensity"], shadow.intensity).asFloat();
 		}
 	}
 

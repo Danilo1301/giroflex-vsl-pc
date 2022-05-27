@@ -9,6 +9,7 @@ struct LightGroupShadow {
 	float angle = 0.0f;
 	float width = 3.0f;
 	float height = 3.0f;
+	float intensity = 1.0f;
 };
 
 class LightGroupShadows {

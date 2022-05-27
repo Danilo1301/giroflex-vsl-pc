@@ -30,6 +30,8 @@ void WindowShadow::Create() {
 
 	auto buttonHeight = window->AddNumberRange(Localization::GetLine("height"), &m_LightGroupShadow->height, 0.0f, 100.0f);
 
+	auto buttonIntensity = window->AddNumberRange(Localization::GetLine("intensity"), &m_LightGroupShadow->intensity, 0.0f, 1.0f);
+
 	auto buttonAngle = window->AddNumberRange(Localization::GetLine("angle"), &m_LightGroupShadow->angle, 0.0f, 360.0f);
 	buttonAngle->m_AddBy = 0.5f;
 

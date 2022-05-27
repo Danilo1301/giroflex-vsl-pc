@@ -11,7 +11,7 @@
 
 bool Mod::m_DebugEnabled = false;
 bool Mod::m_IsSamp = false;
-std::string Mod::m_Version = "1.3";
+std::string Mod::m_Version = "1.3.1";
 
 /*
 
@@ -369,28 +369,28 @@ Mod::Mod() {
 	if (Patterns::m_Patterns.size() == 0) {
 		auto pattern1 = Patterns::CreatePattern("DEFAULT Red 1");
 		pattern1->AddStep(1, 0, 0, CRGBA(255, 0, 0), 120);
-		pattern1->AddStep(0, 0, 0, CRGBA(255, 0, 0), 120);
-		pattern1->AddStep(0, 1, 1, CRGBA(255, 0, 0), 120);
+		pattern1->AddStep(0, 1, 0, CRGBA(255, 0, 0), 120);
+		pattern1->AddStep(0, 0, 1, CRGBA(255, 0, 0), 120);
 		pattern1->AddStep(0, 1, 0, CRGBA(255, 0, 0), 120);
 
 		auto pattern2 = Patterns::CreatePattern("DEFAULT Red 2");
-		pattern2->AddStep(0, 1, 1, CRGBA(255, 0, 0), 70);
-		pattern2->AddStep(1, 0, 1, CRGBA(255, 0, 0), 80);
+		pattern2->AddStep(0, 0, 0, CRGBA(255, 0, 0), 70);
+		pattern2->AddStep(1, 0, 0, CRGBA(255, 0, 0), 80);
 
-		pattern2->AddStep(0, 1, 1, CRGBA(255, 0, 0), 70);
-		pattern2->AddStep(1, 0, 1, CRGBA(255, 0, 0), 80);
+		pattern2->AddStep(0, 0, 0, CRGBA(255, 0, 0), 70);
+		pattern2->AddStep(1, 0, 0, CRGBA(255, 0, 0), 80);
 
-		pattern2->AddStep(0, 0, 1, CRGBA(255, 0, 0), 70);
-		pattern2->AddStep(1, 0, 1, CRGBA(255, 0, 0), 80);
+		pattern2->AddStep(0, 0, 0, CRGBA(255, 0, 0), 70);
+		pattern2->AddStep(1, 1, 0, CRGBA(255, 0, 0), 80);
 
-		pattern2->AddStep(1, 1, 0, CRGBA(255, 0, 0), 70);
-		pattern2->AddStep(1, 0, 1, CRGBA(255, 0, 0), 80);
+		pattern2->AddStep(0, 1, 0, CRGBA(255, 0, 0), 70);
+		pattern2->AddStep(0, 0, 1, CRGBA(255, 0, 0), 80);
 
-		pattern2->AddStep(1, 1, 0, CRGBA(255, 0, 0), 70);
-		pattern2->AddStep(1, 0, 1, CRGBA(255, 0, 0), 80);
+		pattern2->AddStep(0, 0, 0, CRGBA(255, 0, 0), 70);
+		pattern2->AddStep(0, 0, 1, CRGBA(255, 0, 0), 80);
 
-		pattern2->AddStep(1, 0, 0, CRGBA(255, 0, 0), 70);
-		pattern2->AddStep(1, 0, 1, CRGBA(255, 0, 0), 80);
+		pattern2->AddStep(0, 0, 0, CRGBA(255, 0, 0), 70);
+		pattern2->AddStep(0, 0, 1, CRGBA(255, 0, 0), 80);
 
 		auto pattern3 = Patterns::CreatePattern("DEFAULT Red 3");
 		pattern3->AddStep(1, 0, 0, CRGBA(255, 0, 0), 135);
@@ -410,6 +410,9 @@ Mod::Mod() {
 
 		pattern4->AddStep(1, 1, 1, CRGBA(255, 0, 0), 60);
 		pattern4->AddStep(0, 0, 0, CRGBA(255, 0, 0), 360);
+
+		auto pattern5 = Patterns::CreatePattern("DEFAULT Always on");
+		pattern5->AddStep(1, 1, 1, CRGBA(255, 0, 0), 250);
 
 		/*
 		auto lightGroup1 = LightGroups::CreateLightGroup(523);

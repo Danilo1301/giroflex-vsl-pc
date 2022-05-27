@@ -33,6 +33,7 @@ public:
 		point->position = position;
 		point->sirenPosition = sirenPosition;
 		point->color = color;
+		point->shadow.enabled = true;
 		points.push_back(point);
 		return point;
 	}

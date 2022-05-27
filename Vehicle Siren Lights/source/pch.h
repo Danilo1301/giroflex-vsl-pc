@@ -33,6 +33,10 @@ MessageBox(HWND_DESKTOP, buffer, "", MB_ICONERROR);
 
 */
 
+static unsigned char ucharIntensity(unsigned char uc, float intensity) {
+	return (unsigned char)std::clamp((int)round(((float)uc) * intensity), 0, 255);
+}
+
 static CVector2D WorldToScreen(CVector position) {
 	RwV3d rwp = { position.x, position.y, position.z };
 	RwV3d screenCoors; float w, h;

@@ -301,6 +301,8 @@ void Vehicle::RenderShadows() {
 
 			if (!enabled) continue;
 
+			float intensity = point->shadow.intensity;
+
 			CShadows::StoreCarLightShadow(
 				m_Vehicle,
 				shadowId++,
@@ -310,10 +312,10 @@ void Vehicle::RenderShadows() {
 				height * forward.y,
 				width * forward.y,
 				-width * forward.x,
-				color.r,
-				color.g,
-				color.b,
-				7.0f
+				ucharIntensity(color.r, intensity),
+				ucharIntensity(color.g, intensity),
+				ucharIntensity(color.b, intensity),
+				800.0f
 			);
 		}
 	}
