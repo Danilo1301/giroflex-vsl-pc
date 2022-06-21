@@ -71,6 +71,11 @@ public:
 		shadowValue["width"] = shadow.width;
 		shadowValue["height"] = shadow.height;
 		shadowValue["intensity"] = shadow.intensity;
+
+		shadowValue["rotate"] = shadow.rotate;
+		shadowValue["rotateOffsetPos"] = shadow.rotateOffsetPos;
+		shadowValue["rotateOffsetAngle"] = shadow.rotateOffsetAngle;
+
 		value["shadow"] = shadowValue;
 
 		return value;
@@ -94,6 +99,10 @@ public:
 			shadow.width = shadowValue["width"].asFloat();
 			shadow.height = shadowValue["height"].asFloat();
 			shadow.intensity = ValidateValue(shadowValue["intensity"], shadow.intensity).asFloat();
+
+			shadow.rotate = ValidateValue(shadowValue["rotate"], shadow.rotate).asBool();
+			shadow.rotateOffsetPos = ValidateValue(shadowValue["rotateOffsetPos"], shadow.rotateOffsetPos).asFloat();
+			shadow.rotateOffsetAngle = ValidateValue(shadowValue["rotateOffsetAngle"], shadow.rotateOffsetAngle).asFloat();
 		}
 	}
 
