@@ -190,13 +190,19 @@ static Json::Value ValidateValue(Json::Value value, T defaultValue)
 	return value;
 }
 
-static std::string StringToUpper(std::string data) {
+static std::string ToUpper(std::string data) {
 	std::for_each(data.begin(), data.end(), [](char& c) {
 		c = ::toupper(c);
 		});
 	return data;
 }
 
+static std::string ToLower(std::string data) {
+	std::for_each(data.begin(), data.end(), [](char& c) {
+		c = ::tolower(c);
+		});
+	return data;
+}
 
 static float CVector2D_MagnitudeSqr(CVector2D* vec2d) {
 	return vec2d->x * vec2d->x + vec2d->y * vec2d->y;

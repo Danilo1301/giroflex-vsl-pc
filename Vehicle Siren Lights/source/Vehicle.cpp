@@ -175,7 +175,7 @@ void Vehicle::RenderBefore() {
 					auto step = pattern->steps[vehiclePatternData->stepLoop->m_StepIndex];
 
 					for (auto point : lightGroup->points) {
-						if (StringToUpper(name).compare(StringToUpper(point->object)) == 0) {
+						if (ToUpper(name).compare(ToUpper(point->object)) == 0) {
 
 							/*
 							char text[512];
