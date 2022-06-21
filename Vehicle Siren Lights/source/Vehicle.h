@@ -34,6 +34,7 @@ public:
 	bool m_PrevLightState = false;
 	bool m_PrevSirenState = false;
 	unsigned int m_PrevTime;
+	float m_RotateShadowAngle = 0;
 
 	void Update();
 	void UpdateSirenState();

@@ -10,6 +10,9 @@ struct LightGroupShadow {
 	float width = 3.0f;
 	float height = 3.0f;
 	float intensity = 1.0f;
+	bool rotate = false;
+	float rotateOffsetPos = 0.0f;
+	float rotateOffsetAngle = 0.0f;
 };
 
 class LightGroupShadows {

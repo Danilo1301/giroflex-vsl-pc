@@ -35,6 +35,13 @@ void WindowShadow::Create() {
 	auto buttonAngle = window->AddNumberRange(Localization::GetLine("angle"), &m_LightGroupShadow->angle, 0.0f, 360.0f);
 	buttonAngle->m_AddBy = 0.5f;
 
+	auto buttonRotate = window->AddCheckBox(Localization::GetLine("rotate"), &m_LightGroupShadow->rotate);
+
+	auto buttonRotateOffsetPos = window->AddNumberRange(Localization::GetLine("rotate_offset_pos"), &m_LightGroupShadow->rotateOffsetPos, 0.0f, 100.0f);
+	
+	auto buttonRotateOffsetAngle = window->AddNumberRange(Localization::GetLine("rotate_offset_angle"), &m_LightGroupShadow->rotateOffsetAngle, 0.0f, 360.0f);
+	buttonRotateOffsetAngle->m_AddBy = 0.5f;
+
 	auto buttonBack = window->AddButton(Localization::GetLine("back"));
 	buttonBack->m_OnClick = [window]() {
 		Menu::RemoveWindow(window);

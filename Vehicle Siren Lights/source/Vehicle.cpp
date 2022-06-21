@@ -13,6 +13,12 @@ bool Vehicle::m_FreezeLights = false;
 
 static std::list<std::pair<unsigned int*, unsigned int>> m_ResetEntries;
 
+void CVector_AddDir(CVector* vec, CVector2D forward, CVector2D right, float x, float y)
+{
+	(*vec) += CVector(y * forward.x, y * forward.y, 0.0f);
+	(*vec) += CVector(x * right.x, x * right.y, 0.0f);
+}
+
 Vehicle::Vehicle(CVehicle* veh) {
 	m_Vehicle = veh;	
 
@@ -265,6 +271,8 @@ void Vehicle::RenderShadows() {
 		for (auto point : lightGroup->points) {
 			if (!point->shadow.enabled) continue;
 
+			auto shadow = point->shadow;
+
 			//auto pos = VehicleDummy::GetTransformedPosition(m_Vehicle, lightGroup->position + point->position + CVector(point->shadow.position.x, point->shadow.position.y, 0));
 			CVector pos = m_Vehicle->GetPosition();
 
@@ -274,19 +282,34 @@ void Vehicle::RenderShadows() {
 			CVector2D right = CVector2D(m_Vehicle->m_matrix->right);
 			CVector2D_Normalize(&right);
 			
-			auto offsetPos = lightGroup->position + point->position + CVector(point->shadow.position.x, point->shadow.position.y, 0);
+			auto offsetPos = lightGroup->position + point->position + CVector(shadow.position.x, shadow.position.y, 0);
 
-			float add_Y = offsetPos.y;
-			pos += CVector(add_Y * forward.x, add_Y * forward.y, 0.0f);
+			CVector_AddDir(&pos, forward, right, offsetPos.x, offsetPos.y);
 
-			float add_X = offsetPos.x;
-			pos += CVector(add_X * right.x, add_X * right.y, 0.0f);
+			float width = shadow.width;
+			float height = shadow.height;
 
-			float width = point->shadow.width;
-			float height = point->shadow.height;
+			
 
-			CVector2D_Rotate(&forward, point->shadow.angle);
-			CVector2D_Rotate(&right, point->shadow.angle);
+			if (shadow.rotate)
+			{
+				auto angle = m_RotateShadowAngle + shadow.rotateOffsetAngle;
+
+				while (angle >= 360)
+					angle -= 360;
+
+				CVector2D_Rotate(&forward, angle);
+				CVector2D_Rotate(&right, angle);
+
+				CVector_AddDir(&pos, forward, right, 0, shadow.rotateOffsetPos);
+			}
+			else {
+				CVector2D_Rotate(&forward, shadow.angle);
+				CVector2D_Rotate(&right, shadow.angle);
+			}
+
+
+
 			//
 
 			CRGBA color = lightGroup->usePatternColors ? point->GetColor(step) : point->color;
@@ -301,12 +324,12 @@ void Vehicle::RenderShadows() {
 
 			if (!enabled) continue;
 
-			float intensity = point->shadow.intensity;
+			float intensity = shadow.intensity;
 
 			CShadows::StoreCarLightShadow(
 				m_Vehicle,
 				shadowId++,
-				LightGroupShadows::m_ShadowTextures[point->shadow.textureIndex], // gpShadowExplosionTex, //LightGroupShadows::m_ShadowTexture,
+				LightGroupShadows::m_ShadowTextures[shadow.textureIndex], // gpShadowExplosionTex, //LightGroupShadows::m_ShadowTexture,
 				&pos,
 				height * forward.x,
 				height * forward.y,
@@ -380,6 +403,13 @@ void Vehicle::UpdatePatternAndSteps() {
 	//Log::file << "[Vehicle " << m_Vehicle << "] UpdatePatternAndSteps " << m_LightGroupData.size() << " light groups" << std::endl;
 
 	int updateMs = CTimer::m_snTimeInMilliseconds - m_PrevTime;
+
+	if (!m_FreezeLights)
+	{
+		m_RotateShadowAngle += updateMs * 0.5f;
+		if (m_RotateShadowAngle >= 360) m_RotateShadowAngle -= 360;
+	}
+	
 
 	for (auto pair : m_LightGroupData) {
 		auto lightGroup = pair.first;

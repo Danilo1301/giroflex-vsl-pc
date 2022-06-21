@@ -9,22 +9,28 @@
 #include "LightGroupShadow.h"
 #include "Config.h"
 
+#include "CVisibilityPlugins.h"
+
 bool Mod::m_DebugEnabled = false;
 bool Mod::m_IsSamp = false;
-std::string Mod::m_Version = "1.3.1";
-
-/*
+std::string Mod::m_Version = "1.4.0";
 
 CVehicle* testVehicle = NULL;
 #include "VehicleDummy.h"
-
 
 void TestUpdate() {
 	if (Input::GetKeyDown(74)) {
 		testVehicle = FindPlayerVehicle(0, false);
 
 		if (testVehicle) {
+
+			//RwFrameForAllChildren((RwFrame*)testVehicle->m_pRwClump->object.parent, Callback, 0);
+
 			auto frames = VehicleDummy::GetFramesOnVehicle(testVehicle);
+
+			
+
+			/*
 
 			for (auto frame : frames) {
 				std::string name = GetFrameNodeName(frame);
@@ -56,10 +62,12 @@ void TestUpdate() {
 				
 				
 			}
+			*/
 		}
 	}
 }
 
+/*
 
 
 void TestDraw() {
@@ -113,6 +121,7 @@ void TestShadowMenu()
 void Mod::Update() {
 	Input::Update();
 
+	TestUpdate();
 	//
 
 	if (Input::GetKey(17)) {
