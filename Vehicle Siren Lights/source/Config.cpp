@@ -234,6 +234,7 @@ void Config::SaveSettings() {
 	Json::Value value = Json::objectValue;
 
 	value["material_ambient"] = Vehicle::m_MatAmbient;
+	value["key_open_menu"] = Mod::m_OpenMenuKeybind.ToJSON();
 
 	WriteToFile(path, value);
 }
@@ -249,4 +250,7 @@ void Config::LoadSettings() {
 	Json::Value value = ReadFile(path);
 
 	Vehicle::m_MatAmbient = value["material_ambient"].asFloat();
+	Mod::m_OpenMenuKeybind.FromJSON(value["key_open_menu"]);
+
+	Log::file << "[Config] Open menu: " << Mod::m_OpenMenuKeybind.GetKeybindString() << std::endl;
 }

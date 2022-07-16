@@ -63,6 +63,7 @@
     <ClInclude Include="source\menu\TextEditor.h" />
     <ClInclude Include="source\menu\Window.h" />
     <ClInclude Include="source\Mod.h" />
+    <ClInclude Include="source\OpenMenuKeybind.h" />
     <ClInclude Include="source\Pattern.h" />
     <ClInclude Include="source\PatternLoop.h" />
     <ClInclude Include="source\Patterns.h" />

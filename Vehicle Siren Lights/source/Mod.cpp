@@ -13,7 +13,8 @@
 
 bool Mod::m_DebugEnabled = false;
 bool Mod::m_IsSamp = false;
-std::string Mod::m_Version = "1.4.0";
+std::string Mod::m_Version = "1.5";
+OpenMenuKeybind Mod::m_OpenMenuKeybind = { 76, false, false, true };
 
 CVehicle* testVehicle = NULL;
 #include "VehicleDummy.h"
@@ -161,10 +162,9 @@ void Mod::Update() {
 		}
 	}
 
-	if (Input::GetKey(17)) {
-		if (Input::GetKeyDown(76)) {
-			ToggleMenu();
-		}
+	if (m_OpenMenuKeybind.CheckKeybind())
+	{
+		ToggleMenu();
 	}
 
 	if (Menu::m_Visible) {
@@ -254,6 +254,9 @@ void Mod::ToggleMenu() {
 }
 
 void Mod::ReloadConfig() {
+	Log::file << "---------------------------------------------" << std::endl;
+	Log::file << "[Mod] Reload config" << std::endl;
+
 	if (Menu::m_Visible) {
 		ToggleMenu();
 	}

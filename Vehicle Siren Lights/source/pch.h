@@ -234,3 +234,15 @@ static void CVector2D_Rotate(CVector2D* vec2d, float ang) {
 	vec2d->x = x;
 	vec2d->y = y;
 };
+
+template <typename T>
+static std::string join(const T& v, const std::string& delim) {
+	std::ostringstream s;
+	for (const auto& i : v) {
+		if (&i != &v[0]) {
+			s << delim;
+		}
+		s << i;
+	}
+	return s.str();
+}

@@ -230,6 +230,9 @@
     <ClInclude Include="source\windows\WindowShadow.h">
       <Filter>source\windows</Filter>
     </ClInclude>
+    <ClInclude Include="source\OpenMenuKeybind.h">
+      <Filter>source</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\include\json_valueiterator.inl">
