@@ -123,6 +123,9 @@
     <ClCompile Include="source\windows\WindowShadow.cpp">
       <Filter>source\windows</Filter>
     </ClCompile>
+    <ClCompile Include="source\windows\WindowRotateObject.cpp">
+      <Filter>source\windows</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="source\Mod.h">
@@ -232,6 +235,12 @@
     </ClInclude>
     <ClInclude Include="source\OpenMenuKeybind.h">
       <Filter>source</Filter>
+    </ClInclude>
+    <ClInclude Include="source\LightGroupRotateObject.h">
+      <Filter>source</Filter>
+    </ClInclude>
+    <ClInclude Include="source\windows\WindowRotateObject.h">
+      <Filter>source\windows</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

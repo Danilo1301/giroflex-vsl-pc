@@ -13,7 +13,7 @@
 
 bool Mod::m_DebugEnabled = false;
 bool Mod::m_IsSamp = false;
-std::string Mod::m_Version = "1.4.1";
+std::string Mod::m_Version = "1.5";
 OpenMenuKeybind Mod::m_OpenMenuKeybind = { 76, false, false, true };
 
 CVehicle* testVehicle = NULL;

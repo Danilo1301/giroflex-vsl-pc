@@ -6,6 +6,6 @@ class WindowPoint {
 public:
 	static Point* m_Point;
 
-	static void CreatePoints();
+	static void Create();
 	static void CreateEditPoint();
 };

@@ -44,6 +44,8 @@ public:
 	void DrawPoints();
 	void Destroy();
 
+	void ResetObjectRotation(std::string object);
+
 	bool GetSirenState();
 
 	void RenderBefore();

@@ -137,6 +137,20 @@ void Vehicle::Destroy() {
 
 }
 
+void Vehicle::ResetObjectRotation(std::string object)
+{
+	auto frame = VehicleDummy::FindDummy(m_Vehicle, object);
+
+	if (!frame) return;
+
+	RwV3d axis = {0, 0, 0};
+	RwReal angle = 0.0f;
+	RwV3d pos = frame->modelling.pos;
+	
+	RwMatrixRotate(&frame->modelling, &axis, angle, rwCOMBINEREPLACE);
+	RwMatrixTranslate(&frame->modelling, &pos, rwCOMBINEREPLACE);
+}
+
 bool Vehicle::GetSirenState() {
 	if (Menu::m_Visible && FindPlayerVehicle(0, false) == m_Vehicle) return true;
 	return m_Vehicle->m_nVehicleFlags.bSirenOrAlarm;
@@ -177,11 +191,37 @@ void Vehicle::RenderBefore() {
 					for (auto point : lightGroup->points) {
 						if (ToUpper(name).compare(ToUpper(point->object)) == 0) {
 
+							CRGBA color = lightGroup->usePatternColors ? point->GetColor(step) : point->color;
+							bool enabled = point->GetIsEnabled(step);
+
+							/*
+							* use this in other cases
+							*/
+							if (!vehiclePatternData->enabled) enabled = false;
+							if (m_FreezeLights) enabled = true;
+							
 							/*
 							char text[512];
 							sprintf(text, "%s", name.c_str());
 							DrawWorldText(text, position, CRGBA(255, 0, 0));
 							*/
+
+							if (point->rotateObject.rotate)
+							{
+								if (vehiclePatternData->enabled || point->rotateObject.rotateAlways)
+								{
+									auto axisVal = point->rotateObject.axis;
+
+									RwV3d axis = {
+										(float)(axisVal == eRotateObjectAxis::X ? 1 : 0),
+										(float)(axisVal == eRotateObjectAxis::Y ? 1 : 0),
+										(float)(axisVal == eRotateObjectAxis::Z ? 1 : 0)
+									};
+									RwReal angle = point->rotateObject.speed;
+
+									RwMatrixRotate(&frameAtomic->modelling, &axis, angle, rwCOMBINEPRECONCAT);
+								}
+							}
 
 							//
 
@@ -189,31 +229,14 @@ void Vehicle::RenderBefore() {
 							materials.clear();
 							RpGeometryForAllMaterials(atomic->geometry, [](RpMaterial* material, void* data) {
 								materials.push_back(material);
-
 								//m_ResetEntries.push_back(std::make_pair(reinterpret_cast<unsigned int*>(&material->color), *reinterpret_cast<unsigned int*>(&material->color)));
 								//m_ResetEntries.push_back(std::make_pair(reinterpret_cast<unsigned int*>(&material->surfaceProps.ambient), *reinterpret_cast<unsigned int*>(&material->surfaceProps.ambient)));
-
 							return material;
 							}, 0);
 
 							//
 
-							if (!m_FreezeLights) {
-								if (!vehiclePatternData->enabled) {
-									for (auto material : materials) {
-										material->color = { point->disabledColor.r, point->disabledColor.g, point->disabledColor.b, point->disabledColor.a };
-									}
-									continue;
-								}
-							}
-
-							//
-
 							for (auto material : materials) {
-								CRGBA color = lightGroup->usePatternColors ? point->GetColor(step) : point->color;
-								bool enabled = point->GetIsEnabled(step);
-
-								if (m_FreezeLights) enabled = true;
 
 								if (enabled) {
 									material->color = { color.r, color.g, color.b, color.a };
@@ -223,19 +246,13 @@ void Vehicle::RenderBefore() {
 								}
 
 								material->surfaceProps.ambient = m_MatAmbient;
-
-								
 								//material->surfaceProps.diffuse = m_MatDiffuse;
 								//material->surfaceProps.specular = m_MatSpecular;
 							}
 
-							//
-
 							/*
 							sprintf(text, "");
-							for (auto material : materials) {
-								sprintf(text, "%s %s,", text, "MATERIAL");
-							}
+							for (auto material : materials) sprintf(text, "%s %s,", text, "MATERIAL");
 							DrawWorldText(text, position, CRGBA(0, 0, 255));
 							*/
 						}

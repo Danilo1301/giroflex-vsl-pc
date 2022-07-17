@@ -3,6 +3,7 @@
 #include "pch.h"
 
 #include "LightGroupShadow.h"
+#include "LightGroupRotateObject.h"
 
 enum class eSirenPosition {
 	LEFT,
@@ -25,6 +26,7 @@ public:
 	CRGBA disabledColor = CRGBA(0, 0, 0);
 	eSirenPosition sirenPosition = eSirenPosition::LEFT;
 	LightGroupShadow shadow;
+	LightGroupRotateObject rotateObject;
 
 	CRGBA GetColor(PatternStep* step) {
 		switch (sirenPosition)
@@ -71,12 +73,17 @@ public:
 		shadowValue["width"] = shadow.width;
 		shadowValue["height"] = shadow.height;
 		shadowValue["intensity"] = shadow.intensity;
-
 		shadowValue["rotate"] = shadow.rotate;
 		shadowValue["rotateOffsetPos"] = shadow.rotateOffsetPos;
 		shadowValue["rotateOffsetAngle"] = shadow.rotateOffsetAngle;
-
 		value["shadow"] = shadowValue;
+
+		Json::Value rotateObjectValue = Json::objectValue;
+		rotateObjectValue["rotate"] = rotateObject.rotate;
+		rotateObjectValue["rotateAlways"] = rotateObject.rotateAlways;
+		rotateObjectValue["speed"] = rotateObject.speed;
+		rotateObjectValue["axis"] = (int)rotateObject.axis;
+		value["rotateObject"] = rotateObjectValue;
 
 		return value;
 	}
@@ -103,6 +110,15 @@ public:
 			shadow.rotate = ValidateValue(shadowValue["rotate"], shadow.rotate).asBool();
 			shadow.rotateOffsetPos = ValidateValue(shadowValue["rotateOffsetPos"], shadow.rotateOffsetPos).asFloat();
 			shadow.rotateOffsetAngle = ValidateValue(shadowValue["rotateOffsetAngle"], shadow.rotateOffsetAngle).asFloat();
+		}
+
+		Json::Value rotateObjectValue = value["rotateObject"];
+		if (!rotateObjectValue.isNull())
+		{
+			rotateObject.rotate = rotateObjectValue["rotate"].asBool();
+			rotateObject.rotateAlways = rotateObjectValue["rotateAlways"].asBool();
+			rotateObject.speed = rotateObjectValue["speed"].asFloat();
+			rotateObject.axis = (eRotateObjectAxis)rotateObjectValue["axis"].asInt();
 		}
 	}
 

@@ -40,6 +40,7 @@
     <ClCompile Include="source\windows\WindowMain.cpp" />
     <ClCompile Include="source\windows\WindowPattern.cpp" />
     <ClCompile Include="source\windows\WindowPoint.cpp" />
+    <ClCompile Include="source\windows\WindowRotateObject.cpp" />
     <ClCompile Include="source\windows\WindowSelectPattern.cpp" />
     <ClCompile Include="source\windows\WindowSettings.cpp" />
     <ClCompile Include="source\windows\WindowShadow.cpp" />
@@ -49,6 +50,7 @@
     <ClInclude Include="source\Config.h" />
     <ClInclude Include="source\input\Input.h" />
     <ClInclude Include="source\LightGroup.h" />
+    <ClInclude Include="source\LightGroupRotateObject.h" />
     <ClInclude Include="source\LightGroups.h" />
     <ClInclude Include="source\LightGroupShadow.h" />
     <ClInclude Include="source\localization\Localization.h" />
@@ -77,6 +79,7 @@
     <ClInclude Include="source\windows\WindowMain.h" />
     <ClInclude Include="source\windows\WindowPattern.h" />
     <ClInclude Include="source\windows\WindowPoint.h" />
+    <ClInclude Include="source\windows\WindowRotateObject.h" />
     <ClInclude Include="source\windows\WindowSelectPattern.h" />
     <ClInclude Include="source\windows\WindowSettings.h" />
     <ClInclude Include="source\windows\WindowShadow.h" />

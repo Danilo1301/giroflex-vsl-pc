@@ -18,6 +18,12 @@ Vehicle* Vehicles::AddVehicle(CVehicle* veh) {
 	return vehicle;
 }
 
+Vehicle* Vehicles::GetVehicle(CVehicle* veh)
+{
+	if (!HasVehicle(veh)) return NULL;
+	return m_Vehicles[veh];
+}
+
 void Vehicles::TryAddAllVehicles() {
 	//Log::file << "[Vehicles] TryAddAllVehicles" << std::endl;
 

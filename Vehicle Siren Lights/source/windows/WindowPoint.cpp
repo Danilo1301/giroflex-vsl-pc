@@ -2,6 +2,7 @@
 #include "WindowLightGroup.h"
 #include "WindowMain.h"
 #include "WindowShadow.h"
+#include "WindowRotateObject.h"
 
 #include "../VehicleDummy.h"
 #include "../Vehicles.h"
@@ -14,7 +15,7 @@
 
 Point* WindowPoint::m_Point = nullptr;
 
-void WindowPoint::CreatePoints() {
+void WindowPoint::Create() {
 	Vehicles::m_DrawVehiclePoints = true;
 
 	CVehicle* veh = WindowMain::m_Vehicle;
@@ -43,7 +44,7 @@ void WindowPoint::CreatePoints() {
 		auto point = lightGroup->AddPoint(CVector(0, 0, 0), CRGBA(255, 0, 0));
 
 		Menu::RemoveWindow(window);
-		CreatePoints();
+		Create();
 	};
 
 
@@ -135,11 +136,18 @@ void WindowPoint::CreateEditPoint() {
 		});
 	};
 
-	auto buttonShaadow = window->AddButton(Localization::GetLine("edit_shadow"));
-	buttonShaadow->m_OnClick = [point, window]() {
+	auto buttonShadow = window->AddButton(Localization::GetLine("edit_shadow"));
+	buttonShadow->m_OnClick = [point, window]() {
 		Menu::RemoveWindow(window);
 		WindowShadow::m_LightGroupShadow = &point->shadow;
 		WindowShadow::Create();
+	};
+
+	auto buttonRotateObject = window->AddButton("Rotate Object");
+	buttonRotateObject->m_OnClick = [point, window]() {
+		Menu::RemoveWindow(window);
+		WindowRotateObject::m_LightGroupRotateObject = &point->rotateObject;
+		WindowRotateObject::Create();
 	};
 
 	auto buttonDelete = window->AddButton(Localization::GetLine("delete"));
@@ -151,7 +159,7 @@ void WindowPoint::CreateEditPoint() {
 		lightGroup->RemovePoint(point);
 
 		Menu::RemoveWindow(window);
-		CreatePoints();
+		Create();
 	};
 	
 	auto buttonClone = window->AddButton(Localization::GetLine("clone"));
@@ -160,13 +168,13 @@ void WindowPoint::CreateEditPoint() {
 		newPoint->FromJSON(point->ToJSON());
 
 		Menu::RemoveWindow(window);
-		CreatePoints();
+		Create();
 	};
 
 	auto buttonBack = window->AddButton(Localization::GetLine("back"));
 	buttonBack->m_OnClick = [window]() {
 		Menu::RemoveWindow(window);
-		CreatePoints();
+		Create();
 	};
 }
 

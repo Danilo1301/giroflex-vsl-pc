@@ -84,7 +84,7 @@ void WindowLightGroup::CreateEditLightGroup() {
 	auto buttonEditPoints = window->AddButton(Localization::GetLineFormatted("edit_points", lightGroup->points.size()));
 	buttonEditPoints->m_OnClick = [window]() {
 		Menu::RemoveWindow(window);
-		WindowPoint::CreatePoints();
+		WindowPoint::Create();
 	};
 
 	auto editPatterns = window->AddButton(Localization::GetLineFormatted("edit_patterns", lightGroup->patternCycleSteps.size()));

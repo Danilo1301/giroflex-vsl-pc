@@ -11,6 +11,7 @@ public:
 
 	static bool HasVehicle(CVehicle* veh);
 	static Vehicle* AddVehicle(CVehicle* veh);
+	static Vehicle* GetVehicle(CVehicle* veh);
 	static void TryAddAllVehicles();
 	static void RemoveVehicle(CVehicle* veh);
 	static void RemoveAllVehicles();
