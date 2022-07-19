@@ -16,6 +16,7 @@
     <ClCompile Include="..\include\json_writer.cpp" />
     <ClCompile Include="source\Config.cpp" />
     <ClCompile Include="source\input\Input.cpp" />
+    <ClCompile Include="source\Keybinds.cpp" />
     <ClCompile Include="source\LightGroups.cpp" />
     <ClCompile Include="source\LightGroupShadow.cpp" />
     <ClCompile Include="source\localization\Localization.cpp" />
@@ -49,6 +50,7 @@
     <ClInclude Include="..\include\json_tool.h" />
     <ClInclude Include="source\Config.h" />
     <ClInclude Include="source\input\Input.h" />
+    <ClInclude Include="source\Keybinds.h" />
     <ClInclude Include="source\LightGroup.h" />
     <ClInclude Include="source\LightGroupRotateObject.h" />
     <ClInclude Include="source\LightGroups.h" />
@@ -65,7 +67,7 @@
     <ClInclude Include="source\menu\TextEditor.h" />
     <ClInclude Include="source\menu\Window.h" />
     <ClInclude Include="source\Mod.h" />
-    <ClInclude Include="source\OpenMenuKeybind.h" />
+    <ClInclude Include="source\Keybind.h" />
     <ClInclude Include="source\Pattern.h" />
     <ClInclude Include="source\PatternLoop.h" />
     <ClInclude Include="source\Patterns.h" />

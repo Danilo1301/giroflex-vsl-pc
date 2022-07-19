@@ -2,17 +2,27 @@
 
 #include "pch.h"
 
-struct OpenMenuKeybind {
+//key; alt; shift; ctrl
+struct Keybind {
     int key;
     bool alt;
     bool shift;
     bool ctrl;
+    bool code = false;
 
     Json::Value ToJSON()
     {
         Json::Value value = Json::objectValue;
 
-        value["key"] = GetKeyString();
+        if (key == -1) {
+            value["key"] = "";
+        }
+        else
+        {
+            if (code) value["key"] = key;
+            else value["key"] = GetKeyString();
+        }
+
         value["alt"] = alt;
         value["shift"] = shift;
         value["ctrl"] = ctrl;
@@ -24,9 +34,19 @@ struct OpenMenuKeybind {
     {
         if (value.empty()) return;
 
-        auto keyStr = ToUpper(value["key"].asString());
+        code = value["key"].isNumeric();
 
-        key = (int)keyStr.at(0);
+        if (code)
+        {
+            key = value["key"].asInt();
+        }
+        else {
+            auto keyStr = ToUpper(value["key"].asString());
+
+            if (keyStr.empty()) key = -1;
+            else key = (int)keyStr.at(0);
+        }
+
         alt = value["alt"].asBool();
         shift = value["shift"].asBool();
         ctrl = value["ctrl"].asBool();
@@ -42,13 +62,15 @@ struct OpenMenuKeybind {
 
         if (ks.size() == 0) return GetKeyString();
 
-        ks.push_back(GetKeyString());
+        if(key != -1) ks.push_back(GetKeyString());
 
         return join(ks, " + ");
     }
 
     std::string GetKeyString()
     {
+        if (key == -1) return "";
+
         char ch = static_cast<char>(key);
         return ToUpper(std::string(1, ch));
     }
@@ -59,6 +81,8 @@ struct OpenMenuKeybind {
         if (ctrl && !Input::GetKey(17)) return false;
         if (shift && !Input::GetKey(16)) return false;
 
-        return (Input::GetKeyDown(key));
+        if (key == -1) return true;
+
+        return Input::GetKeyDown(key);
     }
 };

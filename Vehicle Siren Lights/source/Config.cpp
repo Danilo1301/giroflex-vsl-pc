@@ -2,6 +2,7 @@
 #include <filesystem>
 
 #include "Vehicle.h"
+#include "Keybinds.h"
 
 std::string Config::m_DataPath = "\\data\\";
 std::string Config::m_VehiclesPath = "\\vehicles\\";
@@ -79,7 +80,6 @@ void Config::LoadJSON() {
 	}
 
 	//
-
 
 	Localization::RemoveAllLines();
 	Localization::m_AvailableLanguages.clear();
@@ -234,7 +234,7 @@ void Config::SaveSettings() {
 	Json::Value value = Json::objectValue;
 
 	value["material_ambient"] = Vehicle::m_MatAmbient;
-	value["key_open_menu"] = Mod::m_OpenMenuKeybind.ToJSON();
+	value["keybinds"] = Keybinds::ToJSON();
 
 	WriteToFile(path, value);
 }
@@ -243,14 +243,17 @@ void Config::LoadSettings() {
 	auto path = m_DataPath + "settings.json";
 
 	if (!Exists(path)) {
-		Log::file << "Config not found";
+		Log::file << "[Config] Config not found";
 		return;
 	}
 
 	Json::Value value = ReadFile(path);
 
 	Vehicle::m_MatAmbient = value["material_ambient"].asFloat();
-	Mod::m_OpenMenuKeybind.FromJSON(value["key_open_menu"]);
+	Keybinds::FromJSON(value["keybinds"]);
 
-	Log::file << "[Config] Open menu: " << Mod::m_OpenMenuKeybind.GetKeybindString() << std::endl;
+	Log::file << "[Keybind] openMenu: " << Keybinds::openMenu.GetKeybindString() << std::endl;
+	Log::file << "[Keybind] toggleLights: " << Keybinds::toggleLights.GetKeybindString() << std::endl;
+	Log::file << "[Keybind] editorUpDown: " << Keybinds::editorUpDown.GetKeybindString() << std::endl;
+	Log::file << "[Keybind] editorSlower: " << Keybinds::editorSlower.GetKeybindString() << std::endl;
 }

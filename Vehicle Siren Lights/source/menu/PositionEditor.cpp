@@ -1,5 +1,6 @@
 #include "PositionEditor.h"
 #include "../input/Input.h"
+#include "../Keybinds.h"
 
 bool PositionEditor::m_Visible = false;
 CVector* PositionEditor::m_Value = nullptr;
@@ -9,7 +10,10 @@ void PositionEditor::Update() {
 
 	if (value == nullptr) return;
 
-	float moveAmount = Input::GetKey(VK_LSHIFT) ? 0.002f : 0.010f;
+	bool isUpDownKeyPressed = Keybinds::editorUpDown.CheckKeybind();
+	bool isSlowerKeyPressed = Keybinds::editorSlower.CheckKeybind();
+
+	float moveAmount = isSlowerKeyPressed ? 0.002f : 0.010f;
 
 	if (Input::GetKey(VK_LEFT)) {
 		(*value).x -= moveAmount;
@@ -17,9 +21,9 @@ void PositionEditor::Update() {
 	if (Input::GetKey(VK_RIGHT)) {
 		(*value).x += moveAmount;
 	}
-
+	
 	if (Input::GetKey(VK_UP)) {
-		if (Input::GetKey(VK_LCONTROL)) {
+		if (isUpDownKeyPressed) {
 			(*value).z += moveAmount;
 		}
 		else {
@@ -28,7 +32,7 @@ void PositionEditor::Update() {
 	}
 
 	if (Input::GetKey(VK_DOWN)) {
-		if (Input::GetKey(VK_LCONTROL)) {
+		if (isUpDownKeyPressed) {
 			(*value).z -= moveAmount;
 		}
 		else {
@@ -61,7 +65,7 @@ void PositionEditor::Draw() {
 	Menu::DrawString("Move", keys1Position.x + 70, keys1Position.y, CRGBA(255, 255, 255));
 
 	CVector2D keys2Position = CVector2D(position.x + 240.0f, position.y + 30.0f);
-	Menu::DrawKeyButton("CTRL", keys2Position.x, keys2Position.y, 50, 20);
+	Menu::DrawKeyButton(Keybinds::editorUpDown.GetKeybindString(), keys2Position.x, keys2Position.y, 50, 20);
 	Menu::DrawString("+", keys2Position.x + 55.0f, keys2Position.y, CRGBA(255, 255, 255));
 	Menu::DrawArrowKeyButton(70 + keys2Position.x, keys2Position.y - 15, eArrowDirection::UP, 20, 20);
 	Menu::DrawArrowKeyButton(70 + keys2Position.x, keys2Position.y + 15, eArrowDirection::DOWN, 20, 20);
@@ -72,7 +76,7 @@ void PositionEditor::Draw() {
 	Menu::DrawString("Confirm", key3Position.x + 60.0f, key3Position.y, CRGBA(255, 255, 255));
 
 	CVector2D key4Position = CVector2D(position.x + 280.0f, position.y + 90.0f);
-	Menu::DrawKeyButton("SHIFT", key4Position.x, key4Position.y, 50, 20);
+	Menu::DrawKeyButton(Keybinds::editorSlower.GetKeybindString(), key4Position.x, key4Position.y, 50, 20);
 	Menu::DrawString("Move slower", key4Position.x + 60.0f, key4Position.y, CRGBA(255, 255, 255));
 
 	if (m_Value == nullptr) return;

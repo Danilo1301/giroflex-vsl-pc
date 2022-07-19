@@ -9,7 +9,7 @@ std::string Localization::m_CurrentLanguage = "en";
 std::vector<std::string> Localization::m_AvailableLanguages;
 
 void Localization::RegisterLine(std::string key, std::string language, std::string text) {
-	Log::file << "[Localization] RegisterLine " << key << " (" << language << ") " << "'" << text << "'" << std::endl;
+	//Log::file << "[Localization] RegisterLine " << key << " (" << language << ") " << "'" << text << "'" << std::endl;
 
 	if (m_Lines.count(key) == 0)
 	{

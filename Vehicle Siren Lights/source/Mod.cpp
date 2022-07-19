@@ -8,13 +8,13 @@
 #include "LightGroups.h"
 #include "LightGroupShadow.h"
 #include "Config.h"
+#include "Keybinds.h"
 
 #include "CVisibilityPlugins.h"
 
 bool Mod::m_DebugEnabled = false;
 bool Mod::m_IsSamp = false;
-std::string Mod::m_Version = "1.5";
-OpenMenuKeybind Mod::m_OpenMenuKeybind = { 76, false, false, true };
+std::string Mod::m_Version = "1.5.1";
 
 CVehicle* testVehicle = NULL;
 #include "VehicleDummy.h"
@@ -141,14 +141,14 @@ void Mod::Update() {
 
 	//
 
-	if (Input::GetKey(17)) {
-		if (Input::GetKeyDown(74)) {
-			auto veh = FindPlayerVehicle(0, false);
-			if (veh) {
-				if (Vehicles::HasVehicle(veh)) {
-					auto vehicle = Vehicles::m_Vehicles[veh];
-					vehicle->SetAllLightGroupState(!vehicle->m_PrevLightState);
-				}
+	if (Keybinds::toggleLights.CheckKeybind())
+	{
+		auto veh = FindPlayerVehicle(0, false);
+
+		if (veh) {
+			if (Vehicles::HasVehicle(veh)) {
+				auto vehicle = Vehicles::m_Vehicles[veh];
+				vehicle->SetAllLightGroupState(!vehicle->m_PrevLightState);
 			}
 		}
 	}
@@ -162,7 +162,7 @@ void Mod::Update() {
 		}
 	}
 
-	if (m_OpenMenuKeybind.CheckKeybind())
+	if (Keybinds::openMenu.CheckKeybind())
 	{
 		ToggleMenu();
 	}
