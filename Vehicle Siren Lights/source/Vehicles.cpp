@@ -1,15 +1,14 @@
 #include "Vehicles.h"
-#include "LightGroups.h"
 
 std::map<CVehicle*, Vehicle*> Vehicles::m_Vehicles;
-bool Vehicles::m_DrawVehicleFrames = false;
-bool Vehicles::m_DrawVehiclePoints = false;
 
-bool Vehicles::HasVehicle(CVehicle* veh) {
+bool Vehicles::HasVehicle(CVehicle* veh)
+{
 	return m_Vehicles.find(veh) != m_Vehicles.end();
 }
 
-Vehicle* Vehicles::AddVehicle(CVehicle* veh) {
+Vehicle* Vehicles::AddVehicle(CVehicle* veh)
+{
 	Log::file << "[Vehicles] AddVehicle " << veh << " [" << std::to_string(veh->m_nModelIndex) << "] (" << std::to_string(m_Vehicles.size()+1) << " total)" << std::endl;
 
 	Vehicle* vehicle = new Vehicle(veh);
@@ -24,21 +23,18 @@ Vehicle* Vehicles::GetVehicle(CVehicle* veh)
 	return m_Vehicles[veh];
 }
 
-void Vehicles::TryAddAllVehicles() {
+void Vehicles::TryAddAllVehicles()
+{
 	//Log::file << "[Vehicles] TryAddAllVehicles" << std::endl;
 
 	for (auto veh : CPools::ms_pVehiclePool)
 	{
-		if (LightGroups::HasLightGroups(veh->m_nModelIndex)) {
-			if (!HasVehicle(veh)) AddVehicle(veh);
-		}
-		else {
-			if (HasVehicle(veh)) RemoveVehicle(veh);
-		}
+		if (!HasVehicle(veh)) AddVehicle(veh);
 	}
 }
 
-void Vehicles::RemoveVehicle(CVehicle* veh) {
+void Vehicles::RemoveVehicle(CVehicle* veh)
+{
 	Log::file << "[Vehicles] RemoveVehicle " << veh << " (" << std::to_string(m_Vehicles.size()-1) << " total)" << std::endl;
 
 	Vehicle* vehicle = m_Vehicles[veh];
@@ -49,7 +45,8 @@ void Vehicles::RemoveVehicle(CVehicle* veh) {
 
 }
 
-void Vehicles::RemoveAllVehicles() {
+void Vehicles::RemoveAllVehicles()
+{
 	Log::file << "[Vehicles] RemoveAllVehicles" << std::endl;
 
 	std::vector<CVehicle*> toremove;

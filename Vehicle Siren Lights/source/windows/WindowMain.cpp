@@ -1,39 +1,48 @@
 #include "WindowMain.h"
-#include "WindowLightGroup.h"
-#include "WindowPattern.h"
-#include "WindowSettings.h"
 
 #include "../menu/Menu.h"
 #include "../Vehicle.h"
 
 #include "../localization/Localization.h"
 
-CVehicle* WindowMain::m_Vehicle = nullptr;
+CVehicle* WindowMain::CurrentVehicle = nullptr;
 
-void WindowMain::CreateMain() {
-	auto window = Menu::AddWindow("Vehicle Siren Lights", Localization::GetLine("info_vehicle_id") + " " + std::to_string(m_Vehicle->m_nModelIndex) + " - v" + Mod::m_Version);
+void WindowMain::CreateMain()
+{
+	auto window = Menu::AddWindow("Vehicle Siren Lights", "whoa");
 
-	auto buttonEditLightGroups = window->AddButton(Localization::GetLine("main_edit_light_groups"));
-	buttonEditLightGroups->m_OnClick = [window]() {
-		Menu::RemoveWindow(window);
-		WindowLightGroup::CreateLightGroups();
+	//window->AddItem("haha");
+
+	auto optionsLanguage = window->AddButton(Localization::GetLine("main_language"));
+	optionsLanguage->m_OnClick = [window]()
+	{
+		auto window2 = Menu::AddWindow("NEW", "whoa AGAINE");
+		window2->m_Position.x += 200;
+		window2->m_Position.y += 200;
+
+		//window2->AddItem("haha");
+
+		for (size_t i = 0; i < 5; i++)
+		{
+			window2->AddButton("hi");
+		}
+
+		//window2->AddItem("haha");
 	};
 
-	auto buttonEditPatterns = window->AddButton(Localization::GetLine("main_edit_patterns"));
-	buttonEditPatterns->m_OnClick = [window]() {
-		Menu::RemoveWindow(window);
-		WindowPattern::CreatePatterns();
-	};
+	for (size_t i = 0; i < 20; i++)
+	{
+		window->AddButton("hi");
+	}
 
-	auto buttonSettings = window->AddButton(Localization::GetLine("main_settings"));
-	buttonSettings->m_OnClick = [window]() {
-		Menu::RemoveWindow(window);
-		WindowSettings::CreateSettings();
-	};
+	//window->AddItem("haha");
 
+	/*
+	auto window = Menu::AddWindow("Vehicle Siren Lights", Localization::GetLine("info_vehicle_id") + " " + std::to_string(CurrentVehicle->m_nModelIndex) + " - v" + Mod::Version);
+	
 	window->AddItem(Localization::GetLine("info_move_camera"));
 
-	if (Mod::m_IsSamp) window->AddItem(Localization::GetLine("info_hide_samp_chat"));
+	if (Mod::IsSamp) window->AddItem(Localization::GetLine("info_hide_samp_chat"));
 
 	static int languageVal;
 	languageVal = 0;
@@ -57,5 +66,5 @@ void WindowMain::CreateMain() {
 			};
 		}
 	};
-
+	*/
 }

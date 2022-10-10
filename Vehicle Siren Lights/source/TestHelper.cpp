@@ -2,19 +2,22 @@
 
 std::vector<TestFunction*> TestHelper::m_Steps;
 
-void TestHelper::AddStep(std::string name, std::function<void(void)> fn) {
+void TestHelper::AddStep(std::string name, std::function<void(void)> fn)
+{
 	TestFunction* testFunction = new TestFunction{ name, fn };
 	m_Steps.push_back(testFunction);
 }
 
-void TestHelper::RemoveStep(TestFunction* step) {
+void TestHelper::RemoveStep(TestFunction* step)
+{
 	auto it = std::find(m_Steps.begin(), m_Steps.end(), step);
 	if (it == m_Steps.end()) return;
 	m_Steps.erase(it);
 	delete step;
 }
 
-void TestHelper::RunNextStep() {
+void TestHelper::RunNextStep() 
+{
 	if (m_Steps.size() == 0) return;
 
 	auto testFunction = m_Steps[0];
@@ -31,7 +34,8 @@ void TestHelper::RunNextStep() {
 }
 
 
-void TestHelper::RunAllSteps() {
+void TestHelper::RunAllSteps()
+{
 	while (m_Steps.size() > 0)
 	{
 		RunNextStep();

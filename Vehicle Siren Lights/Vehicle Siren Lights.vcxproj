@@ -17,8 +17,6 @@
     <ClCompile Include="source\Config.cpp" />
     <ClCompile Include="source\input\Input.cpp" />
     <ClCompile Include="source\Keybinds.cpp" />
-    <ClCompile Include="source\LightGroups.cpp" />
-    <ClCompile Include="source\LightGroupShadow.cpp" />
     <ClCompile Include="source\localization\Localization.cpp" />
     <ClCompile Include="source\log\Log.cpp" />
     <ClCompile Include="source\menu\item\ButtonKey.cpp" />
@@ -31,30 +29,18 @@
     <ClCompile Include="source\menu\TextEditor.cpp" />
     <ClCompile Include="source\menu\Window.cpp" />
     <ClCompile Include="source\Mod.cpp" />
-    <ClCompile Include="source\Patterns.cpp" />
     <ClCompile Include="source\pch.cpp" />
     <ClCompile Include="source\TestHelper.cpp" />
     <ClCompile Include="source\Vehicle.cpp" />
     <ClCompile Include="source\VehicleDummy.cpp" />
     <ClCompile Include="source\Vehicles.cpp" />
-    <ClCompile Include="source\windows\WindowLightGroup.cpp" />
     <ClCompile Include="source\windows\WindowMain.cpp" />
-    <ClCompile Include="source\windows\WindowPattern.cpp" />
-    <ClCompile Include="source\windows\WindowPoint.cpp" />
-    <ClCompile Include="source\windows\WindowRotateObject.cpp" />
-    <ClCompile Include="source\windows\WindowSelectPattern.cpp" />
-    <ClCompile Include="source\windows\WindowSettings.cpp" />
-    <ClCompile Include="source\windows\WindowShadow.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\include\json_tool.h" />
     <ClInclude Include="source\Config.h" />
     <ClInclude Include="source\input\Input.h" />
     <ClInclude Include="source\Keybinds.h" />
-    <ClInclude Include="source\LightGroup.h" />
-    <ClInclude Include="source\LightGroupRotateObject.h" />
-    <ClInclude Include="source\LightGroups.h" />
-    <ClInclude Include="source\LightGroupShadow.h" />
     <ClInclude Include="source\localization\Localization.h" />
     <ClInclude Include="source\log\Log.h" />
     <ClInclude Include="source\menu\item\ButtonKey.h" />
@@ -68,24 +54,13 @@
     <ClInclude Include="source\menu\Window.h" />
     <ClInclude Include="source\Mod.h" />
     <ClInclude Include="source\Keybind.h" />
-    <ClInclude Include="source\Pattern.h" />
-    <ClInclude Include="source\PatternLoop.h" />
-    <ClInclude Include="source\Patterns.h" />
     <ClInclude Include="source\pch.h" />
     <ClInclude Include="source\Point.h" />
     <ClInclude Include="source\TestHelper.h" />
     <ClInclude Include="source\Vehicle.h" />
     <ClInclude Include="source\VehicleDummy.h" />
     <ClInclude Include="source\Vehicles.h" />
-    <ClInclude Include="source\windows\WindowLightGroup.h" />
     <ClInclude Include="source\windows\WindowMain.h" />
-    <ClInclude Include="source\windows\WindowPattern.h" />
-    <ClInclude Include="source\windows\WindowPoint.h" />
-    <ClInclude Include="source\windows\WindowRotateObject.h" />
-    <ClInclude Include="source\windows\WindowSelectPattern.h" />
-    <ClInclude Include="source\windows\WindowSettings.h" />
-    <ClInclude Include="source\windows\WindowShadow.h" />
-    <ClInclude Include="source\windows\WindowTest.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\include\json_valueiterator.inl" />

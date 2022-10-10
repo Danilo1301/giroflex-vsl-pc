@@ -6,11 +6,10 @@
 
 class Keybinds {
 public:
-	static Keybind openMenu;
-	static Keybind toggleLights;
-	static Keybind editorUpDown;
-	static Keybind editorSlower;
-
-	static Json::Value ToJSON();
-	static void FromJSON(Json::Value value);
+	static Keybind OpenMenu;
+	static Keybind ToggleDebug;
+	static Keybind ToggleLights;
+	static Keybind EditorUpDown;
+	static Keybind EditorSlower;
+	static Keybind ReloadConfig;
 };

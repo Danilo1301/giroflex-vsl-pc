@@ -8,13 +8,13 @@ void Window::Draw() {
 	//
 	if (m_Title.length() > 0) {
 		Menu::DrawRect(drawPos.x, drawPos.y, m_Size.x, 50, CRGBA(56, 172, 255));
-		Menu::DrawString(m_Title, drawPos.x + 10, drawPos.y + 50 / 2 - 10, CRGBA(255, 255, 255));
+		Menu::DrawString(m_Title, drawPos.x + 10, drawPos.y + 50.0f / 2 - 10, CRGBA(255, 255, 255));
 		drawPos.y += 50.0f;
 	}
 
 	if (m_Description.length() > 0) {
 		Menu::DrawRect(drawPos.x, drawPos.y, m_Size.x, 20, CRGBA(0, 0, 0, 200));
-		Menu::DrawString(m_Description, drawPos.x + 5, drawPos.y + 20 / 2 - 10, CRGBA(255, 255, 255));
+		Menu::DrawString(m_Description, drawPos.x + 5, drawPos.y + 20.0f / 2 - 10, CRGBA(255, 255, 255));
 		drawPos.y += 20.0f;
 	}
 
@@ -26,6 +26,7 @@ void Window::Draw() {
 
 	std::vector<Item*> items;
 
+	/*
 	float totalSize = 0.0f;
 	int i = 0;
 	int startAt = m_ListStartIndex + m_ListIndex;
@@ -36,17 +37,39 @@ void Window::Draw() {
 		}
 		i++;
 	}
-	m_Size.y = totalSize;
+	*/
+
+	int page = (int)floor((float)m_SelectedIndex / (float)m_MaxItemsByPage);
+	int maxPages = (int)ceil((float)m_Items.size() / (float)m_MaxItemsByPage);
+	int startIndex = (page * m_MaxItemsByPage);
+	int endIndex = startIndex + m_MaxItemsByPage;
+	float totalHeight = 0.0f;
+
+	for (size_t i = 0; i < m_Items.size(); i++)
+	{
+		if ((int)i >= startIndex && (int)i < (startIndex + m_MaxItemsByPage))
+		{
+			auto item = m_Items[i];
+
+			items.push_back(item);
+			totalHeight += item->m_Size.y;
+		}
+	}
+
+	m_Size.y = totalHeight;
 
 	//
 
-	bool canDrawListArrows = items.size() != m_Items.size();
+	bool canDrawListArrows = maxPages > 1;
 
-	if (canDrawListArrows) {
-		Menu::DrawListArrowIndicator(drawPos.x, drawPos.y, eArrowDirection::UP, m_Size.x, 15.0f);
-		drawPos.y += 15.0f;
+	if (canDrawListArrows)
+	{
+		if (page > 0)
+		{
+			Menu::DrawListArrowIndicator(drawPos.x, drawPos.y, eArrowDirection::UP, m_Size.x, 15.0f);
+			drawPos.y += 15.0f;
+		}
 	}
-
 
 	Menu::DrawRect(drawPos.x, drawPos.y, m_Size.x, m_Size.y, CRGBA(0, 0, 0, 190));
 	
@@ -57,46 +80,77 @@ void Window::Draw() {
 	}
 
 	//
-	if (canDrawListArrows) {
-		Menu::DrawListArrowIndicator(drawPos.x, drawPos.y, eArrowDirection::DOWN, m_Size.x, 15.0f);
-		drawPos.y += 15.0f;
+	if (canDrawListArrows)
+	{
+		if (page < maxPages - 1)
+		{
+			Menu::DrawListArrowIndicator(drawPos.x, drawPos.y, eArrowDirection::DOWN, m_Size.x, 15.0f);
+			drawPos.y += 15.0f;
+		}
 	}
 	//
 
-	//sprintf_s(buffer, "%d next 1: %d , -1: %d -- top %d bottom %d", m_SelectedIndex, GetNextSelectableItemIndex(1), GetNextSelectableItemIndex(-1), GetViewTopItemIndex(), GetViewBottomItemIndex());
-	//Menu::DrawString(buffer, m_Position.x, m_Position.y, CRGBA(255,0,0));
+	sprintf_s(buffer, "selectedIndex=%d maxItems=%d | nextBy(1)=%d nextBy(-1)=%d | page=%d / %d startIndex=%d", //top=%d bottom=%d
+		m_SelectedIndex,
+		m_MaxItemsByPage,
+		FindSelectableItemIndex(m_SelectedIndex, FIND_INDEX_DIR::DOWN, FIND_INDEX_TYPE::FIRST),
+		FindSelectableItemIndex(m_SelectedIndex, FIND_INDEX_DIR::UP, FIND_INDEX_TYPE::FIRST),
+		page,
+		maxPages,
+		startIndex
+		//GetViewTopItemIndex(),
+		//GetViewBottomItemIndex()
+	);
+	Menu::DrawString(buffer, m_Position.x, m_Position.y, CRGBA(255,0,0));
+
+	sprintf_s(buffer, "bottomMost=%d topMost=%d", GetBottomMostIndex(), GetTopMostIndex());
+	Menu::DrawString(buffer, m_Position.x, m_Position.y + 20, CRGBA(255, 0, 0));
 }
 
 
 void Window::GoUp() {
-	int newIndex = GetNextSelectableItemIndex(-1);
-	int diff = newIndex - m_SelectedIndex;
-	m_SelectedIndex = newIndex;
-
-	if (m_SelectedIndex <= GetViewTopItemIndex() - 1) {
-		m_ListIndex += diff;
+	if (m_SelectedIndex == GetTopMostIndex())
+	{
+		m_SelectedIndex = GetBottomMostIndex();
+		return;
 	}
+
+	int newIndex = FindSelectableItemIndex(m_SelectedIndex, FIND_INDEX_DIR::UP, FIND_INDEX_TYPE::FIRST);
+	m_SelectedIndex = newIndex;
 }
 
 void Window::GoDown() {
-	int newIndex = GetNextSelectableItemIndex(1);
-	int diff = newIndex - m_SelectedIndex;
-	m_SelectedIndex = newIndex;
-
-	if (m_SelectedIndex >= GetViewBottomItemIndex() + 1) {
-		m_ListIndex += diff;
+	if (m_SelectedIndex == GetBottomMostIndex())
+	{
+		m_SelectedIndex = 0;
+		return;
 	}
-	//CheckSelected(1);
+
+	int newIndex = FindSelectableItemIndex(m_SelectedIndex, FIND_INDEX_DIR::DOWN, FIND_INDEX_TYPE::FIRST);
+	m_SelectedIndex = newIndex;
+}
+
+void Window::GoBackToPrevWindow()
+{
+	if (m_PrevWindow == nullptr) return;
+
+	Menu::m_ActiveWindow = m_PrevWindow;
+	Menu::RemoveWindow(this);
 }
 
 void Window::Update() {
 	for (Item* item : m_Items) {
-		item->m_IsSelected = false;
+		//item->m_IsSelected = false;
 
-		if (item->m_CanBeSelected && Menu::m_ActiveWindow == this) 
-			item->m_IsSelected = GetSelectedItem() == item;
-		
-		item->Update();
+		if (Menu::m_ActiveWindow == this)
+		{
+			if (item->m_CanBeSelected)
+			{
+				item->m_IsSelected = GetSelectedItem() == item;
+			}
+
+			item->Update();
+		}
 	}
 
 	if (m_SelectedIndex == 0 && m_Items.size() > 0) {
@@ -126,23 +180,28 @@ void Window::CheckSelected(int add) {
 	}
 }
 
+/*
 int Window::GetViewTopItemIndex() {
-	return m_ListStartIndex + m_ListIndex;
+	return m_ListIndex;
 }
+*/
 
+/*
 int Window::GetViewBottomItemIndex() {
-	return m_ListStartIndex + m_ListIndex + m_MaxItems - 1;
+	return m_ListIndex + m_MaxItems - 1;
 }
+*/
 
 Item* Window::GetSelectedItem() {
 	if (m_SelectedIndex < 0 || m_SelectedIndex >= (int)m_Items.size()) return nullptr;
 	return m_Items[m_SelectedIndex];
 }
 
-int Window::GetNextSelectableItemIndex(int by) {
+/*
+int Window::GetNextSelectableItemIndex(int at, int by) {
 	//if (m_SelectedIndex < 0 || m_SelectedIndex >= (int)m_Items.size()) return nullptr;
 
-	int find = m_SelectedIndex + by;
+	int find = at + by;
 
 	while (find >= 0 && find < (int)m_Items.size())
 	{
@@ -152,8 +211,43 @@ int Window::GetNextSelectableItemIndex(int by) {
 		find += by;
 	}
 
-	return m_SelectedIndex;
+	return at;
 }
+*/
+
+int Window::FindSelectableItemIndex(int at, FIND_INDEX_DIR dir, FIND_INDEX_TYPE type)
+{
+	int addBy = dir == FIND_INDEX_DIR::UP ? -1 : 1;
+	int index = at + addBy;
+
+	int lastOption = at;
+
+	while (index >= 0 && index < (int)m_Items.size())
+	{
+		if (m_Items[index]->m_CanBeSelected)
+		{
+			if (type == FIND_INDEX_TYPE::FIRST)
+			{
+				return index;
+			}
+
+			lastOption = index;
+		}
+		index += addBy;
+	}
+	return lastOption;
+}
+
+int Window::GetBottomMostIndex()
+{
+	return FindSelectableItemIndex(m_SelectedIndex, FIND_INDEX_DIR::DOWN, FIND_INDEX_TYPE::LAST);
+}
+
+int Window::GetTopMostIndex()
+{
+	return FindSelectableItemIndex(m_SelectedIndex, FIND_INDEX_DIR::UP, FIND_INDEX_TYPE::LAST);
+}
+
 
 Item* Window::AddItem(Item* item) {
 	item->m_Size.x = m_Size.x;

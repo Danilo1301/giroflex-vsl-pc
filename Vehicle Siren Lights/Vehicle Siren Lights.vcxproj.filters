@@ -69,29 +69,8 @@
     <ClCompile Include="source\Vehicle.cpp">
       <Filter>source</Filter>
     </ClCompile>
-    <ClCompile Include="source\Patterns.cpp">
-      <Filter>source</Filter>
-    </ClCompile>
     <ClCompile Include="source\VehicleDummy.cpp">
       <Filter>source</Filter>
-    </ClCompile>
-    <ClCompile Include="source\LightGroups.cpp">
-      <Filter>source</Filter>
-    </ClCompile>
-    <ClCompile Include="source\windows\WindowMain.cpp">
-      <Filter>source\windows</Filter>
-    </ClCompile>
-    <ClCompile Include="source\windows\WindowLightGroup.cpp">
-      <Filter>source\windows</Filter>
-    </ClCompile>
-    <ClCompile Include="source\windows\WindowPoint.cpp">
-      <Filter>source\windows</Filter>
-    </ClCompile>
-    <ClCompile Include="source\windows\WindowSelectPattern.cpp">
-      <Filter>source\windows</Filter>
-    </ClCompile>
-    <ClCompile Include="source\windows\WindowPattern.cpp">
-      <Filter>source\windows</Filter>
     </ClCompile>
     <ClCompile Include="source\Config.cpp">
       <Filter>source</Filter>
@@ -108,26 +87,17 @@
     <ClCompile Include="source\localization\Localization.cpp">
       <Filter>source\localization</Filter>
     </ClCompile>
-    <ClCompile Include="source\windows\WindowSettings.cpp">
-      <Filter>source\windows</Filter>
-    </ClCompile>
     <ClCompile Include="source\log\Log.cpp">
       <Filter>source\log</Filter>
     </ClCompile>
     <ClCompile Include="source\TestHelper.cpp">
       <Filter>source</Filter>
     </ClCompile>
-    <ClCompile Include="source\LightGroupShadow.cpp">
-      <Filter>source</Filter>
-    </ClCompile>
-    <ClCompile Include="source\windows\WindowShadow.cpp">
-      <Filter>source\windows</Filter>
-    </ClCompile>
-    <ClCompile Include="source\windows\WindowRotateObject.cpp">
-      <Filter>source\windows</Filter>
-    </ClCompile>
     <ClCompile Include="source\Keybinds.cpp">
       <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="source\windows\WindowMain.cpp">
+      <Filter>source\windows</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -167,47 +137,14 @@
     <ClInclude Include="source\input\Input.h">
       <Filter>source\input</Filter>
     </ClInclude>
-    <ClInclude Include="source\windows\WindowMain.h">
-      <Filter>source\windows</Filter>
-    </ClInclude>
-    <ClInclude Include="source\windows\WindowTest.h">
-      <Filter>source\windows</Filter>
-    </ClInclude>
     <ClInclude Include="source\Vehicles.h">
       <Filter>source</Filter>
     </ClInclude>
     <ClInclude Include="source\Vehicle.h">
       <Filter>source</Filter>
     </ClInclude>
-    <ClInclude Include="source\PatternLoop.h">
-      <Filter>source</Filter>
-    </ClInclude>
-    <ClInclude Include="source\Pattern.h">
-      <Filter>source</Filter>
-    </ClInclude>
-    <ClInclude Include="source\Patterns.h">
-      <Filter>source</Filter>
-    </ClInclude>
     <ClInclude Include="source\VehicleDummy.h">
       <Filter>source</Filter>
-    </ClInclude>
-    <ClInclude Include="source\LightGroup.h">
-      <Filter>source</Filter>
-    </ClInclude>
-    <ClInclude Include="source\LightGroups.h">
-      <Filter>source</Filter>
-    </ClInclude>
-    <ClInclude Include="source\windows\WindowLightGroup.h">
-      <Filter>source\windows</Filter>
-    </ClInclude>
-    <ClInclude Include="source\windows\WindowPoint.h">
-      <Filter>source\windows</Filter>
-    </ClInclude>
-    <ClInclude Include="source\windows\WindowSelectPattern.h">
-      <Filter>source\windows</Filter>
-    </ClInclude>
-    <ClInclude Include="source\windows\WindowPattern.h">
-      <Filter>source\windows</Filter>
     </ClInclude>
     <ClInclude Include="source\Config.h">
       <Filter>source</Filter>
@@ -221,32 +158,20 @@
     <ClInclude Include="source\localization\Localization.h">
       <Filter>source\localization</Filter>
     </ClInclude>
-    <ClInclude Include="source\windows\WindowSettings.h">
-      <Filter>source\windows</Filter>
-    </ClInclude>
     <ClInclude Include="source\log\Log.h">
       <Filter>source\log</Filter>
     </ClInclude>
     <ClInclude Include="source\TestHelper.h">
       <Filter>source</Filter>
     </ClInclude>
-    <ClInclude Include="source\LightGroupShadow.h">
-      <Filter>source</Filter>
-    </ClInclude>
-    <ClInclude Include="source\windows\WindowShadow.h">
-      <Filter>source\windows</Filter>
-    </ClInclude>
     <ClInclude Include="source\Keybind.h">
       <Filter>source</Filter>
     </ClInclude>
-    <ClInclude Include="source\LightGroupRotateObject.h">
-      <Filter>source</Filter>
-    </ClInclude>
-    <ClInclude Include="source\windows\WindowRotateObject.h">
-      <Filter>source\windows</Filter>
-    </ClInclude>
     <ClInclude Include="source\Keybinds.h">
       <Filter>source</Filter>
+    </ClInclude>
+    <ClInclude Include="source\windows\WindowMain.h">
+      <Filter>source\windows</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

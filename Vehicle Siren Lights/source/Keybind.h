@@ -2,15 +2,80 @@
 
 #include "pch.h"
 
-//key; alt; shift; ctrl
+enum KEYBIND_FLAGS : int
+{
+    NONE = 1 << 0,
+    CTRL = 1 << 1,
+    SHIFT = 1 << 2,
+    ALT = 1 << 3
+};
+
 struct Keybind {
+    /*
     int key;
     bool alt;
     bool shift;
     bool ctrl;
     bool code = false;
+    */
 
-    Json::Value ToJSON()
+    int Flags;
+    unsigned int KeyCode;
+
+    Keybind(std::string key, unsigned int flags)
+    {
+        Flags = flags;
+
+        if (key.empty())
+        {
+            KeyCode = -1;
+        }
+        else {
+            KeyCode = (int)key.at(0);
+        }
+    }
+
+    std::string GetKeybindString()
+    {
+        std::vector<std::string> ks;
+
+        if (Flags & KEYBIND_FLAGS::CTRL) ks.push_back("CTRL");
+        if (Flags & KEYBIND_FLAGS::ALT) ks.push_back("ALT");
+        if (Flags & KEYBIND_FLAGS::SHIFT) ks.push_back("SHIFT");
+
+        ks.push_back(GetKeyString());
+
+        return join(ks, " + ");
+    }
+
+    std::string GetKeyString()
+    {
+        if (KeyCode == -1) return "";
+
+        char ch = static_cast<char>(KeyCode);
+        return ToUpper(std::string(1, ch));
+    }
+
+    bool CheckKeybind()
+    {
+        if ((Flags & KEYBIND_FLAGS::ALT) && !Input::GetKey(18)) return false;
+        if ((Flags & KEYBIND_FLAGS::CTRL) && !Input::GetKey(17)) return false;
+        if ((Flags & KEYBIND_FLAGS::SHIFT) && !Input::GetKey(16)) return false;
+
+        if (KeyCode == -1) return true;
+
+        return Input::GetKeyDown(KeyCode);
+    }
+
+    /*
+    Keybind(int key, KEYBIND_FLAGS flags)
+    {
+
+    }
+    */
+
+    /*
+    * Json::Value ToJSON()
     {
         Json::Value value = Json::objectValue;
 
@@ -85,4 +150,5 @@ struct Keybind {
 
         return Input::GetKeyDown(key);
     }
+    */
 };

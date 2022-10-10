@@ -21,7 +21,7 @@ public:
 	static Window* m_ActiveWindow;
 	static Item* m_ItemClicked;
 
-	static bool m_Visible;
+	static bool m_IsOpen;
 	static bool m_Hide;
 	static int m_OpenAtIndex;
 	static CVector2D m_DefaultPosition;
@@ -45,6 +45,7 @@ public:
 	static Window* CreateColorPickerWindow(CRGBA* color, std::function<void(void)> onClose);
 
 	static void SetOpen(bool open);
+	static bool Toggle();
 	static void Draw();
 	static void Update();
 	static void SaveIndex();

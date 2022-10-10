@@ -4,7 +4,7 @@
 
 class WindowMain {
 public:
-	static CVehicle* m_Vehicle;
+	static CVehicle* CurrentVehicle;
 
 	static void CreateMain();
 };

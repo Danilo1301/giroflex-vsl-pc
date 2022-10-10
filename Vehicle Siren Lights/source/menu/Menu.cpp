@@ -6,7 +6,7 @@
 std::vector<Window*> Menu::m_Windows;
 Window* Menu::m_ActiveWindow = nullptr;
 Item* Menu::m_ItemClicked = nullptr;
-bool Menu::m_Visible = false;
+bool Menu::m_IsOpen = false;
 bool Menu::m_Hide = false;
 int Menu::m_OpenAtIndex = -1;
 CVector2D Menu::m_DefaultPosition = CVector2D(20.0f, 20.0f);
@@ -111,6 +111,12 @@ Window* Menu::AddWindow(std::string title, std::string description) {
     window->m_Title = title;
     window->m_Description = description;
     window->m_Position = m_DefaultPosition;
+
+    if (m_Windows.size() > 0)
+    {
+        window->m_PrevWindow = m_Windows[m_Windows.size()-1];
+    }
+
     m_Windows.push_back(window);
     m_ActiveWindow = window;
     return window;
@@ -161,10 +167,18 @@ Window* Menu::CreateColorPickerWindow(CRGBA* color, std::function<void(void)> on
 }
 
 void Menu::SetOpen(bool open) {
-    m_Visible = open;
+    m_Hide = false;
+    m_IsOpen = open;
     m_OpenAtIndex = -1;
 
-    if (!m_Visible && PositionEditor::m_Visible) PositionEditor::Toggle(nullptr);
+    if (!m_IsOpen && PositionEditor::m_Visible) PositionEditor::Toggle(nullptr);
+}
+
+bool Menu::Toggle()
+{
+    SetOpen(!m_IsOpen);
+
+    return m_IsOpen;
 }
 
 void Menu::Draw() {
@@ -172,7 +186,7 @@ void Menu::Draw() {
 
     m_FontAlign = eFontAlignment::ALIGN_LEFT;
 
-    if (m_Visible && !PositionEditor::m_Visible) {
+    if (m_IsOpen && !PositionEditor::m_Visible) {
         for (Window* window : m_Windows)
         {
             window->Draw();
@@ -197,13 +211,17 @@ void Menu::Update() {
     if (TextEditor::m_Visible) return;
     
 
-    if (m_Visible) {
+    if (m_IsOpen) {
         if (Input::GetKeyDown(VK_UP)) {
             if (m_ActiveWindow) m_ActiveWindow->GoUp();
         }
 
         if (Input::GetKeyDown(VK_DOWN)) {
             if (m_ActiveWindow) m_ActiveWindow->GoDown();
+        }
+
+        if (Input::GetKeyDown(8)) { //backspace
+            if (m_ActiveWindow) m_ActiveWindow->GoBackToPrevWindow();
         }
     }
 

@@ -16,4 +16,5 @@ public:
 	static void RemoveStep(TestFunction* step);
 	static void RunNextStep();
 	static void RunAllSteps();
+	static void Update();
 };

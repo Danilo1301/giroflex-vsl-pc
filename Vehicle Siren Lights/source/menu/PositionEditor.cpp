@@ -10,8 +10,8 @@ void PositionEditor::Update() {
 
 	if (value == nullptr) return;
 
-	bool isUpDownKeyPressed = Keybinds::editorUpDown.CheckKeybind();
-	bool isSlowerKeyPressed = Keybinds::editorSlower.CheckKeybind();
+	bool isUpDownKeyPressed = Keybinds::EditorUpDown.CheckKeybind();
+	bool isSlowerKeyPressed = Keybinds::EditorSlower.CheckKeybind();
 
 	float moveAmount = isSlowerKeyPressed ? 0.002f : 0.010f;
 
@@ -65,7 +65,7 @@ void PositionEditor::Draw() {
 	Menu::DrawString("Move", keys1Position.x + 70, keys1Position.y, CRGBA(255, 255, 255));
 
 	CVector2D keys2Position = CVector2D(position.x + 240.0f, position.y + 30.0f);
-	Menu::DrawKeyButton(Keybinds::editorUpDown.GetKeybindString(), keys2Position.x, keys2Position.y, 50, 20);
+	Menu::DrawKeyButton(Keybinds::EditorUpDown.GetKeybindString(), keys2Position.x, keys2Position.y, 50, 20);
 	Menu::DrawString("+", keys2Position.x + 55.0f, keys2Position.y, CRGBA(255, 255, 255));
 	Menu::DrawArrowKeyButton(70 + keys2Position.x, keys2Position.y - 15, eArrowDirection::UP, 20, 20);
 	Menu::DrawArrowKeyButton(70 + keys2Position.x, keys2Position.y + 15, eArrowDirection::DOWN, 20, 20);
@@ -76,7 +76,7 @@ void PositionEditor::Draw() {
 	Menu::DrawString("Confirm", key3Position.x + 60.0f, key3Position.y, CRGBA(255, 255, 255));
 
 	CVector2D key4Position = CVector2D(position.x + 280.0f, position.y + 90.0f);
-	Menu::DrawKeyButton(Keybinds::editorSlower.GetKeybindString(), key4Position.x, key4Position.y, 50, 20);
+	Menu::DrawKeyButton(Keybinds::EditorSlower.GetKeybindString(), key4Position.x, key4Position.y, 50, 20);
 	Menu::DrawString("Move slower", key4Position.x + 60.0f, key4Position.y, CRGBA(255, 255, 255));
 
 	if (m_Value == nullptr) return;
