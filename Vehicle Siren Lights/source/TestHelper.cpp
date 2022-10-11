@@ -1,4 +1,5 @@
 #include "TestHelper.h"
+#include "CFont.h"
 
 std::vector<TestFunction*> TestHelper::m_Steps;
 
@@ -33,11 +34,45 @@ void TestHelper::RunNextStep()
 	fn();
 }
 
-
 void TestHelper::RunAllSteps()
 {
 	while (m_Steps.size() > 0)
 	{
 		RunNextStep();
 	}
+}
+
+
+std::vector<std::string> TestHelper::m_DebugLines;
+
+void TestHelper::Draw()
+{
+	float x = 30, y = 30;
+
+	for (auto line : m_DebugLines)
+	{
+		char buffer[256];
+		sprintf_s(buffer, "%s", line.c_str());
+
+		CFont::m_fWrapx = 100000.0f;
+		CFont::SetOrientation(eFontAlignment::ALIGN_LEFT);
+		CFont::SetDropShadowPosition(0);
+		CFont::SetRightJustifyWrap(false);
+		CFont::SetJustify(false);
+		CFont::SetBackground(false, false);
+		CFont::SetScale(0.35f, 0.95f);
+		CFont::SetFontStyle(FONT_SUBTITLES);
+		CFont::SetProportional(true);
+		CFont::SetColor(CRGBA(0, 0, 0));
+		CFont::PrintString(x, y, buffer);
+
+		y += 20;
+	}
+}
+
+void TestHelper::AddLine(std::string text)
+{
+	m_DebugLines.push_back(text);
+
+	if (m_DebugLines.size() >= 30) m_DebugLines.erase(m_DebugLines.begin());
 }

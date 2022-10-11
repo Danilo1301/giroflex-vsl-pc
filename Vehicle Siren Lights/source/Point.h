@@ -2,8 +2,8 @@
 
 #include "pch.h"
 
-#include "LightGroupShadow.h"
-#include "LightGroupRotateObject.h"
+//#include "LightGroupShadow.h"
+//#include "LightGroupRotateObject.h"
 
 enum class eSirenPosition {
 	LEFT,
@@ -25,14 +25,15 @@ public:
 	CRGBA color = CRGBA(255, 0, 0);
 	CRGBA disabledColor = CRGBA(0, 0, 0);
 	eSirenPosition sirenPosition = eSirenPosition::LEFT;
-	LightGroupShadow shadow;
-	LightGroupRotateObject rotateObject;
+	//LightGroupShadow shadow;
+	//LightGroupRotateObject rotateObject;
 
+	/*
 	CRGBA GetColor(PatternStep* step) {
 		switch (sirenPosition)
 		{
 		case eSirenPosition::LEFT:
-			return step->leftColor;
+			return step->values[0];
 		case eSirenPosition::MIDDLE:
 			return step->middleColor;
 		case eSirenPosition::RIGHT:
@@ -40,21 +41,17 @@ public:
 		}
 		return NULL;
 	}
+	*/
 
 	bool GetIsEnabled(PatternStep* step) {
-		switch (sirenPosition)
-		{
-		case eSirenPosition::LEFT:
-			return step->leftState;
-		case eSirenPosition::MIDDLE:
-			return step->middleState;
-		case eSirenPosition::RIGHT:
-			return step->rightState;
-		}
-
-		return false;
+		return GetIsEnabled(step, (int)sirenPosition);
 	}
 
+	bool GetIsEnabled(PatternStep* step, int index) {
+		if (index >= (int)step->values.size()) return false;
+
+		return step->values[index] == 1;
+	}
 	Json::Value ToJSON() {
 		Json::Value value = Json::objectValue;
 
@@ -65,6 +62,7 @@ public:
 		value["disabledColor"] = ColorToJSON(disabledColor);
 		value["sirenPosition"] = (int)sirenPosition;
 
+		/*
 		Json::Value shadowValue = Json::objectValue;
 		shadowValue["enabled"] = shadow.enabled;
 		shadowValue["textureIndex"] = shadow.textureIndex;
@@ -84,6 +82,7 @@ public:
 		rotateObjectValue["speed"] = rotateObject.speed;
 		rotateObjectValue["axis"] = (int)rotateObject.axis;
 		value["rotateObject"] = rotateObjectValue;
+		*/
 
 		return value;
 	}
@@ -96,6 +95,7 @@ public:
 		disabledColor = ColorFromJSON(value["disabledColor"]);
 		sirenPosition = (eSirenPosition)value["sirenPosition"].asInt();
 
+		/*
 		Json::Value shadowValue = value["shadow"];
 		if (!shadowValue.isNull())
 		{
@@ -120,6 +120,7 @@ public:
 			rotateObject.speed = rotateObjectValue["speed"].asFloat();
 			rotateObject.axis = (eRotateObjectAxis)rotateObjectValue["axis"].asInt();
 		}
+		*/
 	}
 
 	static double GetAngle(CVehicle* vehicle, CVector position) {

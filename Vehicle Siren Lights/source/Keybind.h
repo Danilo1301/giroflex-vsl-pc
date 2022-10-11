@@ -11,21 +11,17 @@ enum KEYBIND_FLAGS : int
 };
 
 struct Keybind {
-    /*
-    int key;
-    bool alt;
-    bool shift;
-    bool ctrl;
-    bool code = false;
-    */
-
+    //bool code = false;
     int Flags;
     unsigned int KeyCode;
 
     Keybind(std::string key, unsigned int flags)
     {
-        Flags = flags;
+        SetKey(key, flags);
+    }
 
+    void SetKey(std::string key)
+    {
         if (key.empty())
         {
             KeyCode = -1;
@@ -33,6 +29,12 @@ struct Keybind {
         else {
             KeyCode = (int)key.at(0);
         }
+    }
+
+    void SetKey(std::string key, int flags)
+    {
+        Flags = flags;
+        SetKey(key);
     }
 
     std::string GetKeybindString()
@@ -43,7 +45,7 @@ struct Keybind {
         if (Flags & KEYBIND_FLAGS::ALT) ks.push_back("ALT");
         if (Flags & KEYBIND_FLAGS::SHIFT) ks.push_back("SHIFT");
 
-        ks.push_back(GetKeyString());
+        if(KeyCode != -1) ks.push_back(GetKeyString());
 
         return join(ks, " + ");
     }
@@ -62,7 +64,11 @@ struct Keybind {
         if ((Flags & KEYBIND_FLAGS::CTRL) && !Input::GetKey(17)) return false;
         if ((Flags & KEYBIND_FLAGS::SHIFT) && !Input::GetKey(16)) return false;
 
-        if (KeyCode == -1) return true;
+        if (KeyCode == -1)
+        {
+            if (Flags == 0) return false;
+            return true;
+        }
 
         return Input::GetKeyDown(KeyCode);
     }

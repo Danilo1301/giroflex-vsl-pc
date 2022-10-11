@@ -16,5 +16,9 @@ public:
 	static void RemoveStep(TestFunction* step);
 	static void RunNextStep();
 	static void RunAllSteps();
-	static void Update();
+	//static void Update();
+
+	static std::vector<std::string> m_DebugLines;
+	static void Draw();
+	static void AddLine(std::string text);
 };

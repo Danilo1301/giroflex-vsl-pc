@@ -99,6 +99,12 @@
     <ClCompile Include="source\windows\WindowMain.cpp">
       <Filter>source\windows</Filter>
     </ClCompile>
+    <ClCompile Include="source\LightGroups.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Patterns.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="source\Mod.h">
@@ -172,6 +178,27 @@
     </ClInclude>
     <ClInclude Include="source\windows\WindowMain.h">
       <Filter>source\windows</Filter>
+    </ClInclude>
+    <ClInclude Include="source\LightGroups.h">
+      <Filter>source</Filter>
+    </ClInclude>
+    <ClInclude Include="source\LightGroup.h">
+      <Filter>source</Filter>
+    </ClInclude>
+    <ClInclude Include="source\Patterns.h">
+      <Filter>source</Filter>
+    </ClInclude>
+    <ClInclude Include="source\Pattern.h">
+      <Filter>source</Filter>
+    </ClInclude>
+    <ClInclude Include="source\PatternCycleStep.h">
+      <Filter>source</Filter>
+    </ClInclude>
+    <ClInclude Include="source\VehiclePatternData.h">
+      <Filter>source</Filter>
+    </ClInclude>
+    <ClInclude Include="source\PatternLoop.h">
+      <Filter>source</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

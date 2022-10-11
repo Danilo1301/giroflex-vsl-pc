@@ -3,6 +3,8 @@
 #include "windows/WindowMain.h"
 //#include "windows/WindowTest.h"
 
+#include "Patterns.h"
+#include "LightGroups.h"
 #include "Vehicles.h"
 #include "Config.h"
 #include "Keybinds.h"
@@ -12,6 +14,8 @@
 std::string Mod::Version = "2.0";
 bool Mod::IsSamp = false;
 bool Mod::DebugEnabled = false;
+
+unsigned int _prevTime = 0;
 
 Mod::Mod()
 {
@@ -50,7 +54,70 @@ void Mod::Init()
 	Log::file << "ToggleDebug = " << Keybinds::ToggleDebug.GetKeybindString() << std::endl;
 	Log::file << "EditorSlower = " << Keybinds::EditorSlower.GetKeybindString() << std::endl;
 	Log::file << "EditorUpDown = " << Keybinds::EditorUpDown.GetKeybindString() << std::endl;
-	Log::file << "ToggleLights = " << Keybinds::ToggleLights.GetKeybindString() << std::endl;
+	Log::file << "ToggleLightsMode = " << Keybinds::ToggleLightsMode.GetKeybindString() << std::endl;
+
+	auto pattern1 = Patterns::CreatePattern("Default 1");
+	pattern1->AddStep(1, 0, 0, 120);
+	pattern1->AddStep(0, 1, 0, 120);
+	pattern1->AddStep(0, 0, 1, 120);
+	pattern1->AddStep(0, 1, 0, 120);
+
+	auto pattern2 = Patterns::CreatePattern("Default 2");
+	pattern2->AddStep(1, 1, 1, 135);
+	pattern2->AddStep(0, 0, 0, 135);
+	pattern2->AddStep(1, 1, 1, 135);
+
+	auto pattern3 = Patterns::CreatePattern("Default 3");
+	pattern3->AddStep(1, 0, 1, 135);
+	pattern3->AddStep(1, 1, 1, 135);
+	pattern3->AddStep(1, 0, 1, 135);
+
+	auto pattern4 = Patterns::CreatePattern("Lightbar 1 [11 lights]");
+	pattern4->AddStep({ 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }, 100);
+	pattern4->AddStep({ 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0 }, 100);
+	pattern4->AddStep({ 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0 }, 100);
+	pattern4->AddStep({ 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0 }, 100);
+	pattern4->AddStep({ 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0 }, 100);
+	pattern4->AddStep({ 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0 }, 100);
+	pattern4->AddStep({ 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0 }, 100);
+	pattern4->AddStep({ 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0 }, 100);
+	pattern4->AddStep({ 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0 }, 100);
+	pattern4->AddStep({ 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0 }, 100);
+	pattern4->AddStep({ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1 }, 100);
+
+	auto pattern5 = Patterns::CreatePattern("Lightbar 2 [11 lights]");
+	pattern5->AddStep({ 1, 1, 0, 0, 0, 0, 0, 0, 0, 1, 1 }, 500);
+	pattern5->AddStep({ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }, 500);
+	pattern5->AddStep({ 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0 }, 500);
+	pattern5->AddStep({ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }, 500);
+
+
+
+	auto lightGroup1 = LightGroups::CreateLightGroup(596);
+	lightGroup1->position = CVector(0, 0, 2);
+	lightGroup1->AddPoint(CVector(-0.3f, 0, 0), CRGBA(255, 0, 0), eSirenPosition::LEFT);
+	auto testPoint = lightGroup1->AddPoint(CVector(0, 0, 0), CRGBA(255, 0, 0), eSirenPosition::MIDDLE);
+	//testPoint->object = "giroflex_led_3";
+	lightGroup1->AddPoint(CVector(0.3f, 0, 0), CRGBA(255, 0, 0), eSirenPosition::RIGHT);
+	lightGroup1->AddPatternCycleStep(pattern1, 3000);
+	lightGroup1->AddPatternCycleStep(pattern2, 3000);
+	lightGroup1->AddPatternCycleStep(pattern3, 3000);
+	lightGroup1->AddPatternCycleStep(pattern4, 3000);
+	lightGroup1->AddPatternCycleStep(pattern5, 3000);
+	lightGroup1->keybindPause.SetKey("A", KEYBIND_FLAGS::CTRL);
+	lightGroup1->keybindChange.SetKey("D", KEYBIND_FLAGS::CTRL);
+
+
+	auto lightBar1 = LightGroups::CreateLightbarLightGroup(596);
+	lightBar1->position = CVector(0, 1.5, 2);
+	lightBar1->AddPatternCycleStep(pattern1, 3000);
+	lightBar1->AddPatternCycleStep(pattern2, 3000);
+	lightBar1->AddPatternCycleStep(pattern3, 3000);
+	lightBar1->AddPatternCycleStep(pattern4, 3000);
+	lightBar1->AddPatternCycleStep(pattern5, 3000);
+	lightBar1->keybindPause.SetKey("A", KEYBIND_FLAGS::CTRL);
+	lightBar1->keybindChange.SetKey("D", KEYBIND_FLAGS::CTRL);
+
 }
 
 void Mod::Update()
@@ -73,11 +140,29 @@ void Mod::Update()
 	}
 
 	Menu::Update();
+
+	Vehicles::TryAddAllVehicles();
+
+	//TestHelper::AddLine("dt: " + std::to_string(GetDeltaTime()));
+
+	for (auto pair : Vehicles::m_Vehicles) pair.second->Update();
+
+	_prevTime = CTimer::m_snTimeInMilliseconds;
 }
 
 void Mod::Draw()
 {
 	Menu::Draw();
+	
+	TestHelper::Draw();
+
+	for (auto pair : Vehicles::m_Vehicles) pair.second->Draw();
+}
+
+unsigned int Mod::GetDeltaTime()
+{
+	unsigned int dt = CTimer::m_snTimeInMilliseconds - _prevTime;
+	return dt;
 }
 
 void Mod::SetPlayerControl(bool enabled)

@@ -14,6 +14,8 @@ public:
     static void Update();
     static void Draw();
 
+    static unsigned GetDeltaTime();
+
     static void SetPlayerControl(bool enabled);
     static void ToggleMenu();
     static void ToggleDebug();

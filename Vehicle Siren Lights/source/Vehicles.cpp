@@ -1,4 +1,6 @@
 #include "Vehicles.h"
+#include "LightGroups.h"
+#include "TestHelper.h"
 
 std::map<CVehicle*, Vehicle*> Vehicles::m_Vehicles;
 
@@ -10,6 +12,8 @@ bool Vehicles::HasVehicle(CVehicle* veh)
 Vehicle* Vehicles::AddVehicle(CVehicle* veh)
 {
 	Log::file << "[Vehicles] AddVehicle " << veh << " [" << std::to_string(veh->m_nModelIndex) << "] (" << std::to_string(m_Vehicles.size()+1) << " total)" << std::endl;
+	
+	TestHelper::AddLine("Add vehicle " + std::to_string(reinterpret_cast<unsigned int>(veh)) + ", id " + std::to_string(veh->m_nModelIndex));
 
 	Vehicle* vehicle = new Vehicle(veh);
 	m_Vehicles.insert(std::pair<CVehicle*, Vehicle*>(veh, vehicle));
@@ -29,13 +33,20 @@ void Vehicles::TryAddAllVehicles()
 
 	for (auto veh : CPools::ms_pVehiclePool)
 	{
-		if (!HasVehicle(veh)) AddVehicle(veh);
+		if (LightGroups::HasLightGroups(veh->m_nModelIndex)) {
+			if (!HasVehicle(veh)) AddVehicle(veh);
+		}
+		else {
+			if (HasVehicle(veh)) RemoveVehicle(veh);
+		}
 	}
 }
 
 void Vehicles::RemoveVehicle(CVehicle* veh)
 {
 	Log::file << "[Vehicles] RemoveVehicle " << veh << " (" << std::to_string(m_Vehicles.size()-1) << " total)" << std::endl;
+
+	TestHelper::AddLine("Remove vehicle " + std::to_string(reinterpret_cast<unsigned int>(veh)) + ", id " + std::to_string(veh->m_nModelIndex));
 
 	Vehicle* vehicle = m_Vehicles[veh];
 	m_Vehicles.erase(veh);

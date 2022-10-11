@@ -204,6 +204,19 @@ static std::string ToLower(std::string data) {
 	return data;
 }
 
+static bool ends_with(std::string const& value, std::string const& ending)
+{
+	if (ending.size() > value.size()) return false;
+	return std::equal(ending.rbegin(), ending.rend(), value.rbegin());
+}
+
+static bool starts_with(std::string const& value, std::string const& starting)
+{
+	if (starting.size() > value.size()) return false;
+	return std::equal(starting.rend(), starting.rbegin(), value.rbegin());
+}
+
+
 static float CVector2D_MagnitudeSqr(CVector2D* vec2d) {
 	return vec2d->x * vec2d->x + vec2d->y * vec2d->y;
 }

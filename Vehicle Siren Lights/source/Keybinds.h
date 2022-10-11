@@ -8,7 +8,7 @@ class Keybinds {
 public:
 	static Keybind OpenMenu;
 	static Keybind ToggleDebug;
-	static Keybind ToggleLights;
+	static Keybind ToggleLightsMode;
 	static Keybind EditorUpDown;
 	static Keybind EditorSlower;
 	static Keybind ReloadConfig;
