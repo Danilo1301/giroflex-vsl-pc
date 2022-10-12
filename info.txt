@@ -1,0 +1,8 @@
+[3.0]
+[ ] fix lightbar not saving
+[ ] add intensity to flare
+[ ] add intensity to all point shadows 
+[ ] fix support for older vehicles when loading lightbar settings
+[ ] maybe add mod version inside vehicle
+[ ] add panel (individual for each lightgroup) that has option to pause/change pattern, set auto-manual, turn on/off
+[ ] option to make sirens turn on manualy ONLY (not only with siren change event)

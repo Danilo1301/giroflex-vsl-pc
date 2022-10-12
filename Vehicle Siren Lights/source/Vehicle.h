@@ -3,23 +3,7 @@
 #include "pch.h"
 #include "PatternLoop.h"
 #include "LightGroup.h"
-#include "Mod.h"
-
-
-class VehiclePatternData {
-public:
-	PatternLoop* patternLoop;
-	PatternLoop* stepLoop;
-	bool enabled = true;
-
-	VehiclePatternData() {
-		patternLoop = new PatternLoop();
-		stepLoop = new PatternLoop();
-
-		patternLoop->name = "Pattern";
-		stepLoop->name = "Step";
-	}
-};
+#include "VehiclePatternData.h"
 
 class Vehicle {
 public:
@@ -33,7 +17,6 @@ public:
 
 	bool m_PrevLightState = false;
 	bool m_PrevSirenState = false;
-	unsigned int m_PrevTime;
 	float m_RotateShadowAngle = 0;
 
 	void Update();
@@ -45,7 +28,7 @@ public:
 	void Destroy();
 
 	void ResetObjectRotation(std::string object);
-
+	void GoToNextLightGroupPattern(LightGroup* lightGroup);
 	bool GetSirenState();
 
 	void RenderBefore();

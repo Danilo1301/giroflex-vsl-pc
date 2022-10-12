@@ -22,11 +22,11 @@ public:
 	static void WriteToFile(std::string path, Json::Value value);
 	static Json::Value ReadFile(std::string path);
 
-	static void SavePattern(int index, Pattern* pattern);
-	static Pattern* LoadPattern(int index);
+	//static void SavePattern(Pattern* pattern);
+	static Pattern* LoadPattern(std::string fileName);
 
-	static void SaveLightGroup(int index, LightGroup* lightGroup);
-	static LightGroup* LoadLightGroup(int index, int modelId);
+	static void SaveLightGroup(LightGroup* lightGroup);
+	static LightGroup* LoadLightGroup(std::string fileName, int modelId);
 
 	static void LoadLocalization(std::string key);
 

@@ -1,8 +1,10 @@
 #include "Vehicle.h"
-#include "VehicleDummy.h"
-#include "LightGroups.h"
-#include "menu/Menu.h"
 
+#include "VehicleDummy.h"
+#include "Mod.h"
+#include "LightGroups.h"
+
+#include "menu/Menu.h"
 #include "windows/WindowLightGroup.h"
 
 #include "CVisibilityPlugins.h"
@@ -23,17 +25,30 @@ Vehicle::Vehicle(CVehicle* veh) {
 	m_Vehicle = veh;	
 
 	CheckForLightGroups();
-
-	m_PrevTime = CTimer::m_snTimeInMilliseconds;
 }
 
 void Vehicle::Update() {
 	CheckForLightGroups();
 	UpdatePatternAndSteps();
+
+	for (auto pair : m_LightGroupData)
+	{
+		auto lightGroup = pair.first;
+		auto vehiclePatternData = pair.second;
+
+		if (lightGroup->keybindChange.CheckKeybind())
+		{
+			GoToNextLightGroupPattern(lightGroup);
+		}
+
+		if (lightGroup->keybindPause.CheckKeybind())
+		{
+			vehiclePatternData->paused = !vehiclePatternData->paused;
+		}
+	}
+
 	UpdateSirenState();
 	RegisterCoronas();
-
-	m_PrevTime = CTimer::m_snTimeInMilliseconds;
 }
 
 void Vehicle::UpdateSirenState() {
@@ -52,6 +67,59 @@ void Vehicle::Draw() {
 }
 
 void Vehicle::DrawDebug() {
+	//
+	char buffer[512];
+	auto screenPos = WorldToScreen(m_Vehicle->GetPosition() + CVector(0, 0, -0.5f));
+
+	sprintf(buffer, "Vehicle");
+	DrawScreenText(buffer, screenPos);
+	screenPos.y += 20.0f;
+
+	//
+	
+	for (auto pair : m_LightGroupData)
+	{
+		auto lightGroup = pair.first;
+		auto vehiclePatternData = pair.second;
+
+		auto stepLoop = vehiclePatternData->stepLoop;
+		auto patternLoop = vehiclePatternData->patternLoop;
+
+		sprintf(buffer, "step: %d / %d steps, time=%d, total=%d", stepLoop->StepIndex, stepLoop->Steps.size(), stepLoop->Time, stepLoop->TotalTime);
+		DrawScreenText(buffer, screenPos);
+		screenPos.y += 20.0f;
+
+		sprintf(buffer, "pattern: %d / %d steps, time=%d, total=%d", patternLoop->StepIndex, patternLoop->Steps.size(), patternLoop->Time, patternLoop->TotalTime);
+		DrawScreenText(buffer, screenPos);
+		screenPos.y += 20.0f;
+	}
+	
+
+
+	/*
+	//
+	auto atomics = VehicleDummy::RpClumpGetAllAtomics(m_Vehicle->m_pRwClump);
+	for (auto atomic : atomics)
+	{
+		RwFrame* frameAtomic = GetObjectParent((RwObject*)atomic);
+		std::string name = GetFrameNodeName(frameAtomic);
+		CVector position = VehicleDummy::GetTransformedDummyPosition(m_Vehicle, frameAtomic, CVector(0, 0, 0));
+
+		int mats = -1;
+
+		if (atomic->geometry)
+		{
+			auto materials = VehicleDummy::RpGeometryGetAllMaterials(atomic->geometry);
+			mats = materials.size();
+		}
+
+		auto screenPos = WorldToScreen(position);
+		sprintf(buffer, "%s | %d materials", name.c_str(), mats);
+	/DrawScreenText(buffer, screenPos);
+	}
+	*/
+
+	/*
 	char text[512];
 	auto screenPos = WorldToScreen(m_Vehicle->GetPosition() + CVector(0, 0, -0.5f));
 
@@ -74,7 +142,9 @@ void Vehicle::DrawDebug() {
 			DrawWorldText(text, position);
 		}
 	}
+	*/
 
+	/*
 	//draw pattern and step info
 	for (auto pair : m_LightGroupData) {
 		auto lightGroup = pair.first;
@@ -88,10 +158,13 @@ void Vehicle::DrawDebug() {
 		DrawScreenText(text, screenPos);
 		screenPos.y += 20.0f;
 	}
+	*/
 
+	/*
 	sprintf(text, "[time] %d %d", CTimer::m_snTimeInMilliseconds, m_PrevTime);
 	DrawScreenText(text, screenPos);
 	screenPos.y += 20.0f;
+	*/
 }
 
 void Vehicle::DrawFrames() {
@@ -151,118 +224,90 @@ void Vehicle::ResetObjectRotation(std::string object)
 	RwMatrixTranslate(&frame->modelling, &pos, rwCOMBINEREPLACE);
 }
 
+void Vehicle::GoToNextLightGroupPattern(LightGroup* lightGroup)
+{
+	auto vehiclePatternData = m_LightGroupData[lightGroup];
+
+	vehiclePatternData->patternLoop->SetStep(vehiclePatternData->patternLoop->StepIndex + 1);
+	vehiclePatternData->stepLoop->Clear();
+
+	UpdatePatternAndSteps();
+}
+
 bool Vehicle::GetSirenState() {
-	if (Menu::m_Visible && FindPlayerVehicle(0, false) == m_Vehicle) return true;
+	if (Menu::m_IsOpen && FindPlayerVehicle(0, false) == m_Vehicle) return true;
 	return m_Vehicle->m_nVehicleFlags.bSirenOrAlarm;
 }
 
-void Vehicle::RenderBefore() {
-	//char buffer[512];
+void Vehicle::RenderBefore()
+{
+	auto atomics = VehicleDummy::RpClumpGetAllAtomics(m_Vehicle->m_pRwClump);
+	for (auto atomic : atomics)
+	{
+		if (!atomic->geometry) continue;
 
-	if (m_LightGroupData.size() == 0) return;
+		atomic->geometry->flags |= rpGEOMETRYMODULATEMATERIALCOLOR;
 
-	static CVehicle* s_vehicle;
-	s_vehicle = m_Vehicle;
+		RwFrame* frameAtomic = GetObjectParent((RwObject*)atomic);
+		std::string name = GetFrameNodeName(frameAtomic);
+		//CVector position = m_Vehicle->TransformFromObjectSpace(GetFrameNodePosition(frameAtomic));
 
-	static auto lightGroupData = m_LightGroupData;
-	lightGroupData = m_LightGroupData;
+		for (auto pair : m_LightGroupData)
+		{
+			auto lightGroup = pair.first;
+			auto vehiclePatternData = pair.second;
 
-	if (m_Vehicle->m_pRwClump && m_Vehicle->m_pRwClump->object.type == rpCLUMP) {
-		RpClumpForAllAtomics(m_Vehicle->m_pRwClump, [](RpAtomic* atomic, void* data) {
-			if (atomic->geometry) {
-				atomic->geometry->flags |= rpGEOMETRYMODULATEMATERIALCOLOR;
+			auto patternLoop = vehiclePatternData->patternLoop;
+			auto patternCycleStep = lightGroup->patternCycleSteps[patternLoop->StepIndex];
+			auto patternDuration = patternCycleStep->duration;
+			auto pattern = patternCycleStep->pattern;
 
-				RwFrame* frameAtomic = GetObjectParent((RwObject*)atomic);
-				std::string name = GetFrameNodeName(frameAtomic);
-				CVector position = s_vehicle->TransformFromObjectSpace(GetFrameNodePosition(frameAtomic));
+			auto stepLoop = vehiclePatternData->stepLoop;
+			auto step = pattern->steps[stepLoop->StepIndex];
 
-				//
+			if (!step) continue;
 
-				for (auto pair : lightGroupData) {
-					auto lightGroup = pair.first;
-					auto vehiclePatternData = pair.second;
+			for (size_t point_i = 0; point_i < lightGroup->points.size(); point_i++)
+			{
+				auto point = lightGroup->points[point_i];
 
-					auto patternCycleStep = lightGroup->patternCycleSteps[vehiclePatternData->patternLoop->m_StepIndex];
-					auto patternDuration = patternCycleStep->duration;
-					auto pattern = patternCycleStep->pattern;
 
-					auto step = pattern->steps[vehiclePatternData->stepLoop->m_StepIndex];
+				//CVector position = point->position;
 
-					for (auto point : lightGroup->points) {
-						if (ToUpper(name).compare(ToUpper(point->object)) == 0) {
+				CRGBA color = lightGroup->isLightbar ? lightGroup->lightbarSettings.ledOnColor : point->color;
+				bool enabled = true;
 
-							CRGBA color = lightGroup->usePatternColors ? point->GetColor(step) : point->color;
-							bool enabled = point->GetIsEnabled(step);
+				if (lightGroup->isLightbar)
+				{
+					if (ToUpper(name).compare(ToUpper(lightGroup->lightbarSettings.object_prefix + std::to_string(point_i + 1))) != 0) continue;
+					enabled = point->GetIsEnabled(step, point_i);
+				}
+				else {
+					if (ToUpper(name).compare(ToUpper(point->object)) != 0) continue;
+					enabled = point->GetIsEnabled(step);
+				}
 
-							/*
-							* use this in other cases
-							*/
-							if (!vehiclePatternData->enabled) enabled = false;
-							if (m_FreezeLights) enabled = true;
-							
-							/*
-							char text[512];
-							sprintf(text, "%s", name.c_str());
-							DrawWorldText(text, position, CRGBA(255, 0, 0));
-							*/
+				if (!vehiclePatternData->lightsOn) enabled = false;
+				if (m_FreezeLights) enabled = true;
 
-							if (point->rotateObject.rotate)
-							{
-								if (vehiclePatternData->enabled || point->rotateObject.rotateAlways)
-								{
-									auto axisVal = point->rotateObject.axis;
+				if (!enabled) color = lightGroup->isLightbar ? lightGroup->lightbarSettings.ledOffColor : point->disabledColor;
 
-									RwV3d axis = {
-										(float)(axisVal == eRotateObjectAxis::X ? 1 : 0),
-										(float)(axisVal == eRotateObjectAxis::Y ? 1 : 0),
-										(float)(axisVal == eRotateObjectAxis::Z ? 1 : 0)
-									};
-									RwReal angle = point->rotateObject.speed;
+				//TestHelper::AddLine("found " + name);
 
-									RwMatrixRotate(&frameAtomic->modelling, &axis, angle, rwCOMBINEPRECONCAT);
-								}
-							}
+				auto materials = VehicleDummy::RpGeometryGetAllMaterials(atomic->geometry);
+				for (auto material : materials)
+				{
+					//if (!material) continue;
 
-							//
+					material->color = { color.r, color.g, color.b, color.a };
 
-							static std::vector<RpMaterial*> materials;
-							materials.clear();
-							RpGeometryForAllMaterials(atomic->geometry, [](RpMaterial* material, void* data) {
-								materials.push_back(material);
-								//m_ResetEntries.push_back(std::make_pair(reinterpret_cast<unsigned int*>(&material->color), *reinterpret_cast<unsigned int*>(&material->color)));
-								//m_ResetEntries.push_back(std::make_pair(reinterpret_cast<unsigned int*>(&material->surfaceProps.ambient), *reinterpret_cast<unsigned int*>(&material->surfaceProps.ambient)));
-							return material;
-							}, 0);
-
-							//
-
-							for (auto material : materials) {
-
-								if (enabled) {
-									material->color = { color.r, color.g, color.b, color.a };
-								}
-								else {
-									material->color = { point->disabledColor.r, point->disabledColor.g, point->disabledColor.b, point->disabledColor.a };
-								}
-
-								material->surfaceProps.ambient = m_MatAmbient;
-								//material->surfaceProps.diffuse = m_MatDiffuse;
-								//material->surfaceProps.specular = m_MatSpecular;
-							}
-
-							/*
-							sprintf(text, "");
-							for (auto material : materials) sprintf(text, "%s %s,", text, "MATERIAL");
-							DrawWorldText(text, position, CRGBA(0, 0, 255));
-							*/
-						}
-					}
+					material->surfaceProps.ambient = 10;
+					material->surfaceProps.diffuse = 10;
+					material->surfaceProps.specular = 10;
 				}
 			}
-		return atomic;
-		}, 0);
+		}
 	}
-
 }
 
 void Vehicle::RenderAfter() {
@@ -272,41 +317,52 @@ void Vehicle::RenderAfter() {
 	RenderShadows();
 }
 
-void Vehicle::RenderShadows() {
+void Vehicle::RenderShadows()
+{
 	int shadowId = (uintptr_t)m_Vehicle + 100;
-	for (auto pair : m_LightGroupData) {
+
+	for (auto pair : m_LightGroupData)
+	{
 		auto lightGroup = pair.first;
 		auto vehiclePatternData = pair.second;
 
-		auto patternCycleStep = lightGroup->patternCycleSteps[vehiclePatternData->patternLoop->m_StepIndex];
+		auto patternLoop = vehiclePatternData->patternLoop;
+		auto patternCycleStep = lightGroup->patternCycleSteps[patternLoop->StepIndex];
 		auto patternDuration = patternCycleStep->duration;
 		auto pattern = patternCycleStep->pattern;
 
-		auto step = pattern->steps[vehiclePatternData->stepLoop->m_StepIndex];
+		auto stepLoop = vehiclePatternData->stepLoop;
+		auto step = pattern->steps[stepLoop->StepIndex];
 
-		
-		for (auto point : lightGroup->points) {
-			if (!point->shadow.enabled) continue;
+		if (!step) continue;
+
+		for (size_t point_i = 0; point_i < lightGroup->points.size(); point_i++)
+		{
+			auto point = lightGroup->points[point_i];
+
+			if(!point->shadow.enabled) continue;
 
 			auto shadow = point->shadow;
 
 			//auto pos = VehicleDummy::GetTransformedPosition(m_Vehicle, lightGroup->position + point->position + CVector(point->shadow.position.x, point->shadow.position.y, 0));
 			CVector pos = m_Vehicle->GetPosition();
 
+			//
+
 			CVector2D forward = CVector2D(m_Vehicle->m_matrix->up);
 			CVector2D_Normalize(&forward);
-			
+
 			CVector2D right = CVector2D(m_Vehicle->m_matrix->right);
 			CVector2D_Normalize(&right);
-			
+
 			auto offsetPos = lightGroup->position + point->position + CVector(shadow.position.x, shadow.position.y, 0);
 
 			CVector_AddDir(&pos, forward, right, offsetPos.x, offsetPos.y);
 
+			//
+
 			float width = shadow.width;
 			float height = shadow.height;
-
-			
 
 			if (shadow.rotate)
 			{
@@ -325,19 +381,20 @@ void Vehicle::RenderShadows() {
 				CVector2D_Rotate(&right, shadow.angle);
 			}
 
-
-
 			//
 
-			CRGBA color = lightGroup->usePatternColors ? point->GetColor(step) : point->color;
-			bool enabled = point->GetIsEnabled(step);
+			CRGBA color = point->color;
+			bool enabled = true;
 
-			if (!m_FreezeLights) {
-				if (!vehiclePatternData->enabled) enabled = false;
+			if (lightGroup->isLightbar) {
+				enabled = point->GetIsEnabled(step, point_i);
 			}
-			else { enabled = true; }
+			else {
+				enabled = point->GetIsEnabled(step);
+			}
 
-			//
+			if (!vehiclePatternData->lightsOn) enabled = false;
+			if (m_FreezeLights) enabled = true;
 
 			if (!enabled) continue;
 
@@ -365,7 +422,8 @@ void Vehicle::UpdateVehicleMaterial(RpMaterial* material, std::string frameName)
 
 }
 
-void Vehicle::SetAllLightGroupState(bool enabled) {
+void Vehicle::SetAllLightGroupState(bool enabled)
+{
 	//Log::file << "[Vehicle " << m_Vehicle << "] SetAllLightGroupState" << std::endl;
 
 	m_PrevLightState = enabled;
@@ -377,137 +435,133 @@ void Vehicle::SetAllLightGroupState(bool enabled) {
 
 		vehiclePatternData->patternLoop->Reset();
 		vehiclePatternData->stepLoop->Clear();
-		vehiclePatternData->stepLoop->Reset();
 
 		if (lightGroup->turnOnSiren) {
-			vehiclePatternData->enabled = enabled;
+			vehiclePatternData->lightsOn = enabled;
 		}
 	}
 }
 
 void Vehicle::CheckForLightGroups() {
-	//Log::file << "[Vehicle " << m_Vehicle << "] CheckForLightGroups" << std::endl;
+	if (!LightGroups::HasLightGroups(m_Vehicle->m_nModelIndex)) return;
 
-	if (LightGroups::HasLightGroups(m_Vehicle->m_nModelIndex)) {
-		auto lightGroups = LightGroups::GetLightGroups(m_Vehicle->m_nModelIndex);
-		for (auto lightGroup : lightGroups) {
-			if (!m_LightGroupData[lightGroup]) {
-				if (lightGroup->patternCycleSteps.size() == 0) {
-					m_LightGroupData.erase(lightGroup);
-					continue;
-				}
+	auto lightGroups = LightGroups::GetLightGroups(m_Vehicle->m_nModelIndex);
 
-				Log::file << "[Vehicle " << m_Vehicle << "] Add VehiclePatternData for light group '" << lightGroup->name << "' (" << std::to_string(m_LightGroupData.size()) << " total) with " << lightGroup->patternCycleSteps.size() << " patterns" << std::endl;
+	for (auto lightGroup : lightGroups)
+	{
+		if (m_LightGroupData[lightGroup]) continue;
 
-				auto vehiclePatternData = new VehiclePatternData();
-
-				if (lightGroup->turnOnSiren) vehiclePatternData->enabled = GetSirenState();
-
-				for (auto patternCycleStep : lightGroup->patternCycleSteps) {
-					vehiclePatternData->patternLoop->AddStep(&patternCycleStep->duration);
-				}
-
-				m_LightGroupData[lightGroup] = vehiclePatternData;
-			
-			}
+		if (lightGroup->patternCycleSteps.size() == 0) {
+			m_LightGroupData.erase(lightGroup);
+			continue;
 		}
-	}
 
-	//Log::file << "[Vehicle " << m_Vehicle << "] CheckForLightGroups, found" << m_LightGroupData.size() << std::endl;
+		//TestHelper::AddLine("Add VehiclePatternData of " + lightGroup->name + " to vehicle " + std::to_string(reinterpret_cast<unsigned int>(m_Vehicle)) + " with " + std::to_string(lightGroup->patternCycleSteps.size()) + " patternCycleSteps");
+
+		Log::file << "[Vehicle " << m_Vehicle << "] Add VehiclePatternData for light group '" << lightGroup->name << "' (" << std::to_string(m_LightGroupData.size()) << " total) with " << lightGroup->patternCycleSteps.size() << " patterns" << std::endl;
+
+		auto vehiclePatternData = new VehiclePatternData();
+		vehiclePatternData->patternLoop->DontChangeSteps = true; //manually change
+
+		for (auto patternCycleStep : lightGroup->patternCycleSteps)
+		{
+			vehiclePatternData->patternLoop->AddStep(&patternCycleStep->duration);
+		}
+
+		//if (lightGroup->turnOnSiren) vehiclePatternData->enabled = GetSirenState();
+
+		m_LightGroupData[lightGroup] = vehiclePatternData;
+	}
 }
 
 void Vehicle::UpdatePatternAndSteps() {
+
 	//Log::file << "[Vehicle " << m_Vehicle << "] UpdatePatternAndSteps " << m_LightGroupData.size() << " light groups" << std::endl;
 
-	int updateMs = CTimer::m_snTimeInMilliseconds - m_PrevTime;
+	auto dt = Mod::GetDeltaTime();
 
-	if (!m_FreezeLights)
+	for (auto pair : m_LightGroupData)
 	{
-		m_RotateShadowAngle += updateMs * 0.5f;
-		if (m_RotateShadowAngle >= 360) m_RotateShadowAngle -= 360;
-	}
-	
-
-	for (auto pair : m_LightGroupData) {
 		auto lightGroup = pair.first;
 		auto vehiclePatternData = pair.second;
 
-		if (!vehiclePatternData->enabled) continue;
+		if (vehiclePatternData->paused || !vehiclePatternData->lightsOn) continue;
 
-		int prevPatternIndex = vehiclePatternData->patternLoop->m_StepIndex;
-		vehiclePatternData->patternLoop->Update(updateMs);
-		bool patternChanged = prevPatternIndex != vehiclePatternData->patternLoop->m_StepIndex;
+		auto stepLoop = vehiclePatternData->stepLoop;
+		auto patternLoop = vehiclePatternData->patternLoop;
 
-		
+		patternLoop->Update(dt);
 
-		if (patternChanged || vehiclePatternData->stepLoop->GetSteps().size() == 0) {
-			if (vehiclePatternData->stepLoop->GetSteps().size() > 0) {
-				//Log::file << "[Vehicle] patternChanged patternLoop=" << vehiclePatternData->patternLoop->m_Time << "(" << updateMs << ")" << std::endl;
-				//Log::file << "[Vehicle] stepLoop= " << vehiclePatternData->stepLoop->m_Time << " will be " << (vehiclePatternData->stepLoop->m_Time + updateMs) << std::endl;
+		if (patternLoop->HasStepChanged() || stepLoop->HasNoSteps())
+		{
+			stepLoop->Clear();
+
+			auto pattern = lightGroup->patternCycleSteps[patternLoop->StepIndex]->pattern;
+
+			for (size_t i = 0; i < pattern->steps.size(); i++)
+			{
+				stepLoop->AddStep(&pattern->steps[i]->duration);
 			}
-
-			vehiclePatternData->stepLoop->Clear();
-			vehiclePatternData->stepLoop->Reset();
-
-			int newTime = vehiclePatternData->patternLoop->m_Time - updateMs;
-
-			vehiclePatternData->stepLoop->m_Time = newTime;
-			vehiclePatternData->stepLoop->m_TotalTime = newTime;
-
-			auto pattern = lightGroup->patternCycleSteps[vehiclePatternData->patternLoop->m_StepIndex]->pattern;
-
-			for (size_t i = 0; i < pattern->steps.size(); i++) {
-				vehiclePatternData->stepLoop->AddStep(&pattern->steps[i]->duration);;
-			}
-
-			if (vehiclePatternData->stepLoop->GetSteps().size() > 0) {
-				//Log::file << "[Vehicle] patternLoop= " << vehiclePatternData->patternLoop->m_Time << " | " << (vehiclePatternData->patternLoop->m_TotalTime) << std::endl;
-				//Log::file << "[Vehicle] stepLoop= " << vehiclePatternData->stepLoop->m_Time << " | " << (vehiclePatternData->stepLoop->m_TotalTime) << std::endl;
-			}
-			//Log::file << "||" << std::endl;
 		}
 
-		
-
-		vehiclePatternData->stepLoop->Update(updateMs);
+		stepLoop->Update(dt);
 	}
 }
 
-void Vehicle::RegisterCoronas() {
+void Vehicle::RegisterCoronas()
+{
 	//Log::file << "[Vehicle " << m_Vehicle << "] RegisterCoronas" << std::endl;
+	float distanceFromPlayer = 0.0f;
+	auto ped = FindPlayerPed(0);
+	if (ped)
+	{
+		distanceFromPlayer = DistanceBetweenPoints(ped->GetPosition(), m_Vehicle->GetPosition());
+	}
 
 	int lightId = reinterpret_cast<unsigned int>(m_Vehicle) + 50;
 
-	for (auto pair : m_LightGroupData) {
+	for (auto pair : m_LightGroupData)
+	{
 		auto lightGroup = pair.first;
 		auto vehiclePatternData = pair.second;
 
-		lightId += lightGroup->offsetId;
-
-		auto patternCycleStep = lightGroup->patternCycleSteps[vehiclePatternData->patternLoop->m_StepIndex];
+		auto patternLoop = vehiclePatternData->patternLoop;
+		auto patternCycleStep = lightGroup->patternCycleSteps[patternLoop->StepIndex];
 		auto patternDuration = patternCycleStep->duration;
 		auto pattern = patternCycleStep->pattern;
 
-		auto step = pattern->steps[vehiclePatternData->stepLoop->m_StepIndex];
+		auto stepLoop = vehiclePatternData->stepLoop;
+		auto step = pattern->steps[stepLoop->StepIndex];
 
-		for (auto point : lightGroup->points) {
+		if (!step) continue;
 
+		lightId += lightGroup->offsetId;
+
+		for (size_t point_i = 0; point_i < lightGroup->points.size(); point_i++)
+		{
+			auto point = lightGroup->points[point_i];
 			CVector position = point->position;
 
-			CRGBA color = lightGroup->usePatternColors ? point->GetColor(step) : point->color;
-			bool enabled = point->GetIsEnabled(step);
+			CRGBA color = point->color;
+			bool enabled = true;
 
-			if (!m_FreezeLights) {
-				if (!vehiclePatternData->enabled) enabled = false;
+			if (lightGroup->isLightbar) {
+				enabled = point->GetIsEnabled(step, point_i);
 			}
-			else { enabled = true; }
+			else {
+				enabled = point->GetIsEnabled(step);
+			}
 
-			//
+			if (!vehiclePatternData->lightsOn) enabled = false;
+			if (m_FreezeLights) enabled = true;
 
 			auto positionY = lightGroup->position.y + point->position.y;
 			auto angle = Point::GetAngle(m_Vehicle, lightGroup->position + point->position);
 			auto radiusMult = point->GetRadiusMultiplier(angle, lightGroup->direction, positionY);
 			auto radius = lightGroup->size * radiusMult;
+
+			auto flareType = lightGroup->flareType;
+			if (!enabled || distanceFromPlayer > 70.0f) flareType = eCoronaFlareType::FLARETYPE_NONE;
 
 			//
 
@@ -520,11 +574,11 @@ void Vehicle::RegisterCoronas() {
 				color.a,
 				lightGroup->position + position,
 				enabled ? radius : 0.0f,
-				800.0f,
+				1000.0f,
 				lightGroup->type,
-				enabled ? lightGroup->flareType : eCoronaFlareType::FLARETYPE_NONE,
-				false, //lightGroup->cReflect,
-				false,
+				flareType,
+				true, //enableReflection
+				false, //checkObstacles
 				0,
 				0.0f,
 				false,
@@ -541,4 +595,5 @@ void Vehicle::RegisterCoronas() {
 			}
 		}
 	}
+	
 }

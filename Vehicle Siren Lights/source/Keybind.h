@@ -2,87 +2,118 @@
 
 #include "pch.h"
 
-//key; alt; shift; ctrl
+enum KEYBIND_FLAGS : int
+{
+    NONE = 1 << 0,
+    CTRL = 1 << 1,
+    SHIFT = 1 << 2,
+    ALT = 1 << 3
+};
+
 struct Keybind {
-    int key;
-    bool alt;
-    bool shift;
-    bool ctrl;
-    bool code = false;
+    bool SaveAsNumber = false;
+    int Flags;
+    unsigned int KeyCode;
 
-    Json::Value ToJSON()
+    Keybind(std::string key, unsigned int flags)
     {
-        Json::Value value = Json::objectValue;
-
-        if (key == -1) {
-            value["key"] = "";
-        }
-        else
-        {
-            if (code) value["key"] = key;
-            else value["key"] = GetKeyString();
-        }
-
-        value["alt"] = alt;
-        value["shift"] = shift;
-        value["ctrl"] = ctrl;
-
-        return value;
+        SetKey(key, flags);
     }
 
-    void FromJSON(Json::Value value)
+    void SetKey(std::string key)
     {
-        if (value.empty()) return;
-
-        code = value["key"].isNumeric();
-
-        if (code)
+        if (key.empty())
         {
-            key = value["key"].asInt();
+            KeyCode = -1;
         }
         else {
-            auto keyStr = ToUpper(value["key"].asString());
-
-            if (keyStr.empty()) key = -1;
-            else key = (int)keyStr.at(0);
+            KeyCode = (int)key.at(0);
         }
+    }
 
-        alt = value["alt"].asBool();
-        shift = value["shift"].asBool();
-        ctrl = value["ctrl"].asBool();
+    void SetKey(std::string key, int flags)
+    {
+        Flags = flags;
+        SetKey(key);
     }
 
     std::string GetKeybindString()
     {
         std::vector<std::string> ks;
 
-        if (ctrl) ks.push_back("CTRL");
-        if (shift) ks.push_back("SHIFT");
-        if (alt) ks.push_back("ALT");
+        if (Flags & KEYBIND_FLAGS::CTRL) ks.push_back("CTRL");
+        if (Flags & KEYBIND_FLAGS::ALT) ks.push_back("ALT");
+        if (Flags & KEYBIND_FLAGS::SHIFT) ks.push_back("SHIFT");
 
-        if (ks.size() == 0) return GetKeyString();
-
-        if(key != -1) ks.push_back(GetKeyString());
+        if (KeyCode != -1) ks.push_back(GetKeyString());
 
         return join(ks, " + ");
     }
 
     std::string GetKeyString()
     {
-        if (key == -1) return "";
+        if (KeyCode == -1) return "";
 
-        char ch = static_cast<char>(key);
+        char ch = static_cast<char>(KeyCode);
         return ToUpper(std::string(1, ch));
     }
 
     bool CheckKeybind()
     {
-        if (alt && !Input::GetKey(18)) return false;
-        if (ctrl && !Input::GetKey(17)) return false;
-        if (shift && !Input::GetKey(16)) return false;
+        if ((Flags & KEYBIND_FLAGS::ALT) && !Input::GetKey(18)) return false;
+        if ((Flags & KEYBIND_FLAGS::CTRL) && !Input::GetKey(17)) return false;
+        if ((Flags & KEYBIND_FLAGS::SHIFT) && !Input::GetKey(16)) return false;
 
-        if (key == -1) return true;
+        if (KeyCode == -1)
+        {
+            if (Flags == 0) return false;
+            return true;
+        }
 
-        return Input::GetKeyDown(key);
+        return Input::GetKeyDown(KeyCode);
+    }
+
+    //change this
+    Json::Value ToJSON()
+    {
+        Json::Value value = Json::objectValue;
+
+        if (KeyCode == -1) {
+            value["key"] = "";
+        }
+        else
+        {
+            if (SaveAsNumber) value["key"] = KeyCode;
+            else value["key"] = GetKeyString();
+        }
+
+        value["alt"] = (Flags & KEYBIND_FLAGS::ALT) != 0;
+        value["shift"] = (Flags & KEYBIND_FLAGS::SHIFT) != 0;
+        value["ctrl"] = (Flags & KEYBIND_FLAGS::CTRL) != 0;
+
+        return value;
+    }
+
+    //change this
+    void FromJSON(Json::Value value)
+    {
+        if (value.empty()) return;
+
+        SaveAsNumber = value["key"].isNumeric();
+
+        if (SaveAsNumber)
+        {
+            KeyCode = value["key"].asInt();
+        }
+        else {
+            auto keyStr = ToUpper(value["key"].asString());
+
+            if (keyStr.empty()) KeyCode = -1;
+            else KeyCode = (int)keyStr.at(0);
+        }
+
+        if (value["alt"].asBool()) Flags |= KEYBIND_FLAGS::ALT;
+        if (value["shift"].asBool()) Flags |= KEYBIND_FLAGS::SHIFT;
+        if (value["ctrl"].asBool()) Flags |= KEYBIND_FLAGS::CTRL;
     }
 };

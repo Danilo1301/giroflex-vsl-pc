@@ -8,4 +8,5 @@ public:
 
 	static void CreateLightGroups();
 	static void CreateEditLightGroup();
+	static void CreateEditLightGroup_Lightbar();
 };

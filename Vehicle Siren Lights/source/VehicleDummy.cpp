@@ -3,6 +3,71 @@
 std::vector<RwFrame*> VehicleDummy::m_Frames;
 RwMatrix* tempMat = NULL;
 
+void VehicleDummy::CreateTempMatrix()
+{
+	if (!tempMat) tempMat = RwMatrixCreate();
+}
+
+std::vector<RpAtomic*> VehicleDummy::RpClumpGetAllAtomics(RpClump* clump)
+{
+	static std::vector<RpAtomic*> atomics;
+	atomics.clear();
+
+	RpClumpForAllAtomics(clump, [](RpAtomic* atomic, void* data) {
+		atomics.push_back(atomic);
+		return atomic;
+		}, (void*)((uint32_t)(0)));
+
+	return atomics;
+}
+
+std::vector<RpMaterial*> VehicleDummy::RpGeometryGetAllMaterials(RpGeometry* geometry)
+{
+	static std::vector<RpMaterial*> materials;
+	materials.clear();
+
+	RpGeometryForAllMaterials(geometry, [](RpMaterial* material, void* data) {
+		materials.push_back(material);
+		return material;
+		}, 0);
+
+	return materials;
+}
+
+std::vector<RwFrame*> VehicleDummy::GetFrameHierarchy(RwFrame* frame, RwFrame* root) {
+	std::vector<RwFrame*> hie;
+	RwFrame* f = frame;
+
+	while (f != NULL && f != root)
+	{
+		hie.insert(hie.begin(), f);
+		f = RwFrameGetParent(f);
+	}
+	return hie;
+}
+
+std::vector<RwFrame*> VehicleDummy::GetFramesOnVehicle(CVehicle* vehicle) {
+	m_Frames.clear();
+	FindDummies(vehicle, (RwFrame*)vehicle->m_pRwClump->object.parent);
+	return m_Frames;
+}
+
+RwFrame* VehicleDummy::FindDummy(CVehicle* vehicle, std::string dummyName) {
+	auto frames = VehicleDummy::GetFramesOnVehicle(vehicle);
+
+	for (auto frame : frames)
+	{
+		std::string frameName = ToLower(GetFrameNodeName(frame));
+
+		if (frameName.compare(ToLower(dummyName)) == 0) {
+			return frame;
+		}
+	}
+
+	return NULL;
+}
+
+
 void VehicleDummy::FindDummies(CVehicle* vehicle, RwFrame* frame) {
 	if (!frame)
 		return;
@@ -17,29 +82,6 @@ void VehicleDummy::FindDummies(CVehicle* vehicle, RwFrame* frame) {
 		return;
 
 	m_Frames.push_back(frame);
-}
-
-void VehicleDummy::CreateTempMatrix()
-{
-	if (!tempMat) tempMat = RwMatrixCreate();
-}
-
-std::vector<RwFrame*> VehicleDummy::GetFramesOnVehicle(CVehicle* vehicle) {
-	m_Frames.clear();
-	FindDummies(vehicle, (RwFrame*)vehicle->m_pRwClump->object.parent);
-	return m_Frames;
-}
-
-std::vector<RwFrame*> VehicleDummy::GetFrameHierarchy(RwFrame* frame, RwFrame* root) {
-	std::vector<RwFrame*> hie;
-	RwFrame* f = frame;
-
-	while (f != NULL && f != root)
-	{
-		hie.insert(hie.begin(), f);
-		f = RwFrameGetParent(f);
-	}
-	return hie;
 }
 
 /*
@@ -96,21 +138,6 @@ CVector VehicleDummy::GetTransformedDummyPositionByName(CVehicle* vehicle, std::
 	if (!frame) return CVector(0, 0, 0);
 
 	return VehicleDummy::GetTransformedDummyPosition(vehicle, frame, offset);
-}
-
-RwFrame* VehicleDummy::FindDummy(CVehicle* vehicle, std::string dummyName) {
-	auto frames = VehicleDummy::GetFramesOnVehicle(vehicle);
-
-	for (auto frame : frames)
-	{
-		std::string frameName = ToLower(GetFrameNodeName(frame));
-
-		if (frameName.compare(ToLower(dummyName)) == 0) {
-			return frame;
-		}
-	}
-
-	return NULL;
 }
 
 CVector VehicleDummy::GetDummyOffset(CVehicle* vehicle, std::string dummyName) {

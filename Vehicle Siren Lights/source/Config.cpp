@@ -22,10 +22,12 @@ void Config::SaveJSON() {
 
 	SaveSettings();
 
+	/*
 	for (size_t i = 0; i < Patterns::m_Patterns.size(); i++)
 	{
-		SavePattern(i, Patterns::m_Patterns[i]);
+		SavePattern(Patterns::m_Patterns[i]);
 	}
+	*/
 
 	for (auto pair : LightGroups::m_LightGroups)
 	{
@@ -34,13 +36,13 @@ void Config::SaveJSON() {
 
 		for (size_t i = 0; i < lightGroups.size(); i++)
 		{
-			SaveLightGroup(i, lightGroups[i]);
+			SaveLightGroup(lightGroups[i]);
 		}
 	}
 }
 
 void Config::LoadJSON() {
-	Log::file << "[Config] Loading config" << std::endl;
+	Log::file << "[Config] Loading config..." << std::endl;
 
 	CreatePath(m_DataPath);
 	CreatePath(m_DataPath + m_PatternsPath);
@@ -49,33 +51,37 @@ void Config::LoadJSON() {
 
 	LoadSettings();
 
+	Log::file << "[Config] Loading patterns..." << std::endl;
+
 	std::string pathPatterns = GetFullPath(m_DataPath + m_PatternsPath);
 
 	for (const auto& entry : std::filesystem::directory_iterator(pathPatterns)) {
-		int index = std::stoi(entry.path().filename().replace_extension());
+		std::string fileName = entry.path().filename().replace_extension().string();
 
-		Log::file << "[Config] Pattern " << index << std::endl;
+		Log::file << "[Config] Pattern " << fileName << std::endl;
 
-		LoadPattern(index);
+		LoadPattern(fileName);
 	}
 	
 	//
+
+	Log::file << "[Config] Loading vehicles..." << std::endl;
 
 	std::string pathVehicles = GetFullPath(m_DataPath + m_VehiclesPath);
 
 	for (const auto& entry : std::filesystem::directory_iterator(pathVehicles)) {
 		int modelId = std::stoi(entry.path().filename().replace_extension());
 
-		Log::file << "[Config] Vehicle " << modelId << std::endl;
+		Log::file << "[Config] Vehicle [" << modelId  << "]" << std::endl;
 
 		std::string pathLightGroups = GetFullPath(m_DataPath + m_VehiclesPath + std::to_string(modelId) + m_LightGroupsPath);
 
 		for (const auto& entry2 : std::filesystem::directory_iterator(pathLightGroups)) {
-			int index = std::stoi(entry2.path().filename().replace_extension());
+			std::string fileName = entry2.path().filename().replace_extension().string();
 
-			Log::file << "[Config] LightGroup " << index << std::endl;
+			Log::file << "[Config] LightGroup " << fileName << std::endl;
 
-			LoadLightGroup(index, modelId);
+			LoadLightGroup(fileName, modelId);
 		}
 	}
 
@@ -157,11 +163,13 @@ void Config::DeleteAllConfig() {
 
 	//
 
+	/*
 	std::string pathPatterns = GetFullPath(m_DataPath + m_PatternsPath);
 
 	for (const auto& entry : std::filesystem::directory_iterator(pathPatterns)) {
 		std::filesystem::remove_all(entry.path());
 	}
+	*/
 
 	//
 
@@ -180,6 +188,7 @@ void Config::DeleteAllConfig() {
 	}
 }
 
+/*
 void Config::SavePattern(int index, Pattern* pattern) {
 	CreatePath(m_DataPath);
 	CreatePath(m_DataPath + m_PatternsPath);
@@ -188,17 +197,19 @@ void Config::SavePattern(int index, Pattern* pattern) {
 
 	WriteToFile(m_DataPath + m_PatternsPath + std::to_string(index) + ".json", value);
 }
+*/
 
-Pattern* Config::LoadPattern(int index) {
-	Json::Value value = ReadFile(m_DataPath + m_PatternsPath + std::to_string(index) + ".json");
+Pattern* Config::LoadPattern(std::string fileName) {
+	Json::Value value = ReadFile(m_DataPath + m_PatternsPath + fileName + ".json");
 
 	Pattern* pattern = Patterns::CreatePattern(value["name"].asString());
+	pattern->fileName = fileName;
 	pattern->FromJSON(value);
 
 	return pattern;
 }
 
-void Config::SaveLightGroup(int index, LightGroup* lightGroup) {
+void Config::SaveLightGroup(LightGroup* lightGroup) {
 	CreatePath(m_DataPath);
 	CreatePath(m_DataPath + m_VehiclesPath);
 	CreatePath(m_DataPath + m_VehiclesPath + std::to_string(lightGroup->modelId));
@@ -206,14 +217,15 @@ void Config::SaveLightGroup(int index, LightGroup* lightGroup) {
 
 	Json::Value value = lightGroup->ToJSON();
 
-	WriteToFile(m_DataPath + m_VehiclesPath + std::to_string(lightGroup->modelId) + m_LightGroupsPath + std::to_string(index) + ".json", value);
+	WriteToFile(m_DataPath + m_VehiclesPath + std::to_string(lightGroup->modelId) + m_LightGroupsPath + lightGroup->fileName + ".json", value);
 }
 
-LightGroup* Config::LoadLightGroup(int index, int modelId) {
-	Json::Value value = ReadFile(m_DataPath + m_VehiclesPath + std::to_string(modelId) + m_LightGroupsPath + std::to_string(index) + ".json");
+LightGroup* Config::LoadLightGroup(std::string fileName, int modelId) {
+	Json::Value value = ReadFile(m_DataPath + m_VehiclesPath + std::to_string(modelId) + m_LightGroupsPath + fileName + ".json");
 
 	LightGroup* lightGroup = LightGroups::CreateLightGroup(modelId);
 	lightGroup->FromJSON(value);
+	lightGroup->fileName = fileName;
 
 	return lightGroup;
 }
@@ -240,10 +252,12 @@ void Config::SaveSettings() {
 }
 
 void Config::LoadSettings() {
+	Log::file << "[Config] Loading settings.json" << std::endl;
+
 	auto path = m_DataPath + "settings.json";
 
 	if (!Exists(path)) {
-		Log::file << "[Config] Config not found";
+		Log::file << "[Config] settings not found.json";
 		return;
 	}
 
@@ -253,7 +267,8 @@ void Config::LoadSettings() {
 	Keybinds::FromJSON(value["keybinds"]);
 
 	Log::file << "[Keybind] openMenu: " << Keybinds::openMenu.GetKeybindString() << std::endl;
-	Log::file << "[Keybind] toggleLights: " << Keybinds::toggleLights.GetKeybindString() << std::endl;
+	Log::file << "[Keybind] reloadConfig: " << Keybinds::reloadConfig.GetKeybindString() << std::endl;
+	Log::file << "[Keybind] toggleDebug: " << Keybinds::toggleDebug.GetKeybindString() << std::endl;
 	Log::file << "[Keybind] editorUpDown: " << Keybinds::editorUpDown.GetKeybindString() << std::endl;
 	Log::file << "[Keybind] editorSlower: " << Keybinds::editorSlower.GetKeybindString() << std::endl;
 }

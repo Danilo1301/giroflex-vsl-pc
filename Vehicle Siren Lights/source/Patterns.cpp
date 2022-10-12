@@ -10,6 +10,17 @@ Pattern* Patterns::CreatePattern(std::string name) {
 	return pattern;
 }
 
+Pattern* Patterns::GetPattern(std::string name) {
+	
+	for (auto pattern : m_Patterns)
+	{
+		if (name.compare(pattern->name) == 0) return pattern;
+	}
+
+	return NULL;
+}
+
+
 void Patterns::RemovePattern(Pattern* pattern) {
 	m_Patterns.erase(std::find(m_Patterns.begin(), m_Patterns.end(), pattern));
 

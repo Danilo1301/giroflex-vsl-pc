@@ -6,14 +6,14 @@
 std::vector<Window*> Menu::m_Windows;
 Window* Menu::m_ActiveWindow = nullptr;
 Item* Menu::m_ItemClicked = nullptr;
-bool Menu::m_Visible = false;
+bool Menu::m_IsOpen = false;
 bool Menu::m_Hide = false;
 int Menu::m_OpenAtIndex = -1;
 CVector2D Menu::m_DefaultPosition = CVector2D(20.0f, 20.0f);
 eFontAlignment Menu::m_FontAlign = eFontAlignment::ALIGN_LEFT;
 
 void Menu::DrawRect(float x, float y, float width, float height, CRGBA color) {
-	CSprite2d::DrawRect(CRect(ScreenX(x), ScreenY(y), ScreenX(x + width), ScreenY(y + height)), color);
+    CSprite2d::DrawRect(CRect(ScreenX(x), ScreenY(y), ScreenX(x + width), ScreenY(y + height)), color);
 }
 
 void Menu::DrawString(std::string text, float x, float y, CRGBA color)
@@ -44,7 +44,7 @@ void Menu::DrawArrow(float x, float y, eArrowDirection direction, float width, f
 
     if (direction == eArrowDirection::LEFT || direction == eArrowDirection::RIGHT) {
         point2.x = width;
-        point2.y = height/2;
+        point2.y = height / 2;
 
         point3.y = height;
 
@@ -56,11 +56,11 @@ void Menu::DrawArrow(float x, float y, eArrowDirection direction, float width, f
 
     if (direction == eArrowDirection::UP || direction == eArrowDirection::DOWN) {
         point2.x = width;
-  
+
         point3.x = width / 2;
         point3.y = height;
 
-        if(direction == eArrowDirection::UP) {
+        if (direction == eArrowDirection::UP) {
             translate.y += point3.y;
             point3.y = -point3.y;
         }
@@ -81,7 +81,7 @@ void Menu::DrawArrow(float x, float y, eArrowDirection direction, float width, f
 void Menu::DrawArrowButton(float x, float y, eArrowDirection direction, float width, float height, bool active) {
     float padding = 5.0f;
     DrawRect(x, y, width, height, CRGBA(0, 0, 0));
-    DrawArrow(x + padding, y + padding, direction, width - padding*2, height - padding * 2, active ? CRGBA(255, 255, 255) : CRGBA(64, 64, 64));
+    DrawArrow(x + padding, y + padding, direction, width - padding * 2, height - padding * 2, active ? CRGBA(255, 255, 255) : CRGBA(64, 64, 64));
 }
 
 void Menu::DrawKeyButton(std::string text, float x, float y, float width, float height) {
@@ -111,6 +111,12 @@ Window* Menu::AddWindow(std::string title, std::string description) {
     window->m_Title = title;
     window->m_Description = description;
     window->m_Position = m_DefaultPosition;
+
+    if (m_Windows.size() > 0)
+    {
+        window->m_PrevWindow = m_Windows[m_Windows.size() - 1];
+    }
+
     m_Windows.push_back(window);
     m_ActiveWindow = window;
     return window;
@@ -161,10 +167,18 @@ Window* Menu::CreateColorPickerWindow(CRGBA* color, std::function<void(void)> on
 }
 
 void Menu::SetOpen(bool open) {
-    m_Visible = open;
+    m_Hide = false;
+    m_IsOpen = open;
     m_OpenAtIndex = -1;
 
-    if (!m_Visible && PositionEditor::m_Visible) PositionEditor::Toggle(nullptr);
+    if (!m_IsOpen && PositionEditor::m_Visible) PositionEditor::Toggle(nullptr);
+}
+
+bool Menu::Toggle()
+{
+    SetOpen(!m_IsOpen);
+
+    return m_IsOpen;
 }
 
 void Menu::Draw() {
@@ -172,15 +186,15 @@ void Menu::Draw() {
 
     m_FontAlign = eFontAlignment::ALIGN_LEFT;
 
-    if (m_Visible && !PositionEditor::m_Visible) {
+    if (m_IsOpen && !PositionEditor::m_Visible) {
         for (Window* window : m_Windows)
         {
             window->Draw();
         }
     }
 
-    if(PositionEditor::m_Visible) PositionEditor::Draw();
-    if(TextEditor::m_Visible) TextEditor::Draw();
+    if (PositionEditor::m_Visible) PositionEditor::Draw();
+    if (TextEditor::m_Visible) TextEditor::Draw();
 }
 
 void Menu::Update() {
@@ -195,15 +209,19 @@ void Menu::Update() {
 
     if (PositionEditor::m_Visible) return;
     if (TextEditor::m_Visible) return;
-    
 
-    if (m_Visible) {
+
+    if (m_IsOpen) {
         if (Input::GetKeyDown(VK_UP)) {
             if (m_ActiveWindow) m_ActiveWindow->GoUp();
         }
 
         if (Input::GetKeyDown(VK_DOWN)) {
             if (m_ActiveWindow) m_ActiveWindow->GoDown();
+        }
+
+        if (Input::GetKeyDown(8)) { //backspace
+            if (m_ActiveWindow) m_ActiveWindow->GoBackToPrevWindow();
         }
     }
 
@@ -233,5 +251,5 @@ void Menu::SaveIndex() {
 void Menu::RestoreIndex() {
     m_ActiveWindow->m_SelectedIndex = m_OpenAtIndex;
     m_OpenAtIndex = -1;
-    
+
 }

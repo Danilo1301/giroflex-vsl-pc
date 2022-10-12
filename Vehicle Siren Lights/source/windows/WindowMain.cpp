@@ -1,7 +1,9 @@
 #include "WindowMain.h"
 #include "WindowLightGroup.h"
-#include "WindowPattern.h"
+//#include "WindowPattern.h"
 #include "WindowSettings.h"
+
+#include "../Mod.h"
 
 #include "../menu/Menu.h"
 #include "../Vehicle.h"
@@ -19,11 +21,13 @@ void WindowMain::CreateMain() {
 		WindowLightGroup::CreateLightGroups();
 	};
 
+	/*
 	auto buttonEditPatterns = window->AddButton(Localization::GetLine("main_edit_patterns"));
 	buttonEditPatterns->m_OnClick = [window]() {
 		Menu::RemoveWindow(window);
 		WindowPattern::CreatePatterns();
 	};
+	*/
 
 	auto buttonSettings = window->AddButton(Localization::GetLine("main_settings"));
 	buttonSettings->m_OnClick = [window]() {

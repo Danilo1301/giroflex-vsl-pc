@@ -9,6 +9,7 @@
 #include "LightGroupShadow.h"
 #include "Config.h"
 #include "Keybinds.h"
+#include "VehicleDummy.h"
 
 #include "CVisibilityPlugins.h"
 
@@ -17,7 +18,7 @@ bool Mod::m_IsSamp = false;
 std::string Mod::m_Version = "1.5.1";
 
 CVehicle* testVehicle = NULL;
-#include "VehicleDummy.h"
+unsigned int _prevTime = 0;
 
 void TestUpdate() {
 	if (Input::GetKeyDown(74)) {
@@ -141,6 +142,7 @@ void Mod::Update() {
 
 	//
 
+	/*
 	if (Keybinds::toggleLights.CheckKeybind())
 	{
 		auto veh = FindPlayerVehicle(0, false);
@@ -152,6 +154,7 @@ void Mod::Update() {
 			}
 		}
 	}
+	*/
 
 	//
 
@@ -167,7 +170,7 @@ void Mod::Update() {
 		ToggleMenu();
 	}
 
-	if (Menu::m_Visible) {
+	if (Menu::m_IsOpen) {
 		if (Input::GetKeyDown(18)) {
 			SetPlayerControl(true);
 			Menu::m_Hide = true;
@@ -191,6 +194,8 @@ void Mod::Update() {
 		Vehicle* vehicle = pair.second;
 		vehicle->Update();
 	}
+
+	_prevTime = CTimer::m_snTimeInMilliseconds;
 }
 
 void Mod::Draw() {
@@ -219,6 +224,13 @@ void Mod::Draw() {
 	}
 
 	Menu::Draw();
+	TestHelper::Draw();
+}
+
+unsigned int Mod::GetDeltaTime()
+{
+	unsigned int dt = CTimer::m_snTimeInMilliseconds - _prevTime;
+	return dt;
 }
 
 void Mod::SetPlayerControl(bool enabled) {
@@ -227,7 +239,8 @@ void Mod::SetPlayerControl(bool enabled) {
 
 void Mod::ToggleMenu() {
 
-	if (!Menu::m_Visible) {
+	if (!Menu::m_IsOpen)
+	{
 		WindowMain::m_Vehicle = FindPlayerVehicle(0, false);
 		if (!WindowMain::m_Vehicle) {
 			Localization::PrintString("error_need_vehicle", 1000);
@@ -235,10 +248,9 @@ void Mod::ToggleMenu() {
 		}
 	}
 
-	Menu::m_Visible = !Menu::m_Visible;
-	Menu::m_Hide = false;
+	bool open = Menu::Toggle();
 
-	if (Menu::m_Visible) {
+	if (open) {
 		WindowMain::CreateMain();
 		//WindowTest::Create();
 
@@ -248,6 +260,7 @@ void Mod::ToggleMenu() {
 		Menu::RemoveAllWindows();
 
 		SetPlayerControl(true);
+		Vehicle::m_FreezeLights = false;
 
 		Config::SaveJSON();
 	}
@@ -257,7 +270,7 @@ void Mod::ReloadConfig() {
 	Log::file << "---------------------------------------------" << std::endl;
 	Log::file << "[Mod] Reload config" << std::endl;
 
-	if (Menu::m_Visible) {
+	if (Menu::m_IsOpen) {
 		ToggleMenu();
 	}
 
@@ -377,67 +390,6 @@ Mod::Mod() {
 	DisableOriginalLights();
 
 	Config::LoadJSON();
-
-	if (Patterns::m_Patterns.size() == 0) {
-		auto pattern1 = Patterns::CreatePattern("DEFAULT Red 1");
-		pattern1->AddStep(1, 0, 0, CRGBA(255, 0, 0), 120);
-		pattern1->AddStep(0, 1, 0, CRGBA(255, 0, 0), 120);
-		pattern1->AddStep(0, 0, 1, CRGBA(255, 0, 0), 120);
-		pattern1->AddStep(0, 1, 0, CRGBA(255, 0, 0), 120);
-
-		auto pattern2 = Patterns::CreatePattern("DEFAULT Red 2");
-		pattern2->AddStep(0, 0, 0, CRGBA(255, 0, 0), 70);
-		pattern2->AddStep(1, 0, 0, CRGBA(255, 0, 0), 80);
-
-		pattern2->AddStep(0, 0, 0, CRGBA(255, 0, 0), 70);
-		pattern2->AddStep(1, 0, 0, CRGBA(255, 0, 0), 80);
-
-		pattern2->AddStep(0, 0, 0, CRGBA(255, 0, 0), 70);
-		pattern2->AddStep(1, 1, 0, CRGBA(255, 0, 0), 80);
-
-		pattern2->AddStep(0, 1, 0, CRGBA(255, 0, 0), 70);
-		pattern2->AddStep(0, 0, 1, CRGBA(255, 0, 0), 80);
-
-		pattern2->AddStep(0, 0, 0, CRGBA(255, 0, 0), 70);
-		pattern2->AddStep(0, 0, 1, CRGBA(255, 0, 0), 80);
-
-		pattern2->AddStep(0, 0, 0, CRGBA(255, 0, 0), 70);
-		pattern2->AddStep(0, 0, 1, CRGBA(255, 0, 0), 80);
-
-		auto pattern3 = Patterns::CreatePattern("DEFAULT Red 3");
-		pattern3->AddStep(1, 0, 0, CRGBA(255, 0, 0), 135);
-		pattern3->AddStep(0, 1, 0, CRGBA(255, 0, 0), 135);
-		pattern3->AddStep(0, 0, 1, CRGBA(255, 0, 0), 135);
-		pattern3->AddStep(0, 1, 0, CRGBA(255, 0, 0), 135);
-
-		auto pattern4 = Patterns::CreatePattern("DEFAULT Red 4");
-		pattern4->AddStep(1, 1, 1, CRGBA(255, 0, 0), 60);
-		pattern4->AddStep(0, 0, 0, CRGBA(255, 0, 0), 60);
-
-		pattern4->AddStep(1, 1, 1, CRGBA(255, 0, 0), 60);
-		pattern4->AddStep(0, 0, 0, CRGBA(255, 0, 0), 60);
-
-		pattern4->AddStep(1, 1, 1, CRGBA(255, 0, 0), 60);
-		pattern4->AddStep(0, 0, 0, CRGBA(255, 0, 0), 60);
-
-		pattern4->AddStep(1, 1, 1, CRGBA(255, 0, 0), 60);
-		pattern4->AddStep(0, 0, 0, CRGBA(255, 0, 0), 360);
-
-		auto pattern5 = Patterns::CreatePattern("DEFAULT Always on");
-		pattern5->AddStep(1, 1, 1, CRGBA(255, 0, 0), 250);
-
-		/*
-		auto lightGroup1 = LightGroups::CreateLightGroup(523);
-		lightGroup1->position = CVector(0, 0, 2);
-		lightGroup1->AddPoint(CVector(-0.3f, 0, 0), eSirenPosition::LEFT);
-		lightGroup1->AddPoint(CVector(0, 0, 0), eSirenPosition::MIDDLE);
-		lightGroup1->AddPoint(CVector(0.3f, 0, 0), eSirenPosition::RIGHT);
-
-		lightGroup1->AddPatternCycleStep(pattern1, 3000);
-		lightGroup1->AddPatternCycleStep(pattern2, 3000);
-		*/
-	}
-	
 	Config::SaveJSON();
 
 	Events::initRwEvent += [] {

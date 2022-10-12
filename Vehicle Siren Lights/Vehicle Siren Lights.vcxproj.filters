@@ -90,9 +90,6 @@
     <ClCompile Include="source\windows\WindowSelectPattern.cpp">
       <Filter>source\windows</Filter>
     </ClCompile>
-    <ClCompile Include="source\windows\WindowPattern.cpp">
-      <Filter>source\windows</Filter>
-    </ClCompile>
     <ClCompile Include="source\Config.cpp">
       <Filter>source</Filter>
     </ClCompile>
@@ -206,9 +203,6 @@
     <ClInclude Include="source\windows\WindowSelectPattern.h">
       <Filter>source\windows</Filter>
     </ClInclude>
-    <ClInclude Include="source\windows\WindowPattern.h">
-      <Filter>source\windows</Filter>
-    </ClInclude>
     <ClInclude Include="source\Config.h">
       <Filter>source</Filter>
     </ClInclude>
@@ -246,6 +240,9 @@
       <Filter>source\windows</Filter>
     </ClInclude>
     <ClInclude Include="source\Keybinds.h">
+      <Filter>source</Filter>
+    </ClInclude>
+    <ClInclude Include="source\VehiclePatternData.h">
       <Filter>source</Filter>
     </ClInclude>
   </ItemGroup>

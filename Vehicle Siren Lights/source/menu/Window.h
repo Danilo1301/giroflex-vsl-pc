@@ -8,33 +8,53 @@
 #include "item/NumberRange.h"
 #include "item/ButtonKey.h"
 
+
+
 class Window {
 public:
+	enum FIND_INDEX_DIR
+	{
+		UP,
+		DOWN
+	};
+
+	enum FIND_INDEX_TYPE
+	{
+		FIRST,
+		LAST
+	};
+
 	CVector2D m_Position;
 	std::vector<Item*> m_Items;
 	int m_SelectedIndex = 0;
+	int m_MaxItemsByPage = 17;
 
 	std::string m_Title = "Title";
 	std::string m_Description = "Desc";
 
 	CVector2D m_Size = CVector2D(400, 0);
 
-	int m_ListStartIndex = 0; //remove
-	int m_ListIndex = 0;
-	int m_MaxItems = 17;
+	Window* m_PrevWindow = nullptr;
+
+	//int m_ListStartIndex = 0; //remove
+	//int m_ = 0;
 
 	void Draw();
 	void GoUp();
 	void GoDown();
+	void GoBackToPrevWindow();
 	void Update();
 	void Destroy();
 	void CheckSelected(int add);
 
-	int GetViewTopItemIndex();
-	int GetViewBottomItemIndex();
+	//int GetViewTopItemIndex();
+	//int GetViewBottomItemIndex();
 
 	Item* GetSelectedItem();
-	int GetNextSelectableItemIndex(int by);
+	//int _GetNextSelectableItemIndex(int at, int by);
+	int FindSelectableItemIndex(int at, FIND_INDEX_DIR dir, FIND_INDEX_TYPE type);
+	int GetBottomMostIndex();
+	int GetTopMostIndex();
 	Item* AddItem(Item* item);
 	Item* AddItem(std::string text);
 	Item* AddButton(std::string text);

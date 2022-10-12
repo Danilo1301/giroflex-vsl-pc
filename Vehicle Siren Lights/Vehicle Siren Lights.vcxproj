@@ -39,7 +39,6 @@
     <ClCompile Include="source\Vehicles.cpp" />
     <ClCompile Include="source\windows\WindowLightGroup.cpp" />
     <ClCompile Include="source\windows\WindowMain.cpp" />
-    <ClCompile Include="source\windows\WindowPattern.cpp" />
     <ClCompile Include="source\windows\WindowPoint.cpp" />
     <ClCompile Include="source\windows\WindowRotateObject.cpp" />
     <ClCompile Include="source\windows\WindowSelectPattern.cpp" />
@@ -76,10 +75,10 @@
     <ClInclude Include="source\TestHelper.h" />
     <ClInclude Include="source\Vehicle.h" />
     <ClInclude Include="source\VehicleDummy.h" />
+    <ClInclude Include="source\VehiclePatternData.h" />
     <ClInclude Include="source\Vehicles.h" />
     <ClInclude Include="source\windows\WindowLightGroup.h" />
     <ClInclude Include="source\windows\WindowMain.h" />
-    <ClInclude Include="source\windows\WindowPattern.h" />
     <ClInclude Include="source\windows\WindowPoint.h" />
     <ClInclude Include="source\windows\WindowRotateObject.h" />
     <ClInclude Include="source\windows\WindowSelectPattern.h" />

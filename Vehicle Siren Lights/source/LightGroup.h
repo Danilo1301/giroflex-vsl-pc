@@ -5,10 +5,27 @@
 #include "Patterns.h"
 #include "Point.h"
 #include "LightGroupShadow.h"
+#include "Keybinds.h"
+
+struct LightbarSettings {
+	//int amountOfLights = 11;
+	//float lightDistance = 0.1f;
+	std::string object_prefix = "giroflex_led_";
+	CRGBA ledOnColor = CRGBA(255, 255, 255);
+	CRGBA ledOffColor = CRGBA(0, 0, 0);
+};
 
 class LightGroup {
 public:
+	bool isLightbar = false;
+	LightbarSettings lightbarSettings;
+
+	//Keybind keybindChange = Keybind("", 0);
+	Keybind keybindChange = Keybind("Z", KEYBIND_FLAGS::CTRL);
+	Keybind keybindPause = Keybind("X", KEYBIND_FLAGS::CTRL);
+
 	std::string name = "Light group";
+	std::string fileName = "";
 	int modelId;
 	bool reflect = false;
 	bool turnOnSiren = true;
@@ -28,12 +45,39 @@ public:
 		this->modelId = modelId;
 	}
 
+	void UpdateLightbarPoints()
+	{
+		if (!isLightbar) return;
+
+		if (points.size() == 0)
+		{
+			Point* lastPoint = NULL;
+			if (points.size() > 0)
+			{
+				lastPoint = points[points.size() - 1];
+			}
+
+			CVector pos = lastPoint ? lastPoint->position + CVector(0.1f, 0, 0) : CVector(0, 0, 0);
+			CRGBA color = lastPoint ? lastPoint->color : CRGBA(255, 0, 0);
+
+			AddPoint(pos, color);
+		}
+
+		/*
+		while (lightbarSettings.amountOfLights > (int)points.size())
+		{
+			Point* lastPoint = points[points.size() - 1];
+			RemovePoint(lastPoint);
+		}
+		*/
+	}
+
 	Point* AddPoint(CVector position, CRGBA color, eSirenPosition sirenPosition) {
 		Point* point = new Point();
 		point->position = position;
 		point->sirenPosition = sirenPosition;
 		point->color = color;
-		point->shadow.enabled = true;
+		//point->shadow.enabled = false;
 		points.push_back(point);
 		return point;
 	}
@@ -78,6 +122,7 @@ public:
 		Json::Value value = Json::objectValue;
 
 		value["name"] = name;
+		value["isLightbar"] = isLightbar;
 		value["reflect"] = reflect;
 		value["turnOnSiren"] = turnOnSiren;
 		value["reflectionDistance"] = reflectionDistance;
@@ -105,6 +150,9 @@ public:
 
 	void FromJSON(Json::Value value) {
 		name = value["name"].asString();
+
+		if (!value["isLightbar"].isNull()) isLightbar = value["isLightbar"].asBool();
+
 		reflect = value["reflect"].asBool();
 		turnOnSiren = value["turnOnSiren"].asBool();
 		reflectionDistance = value["reflectionDistance"].asFloat();

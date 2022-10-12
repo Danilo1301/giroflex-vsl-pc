@@ -28,6 +28,7 @@ public:
 	LightGroupShadow shadow;
 	LightGroupRotateObject rotateObject;
 
+	/*
 	CRGBA GetColor(PatternStep* step) {
 		switch (sirenPosition)
 		{
@@ -40,19 +41,15 @@ public:
 		}
 		return NULL;
 	}
+	*/
 
 	bool GetIsEnabled(PatternStep* step) {
-		switch (sirenPosition)
-		{
-		case eSirenPosition::LEFT:
-			return step->leftState;
-		case eSirenPosition::MIDDLE:
-			return step->middleState;
-		case eSirenPosition::RIGHT:
-			return step->rightState;
-		}
+		return GetIsEnabled(step, (int)sirenPosition);
+	}
 
-		return false;
+	bool GetIsEnabled(PatternStep* step, int index) {
+		if (index >= (int)step->values.size()) return false;
+		return step->values[index] == 1;
 	}
 
 	Json::Value ToJSON() {
