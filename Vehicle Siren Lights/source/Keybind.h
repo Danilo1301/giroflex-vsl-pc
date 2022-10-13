@@ -2,6 +2,23 @@
 
 #include "pch.h"
 
+#include "input/Input.h"
+
+static std::map<int, std::string> KeyMaps = {
+    {219, "(´)"},
+    {222, "(~)"},
+    {190, "."},
+    {188, ","},
+    {191, ";"},
+    {193, "/"},
+    {226, "\\"},
+    {187, "="},
+    {189, "-"},
+    {192, "'"},
+    {220, "]"},
+    {221, "["}
+};
+
 enum KEYBIND_FLAGS : int
 {
     NONE = 1 << 0,
@@ -28,6 +45,15 @@ struct Keybind {
         }
         else {
             KeyCode = (int)key.at(0);
+
+            for (auto k : KeyMaps)
+            {
+                if (k.second.compare(key) == 0)
+                {
+                    KeyCode = k.first;
+                    break;
+                }
+            }
         }
     }
 
@@ -53,6 +79,11 @@ struct Keybind {
     std::string GetKeyString()
     {
         if (KeyCode == -1) return "";
+
+        for (auto k : KeyMaps)
+        {
+            if (k.first == KeyCode) return k.second;
+        }
 
         char ch = static_cast<char>(KeyCode);
         return ToUpper(std::string(1, ch));
@@ -87,9 +118,9 @@ struct Keybind {
             else value["key"] = GetKeyString();
         }
 
-        value["alt"] = (Flags & KEYBIND_FLAGS::ALT) != 0;
-        value["shift"] = (Flags & KEYBIND_FLAGS::SHIFT) != 0;
-        value["ctrl"] = (Flags & KEYBIND_FLAGS::CTRL) != 0;
+        value["alt"] = (Flags & KEYBIND_FLAGS::ALT) > 0;
+        value["shift"] = (Flags & KEYBIND_FLAGS::SHIFT) > 0;
+        value["ctrl"] = (Flags & KEYBIND_FLAGS::CTRL) > 0;
 
         return value;
     }
@@ -112,6 +143,7 @@ struct Keybind {
             else KeyCode = (int)keyStr.at(0);
         }
 
+        Flags = 0;
         if (value["alt"].asBool()) Flags |= KEYBIND_FLAGS::ALT;
         if (value["shift"].asBool()) Flags |= KEYBIND_FLAGS::SHIFT;
         if (value["ctrl"].asBool()) Flags |= KEYBIND_FLAGS::CTRL;

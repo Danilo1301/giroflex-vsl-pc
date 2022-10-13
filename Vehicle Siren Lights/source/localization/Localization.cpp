@@ -32,7 +32,7 @@ std::string Localization::GetLine(std::string key, std::string language) {
 		}
 	}
 
-	return key + "_" + language;
+	return "[" + language + "] " + key;
 }
 
 std::string Localization::GetLine(std::string key) {

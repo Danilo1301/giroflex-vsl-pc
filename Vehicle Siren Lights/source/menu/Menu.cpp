@@ -2,6 +2,7 @@
 #include "../input/Input.h"
 #include "PositionEditor.h"
 #include "TextEditor.h"
+#include "KeySelector.h"
 
 std::vector<Window*> Menu::m_Windows;
 Window* Menu::m_ActiveWindow = nullptr;
@@ -11,6 +12,7 @@ bool Menu::m_Hide = false;
 int Menu::m_OpenAtIndex = -1;
 CVector2D Menu::m_DefaultPosition = CVector2D(20.0f, 20.0f);
 eFontAlignment Menu::m_FontAlign = eFontAlignment::ALIGN_LEFT;
+eFontStyle Menu::m_FontStyle = eFontStyle::FONT_SUBTITLES;
 
 void Menu::DrawRect(float x, float y, float width, float height, CRGBA color) {
     CSprite2d::DrawRect(CRect(ScreenX(x), ScreenY(y), ScreenX(x + width), ScreenY(y + height)), color);
@@ -28,7 +30,7 @@ void Menu::DrawString(std::string text, float x, float y, CRGBA color)
     CFont::SetJustify(false);
     CFont::SetBackground(false, false);
     CFont::SetScale(ScreenX(0.35f), ScreenY(0.95f));
-    CFont::SetFontStyle(FONT_SUBTITLES);
+    CFont::SetFontStyle(m_FontStyle);
     CFont::SetProportional(true);
     CFont::SetColor(color);
     CFont::PrintString(ScreenX(x), ScreenY(y), buffer);
@@ -166,12 +168,40 @@ Window* Menu::CreateColorPickerWindow(CRGBA* color, std::function<void(void)> on
     return window;
 }
 
+Window* Menu::CreateConfirmWindow(std::string title, std::string message, std::string yes, std::string no, std::function<void(void)> onConfirm)
+{
+    auto window = Menu::AddWindow(title);
+    window->m_Size.x = 250;
+
+    window->AddItem(message);
+
+    auto yesButton = window->AddButton(yes);
+    yesButton->m_OnClick = [window, onConfirm]() {
+        window->GoBackToPrevWindow();
+        onConfirm();
+    };
+
+    auto noButton = window->AddButton(no);
+    noButton->m_OnClick = [window]() {
+        window->GoBackToPrevWindow();
+    };
+
+    window->m_Position.x += GetFullScreenSizeX() / 2 - window->m_Size.x / 2;
+    window->m_Position.y += GetFullScreenSizeY() / 2 - 100.0f;
+    
+    return window;
+}
+
 void Menu::SetOpen(bool open) {
     m_Hide = false;
     m_IsOpen = open;
     m_OpenAtIndex = -1;
 
-    if (!m_IsOpen && PositionEditor::m_Visible) PositionEditor::Toggle(nullptr);
+    if (!m_IsOpen)
+    {
+        if (PositionEditor::m_Visible) PositionEditor::Toggle(NULL);
+        if (KeySelector::m_Visible) KeySelector::Toggle(NULL);
+    }
 }
 
 bool Menu::Toggle()
@@ -195,20 +225,18 @@ void Menu::Draw() {
 
     if (PositionEditor::m_Visible) PositionEditor::Draw();
     if (TextEditor::m_Visible) TextEditor::Draw();
+    if (KeySelector::m_Visible) KeySelector::Draw();
 }
 
 void Menu::Update() {
 
     PositionEditor::Update();
     TextEditor::Update();
-
-    if (ButtonKey::m_EditingButtonKey) {
-        ButtonKey::m_EditingButtonKey->Update();
-        return;
-    }
+    KeySelector::Update();
 
     if (PositionEditor::m_Visible) return;
     if (TextEditor::m_Visible) return;
+    if (KeySelector::m_Visible) return;
 
 
     if (m_IsOpen) {

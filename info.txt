@@ -1,8 +1,18 @@
 [3.0]
-[ ] fix lightbar not saving
-[ ] add intensity to flare
-[ ] add intensity to all point shadows 
-[ ] fix support for older vehicles when loading lightbar settings
-[ ] maybe add mod version inside vehicle
-[ ] add panel (individual for each lightgroup) that has option to pause/change pattern, set auto-manual, turn on/off
-[ ] option to make sirens turn on manualy ONLY (not only with siren change event)
+[ ] FIX: lightbar not saving
+[ ] ADD: intensity to flare
+[ ] ADD: intensity to all point shadows 
+[ ] FIX: support for older vehicles when loading lightbar settings
+[~] ADD MAYBE: add mod version inside vehicle
+[ ] ADD: panel (individual for each lightgroup) that has option to pause/change pattern, set auto-manual, turn on/off
+[ ] ADD: option to make sirens turn on manualy ONLY (not only with siren change event)
+[~] ADD: use DUMMIES to put around a lightbar
+[~] ADD: setup na hora de coloca o giroflex, perguntando qual o dummy prefix e o led prefix
+[ ] FIX: demo vehicles lightgroup size
+[ ] ADD: keep language settings
+[ ] FIX: fix material ambient settings (for giroflex and non giroflex)
+[ ] FIX: increase nearClip a little bit
+[ ] FIX: instead of useShadows, use applyShadows
+
+[ ] create default patterns for lightgroups and lightbars
+[ ] adapt default vehicles with no graphics mod

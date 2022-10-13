@@ -1,12 +1,7 @@
 #pragma once
 
-#include "plugin.h"
-#include "CFont.h"
-
+#include "../pch.h"
 #include "Window.h"
-
-static float ScreenX(float x) { return (x * (SCREEN_COORD_CENTER_X * 2)) / 1024.0f; }
-static float ScreenY(float y) { return (y * (SCREEN_COORD_CENTER_Y * 2)) / 768.0f; }
 
 enum class eArrowDirection {
 	LEFT,
@@ -27,6 +22,7 @@ public:
 	static CVector2D m_DefaultPosition;
 
 	static eFontAlignment m_FontAlign;
+	static eFontStyle m_FontStyle;
 
 	static void DrawRect(float x, float y, float width, float height, CRGBA color);
 	static void DrawString(std::string text, float x, float y, CRGBA color);
@@ -43,6 +39,7 @@ public:
 	static void RemoveWindow(Window* window);
 	static void RemoveAllWindows();
 	static Window* CreateColorPickerWindow(CRGBA* color, std::function<void(void)> onClose);
+	static Window* CreateConfirmWindow(std::string title, std::string message, std::string yes, std::string no, std::function<void(void)> onConfirm);
 
 	static void SetOpen(bool open);
 	static bool Toggle();

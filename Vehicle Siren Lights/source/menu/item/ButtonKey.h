@@ -2,15 +2,15 @@
 
 #include "Item.h"
 
+#include "../../Keybind.h"
+
 class ButtonKey : public Item {
 public:
-	ButtonKey(int* value);
+	ButtonKey(Keybind* keybind);
 
-	int* m_Keys;
+	Keybind* m_Keybind;
 
 	void Update();
 	void Draw(float x, float y);
 	void DrawTextDisplay(float x, float y, float width, float height);
-
-	static ButtonKey* m_EditingButtonKey;
 };

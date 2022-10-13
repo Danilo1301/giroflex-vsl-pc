@@ -16,9 +16,9 @@ public:
 static Json::Value PatternCycleStepToJSON(PatternCycleStep* patternCycleStep) {
 	Json::Value value = Json::objectValue;
 
-	auto index = (std::find(Patterns::m_Patterns.begin(), Patterns::m_Patterns.end(), patternCycleStep->pattern) - Patterns::m_Patterns.begin());
+	//auto index = (std::find(Patterns::m_Patterns.begin(), Patterns::m_Patterns.end(), patternCycleStep->pattern) - Patterns::m_Patterns.begin());
 
-	value["pattern"] = index;
+	value["pattern"] = patternCycleStep->pattern->name;
 	value["duration"] = patternCycleStep->duration;
 	value["lerpColor"] = patternCycleStep->lerpColor;
 
@@ -28,15 +28,20 @@ static Json::Value PatternCycleStepToJSON(PatternCycleStep* patternCycleStep) {
 static PatternCycleStep* PatternCycleStepFromJSON(Json::Value value) {
 	PatternCycleStep* patternCycleStep = new PatternCycleStep();
 
-	int index = value["pattern"].asInt();
+	Pattern* pattern = NULL;
 
-	if (index <= (int)Patterns::m_Patterns.size() - 1) {
-		patternCycleStep->pattern = Patterns::m_Patterns[value["pattern"].asInt()];
+	if (value["pattern"].isNumeric())
+	{
+		int index = value["pattern"].asInt();
+		if (index <= (int)Patterns::m_Patterns.size() - 1) {
+			pattern = Patterns::m_Patterns[value["pattern"].asInt()];
+		}
 	}
 	else {
-		patternCycleStep->pattern = nullptr;
+		pattern = Patterns::GetPattern(value["pattern"].asString());
 	}
 
+	patternCycleStep->pattern = pattern;
 	patternCycleStep->duration = value["duration"].asInt();
 	patternCycleStep->lerpColor = value["lerpColor"].asBool();
 

@@ -7,22 +7,29 @@
 #include "LightGroupShadow.h"
 #include "Keybinds.h"
 
+#include "log/Log.h"
+
 struct LightbarSettings {
 	//int amountOfLights = 11;
 	//float lightDistance = 0.1f;
-	std::string object_prefix = "giroflex_led_";
-	CRGBA ledOnColor = CRGBA(255, 255, 255);
-	CRGBA ledOffColor = CRGBA(0, 0, 0);
+
+	bool isLightbar = false;
+	std::string object_prefix = "lightbar-led-";
+	CRGBA ledOnColor = CRGBA(255, 255, 0);
+	CRGBA ledOffColor = CRGBA(30, 0, 0);
 };
+
+static double arch_fn_parabola(float x, float curve, float len)
+{
+	return -(pow(x, 2) * (double)curve) + (((double)len * (double)curve) * (double)x);
+}
 
 class LightGroup {
 public:
-	bool isLightbar = false;
 	LightbarSettings lightbarSettings;
 
 	//Keybind keybindChange = Keybind("", 0);
-	Keybind keybindChange = Keybind("Z", KEYBIND_FLAGS::CTRL);
-	Keybind keybindPause = Keybind("X", KEYBIND_FLAGS::CTRL);
+	Keybind keybindMenu = Keybind("Z", KEYBIND_FLAGS::CTRL);
 
 	std::string name = "Light group";
 	std::string fileName = "";
@@ -31,7 +38,7 @@ public:
 	bool turnOnSiren = true;
 	float reflectionDistance = 20.0f;
 	float size = 0.2f;
-	float nearClip = 0.8f;
+	float nearClip = 0.3f;
 	eCoronaFlareType flareType = eCoronaFlareType::FLARETYPE_NONE;
 	eCoronaType type = eCoronaType::CORONATYPE_SHINYSTAR;
 	eSirenDirection direction = eSirenDirection::BOTH;
@@ -43,33 +50,46 @@ public:
 
 	LightGroup(int modelId) {
 		this->modelId = modelId;
+		this->keybindMenu.SaveAsNumber = true;
 	}
 
-	void UpdateLightbarPoints()
+	bool IsLightbar()
 	{
-		if (!isLightbar) return;
+		return lightbarSettings.isLightbar;
+	}
 
-		if (points.size() == 0)
+	void UpdateLightbarPoints(int amountOfLights, float curve, float distance)
+	{
+		if (!IsLightbar()) return;
+
+		CVector lastPos = CVector(0, 0, 0);
+		CRGBA lastColor = CRGBA(255, 0, 0);
+
+		int i = 0;
+		while ((int)points.size() < amountOfLights)
 		{
-			Point* lastPoint = NULL;
-			if (points.size() > 0)
+			Point* lastPoint = points.size() > 0 ? points[points.size() - 1] : NULL;
+
+			if (lastPoint)
 			{
-				lastPoint = points[points.size() - 1];
+				lastPos = lastPoint->position;
+				lastColor = lastPoint->color;
+
+				lastPos.x += distance;
 			}
 
-			CVector pos = lastPoint ? lastPoint->position + CVector(0.1f, 0, 0) : CVector(0, 0, 0);
-			CRGBA color = lastPoint ? lastPoint->color : CRGBA(255, 0, 0);
+			lastPos.y = (float)arch_fn_parabola((float)i, curve, (float)(amountOfLights-1));
 
-			AddPoint(pos, color);
+			AddPoint(lastPos, lastColor);
+
+			i++;
 		}
 
-		/*
-		while (lightbarSettings.amountOfLights > (int)points.size())
+		while (amountOfLights < (int)points.size())
 		{
 			Point* lastPoint = points[points.size() - 1];
 			RemovePoint(lastPoint);
 		}
-		*/
 	}
 
 	Point* AddPoint(CVector position, CRGBA color, eSirenPosition sirenPosition) {
@@ -102,27 +122,40 @@ public:
 	}
 
 	void RemovePatternCycleStep(PatternCycleStep* patternCycleStep) {
+		Log::file << "[LightGroup : " << name << "] Pattern '" << patternCycleStep->pattern->name << "' removed" << std::endl;
+
 		auto it = std::find(patternCycleSteps.begin(), patternCycleSteps.end(), patternCycleStep);
 		if (it == patternCycleSteps.end()) return;
 		patternCycleSteps.erase(it);
 		delete patternCycleStep;
-
-		Log::file << "[LightGroup : " << name << "] Pattern '"<< patternCycleStep->pattern->name <<"' removed" << std::endl;
 	}
 
 	void Destroy() {
 		while (patternCycleSteps.size() > 0) 
 			RemovePatternCycleStep(patternCycleSteps[0]);
 		
-		while (points.size() > 0) 
+		RemoveAllPoints();
+	}
+
+	void RemoveAllPoints()
+	{
+		while (points.size() > 0)
 			RemovePoint(points[0]);
 	}
 
 	Json::Value ToJSON() {
 		Json::Value value = Json::objectValue;
 
+		value["lightbarSettings"] = Json::objectValue;
+		value["lightbarSettings"] = Json::objectValue;
+		value["lightbarSettings"]["isLightbar"] = lightbarSettings.isLightbar;
+		value["lightbarSettings"]["object_prefix"] = lightbarSettings.object_prefix;
+		value["lightbarSettings"]["ledOnColor"] = ColorToJSON(lightbarSettings.ledOnColor);
+		value["lightbarSettings"]["ledOffColor"] = ColorToJSON(lightbarSettings.ledOffColor);
+
+		value["keybindMenu"] = keybindMenu.ToJSON();
+
 		value["name"] = name;
-		value["isLightbar"] = isLightbar;
 		value["reflect"] = reflect;
 		value["turnOnSiren"] = turnOnSiren;
 		value["reflectionDistance"] = reflectionDistance;
@@ -151,7 +184,18 @@ public:
 	void FromJSON(Json::Value value) {
 		name = value["name"].asString();
 
-		if (!value["isLightbar"].isNull()) isLightbar = value["isLightbar"].asBool();
+		if (!value["lightbarSettings"].isNull())
+		{
+			lightbarSettings.isLightbar = value["lightbarSettings"]["isLightbar"].asBool();
+			lightbarSettings.object_prefix = value["lightbarSettings"]["object_prefix"].asString();
+			lightbarSettings.ledOnColor = ColorFromJSON(value["lightbarSettings"]["ledOnColor"]);
+			lightbarSettings.ledOffColor = ColorFromJSON(value["lightbarSettings"]["ledOffColor"]);
+		}
+
+		if (!value["keybindMenu"].isNull())
+		{
+			keybindMenu.FromJSON(value["keybindMenu"]);
+		}
 
 		reflect = value["reflect"].asBool();
 		turnOnSiren = value["turnOnSiren"].asBool();

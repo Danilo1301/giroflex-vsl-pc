@@ -7,6 +7,6 @@ public:
 	static LightGroup* m_LightGroup;
 
 	static void CreateLightGroups();
+	static void CreateSetupLightbar();
 	static void CreateEditLightGroup();
-	static void CreateEditLightGroup_Lightbar();
 };

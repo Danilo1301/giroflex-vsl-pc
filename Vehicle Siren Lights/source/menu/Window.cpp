@@ -1,6 +1,7 @@
 #include "Window.h"
 #include "Menu.h"
 
+
 void Window::Draw() {
 	char buffer[256];
 	CVector2D drawPos = CVector2D(m_Position.x, m_Position.y);
@@ -20,7 +21,7 @@ void Window::Draw() {
 
 	//
 
-
+	
 
 	//
 
@@ -90,6 +91,7 @@ void Window::Draw() {
 	}
 	//
 
+	/*
 	sprintf_s(buffer, "selectedIndex=%d maxItems=%d | nextBy(1)=%d nextBy(-1)=%d | page=%d / %d startIndex=%d", //top=%d bottom=%d
 		m_SelectedIndex,
 		m_MaxItemsByPage,
@@ -105,8 +107,8 @@ void Window::Draw() {
 
 	sprintf_s(buffer, "bottomMost=%d topMost=%d", GetBottomMostIndex(), GetTopMostIndex());
 	Menu::DrawString(buffer, m_Position.x, m_Position.y + 20, CRGBA(255, 0, 0));
+	*/
 }
-
 
 void Window::GoUp() {
 	if (m_SelectedIndex == GetTopMostIndex())
@@ -332,8 +334,8 @@ Item* Window::AddDivider(float height) {
 	return divider;
 }
 
-ButtonKey* Window::AddButtonKey(std::string text, int* keys) {
-	auto buttonKey = (ButtonKey*)AddItem(new ButtonKey(keys));
+ButtonKey* Window::AddButtonKey(std::string text, Keybind* keybind) {
+	auto buttonKey = (ButtonKey*)AddItem(new ButtonKey(keybind));
 	buttonKey->m_Label = text;
 	return buttonKey;
 }

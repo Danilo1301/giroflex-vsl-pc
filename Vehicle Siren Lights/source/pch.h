@@ -17,14 +17,15 @@
 
 #include "map"
 
+using namespace plugin;
+
+/*
 #include "log/Log.h"
 #include "input/Input.h"
 #include "menu/Menu.h"
 #include "localization/Localization.h"
 #include "TestHelper.h"
-
-using namespace plugin;
-
+*/
 
 /*
 
@@ -32,6 +33,12 @@ sprintf(buffer, "%d", a);
 MessageBox(HWND_DESKTOP, buffer, "", MB_ICONERROR);
 
 */
+
+static float GetFullScreenSizeX() { return 1024.0f; }
+static float GetFullScreenSizeY() { return 768.0f; }
+
+static float ScreenX(float x) { return (x * (SCREEN_COORD_CENTER_X * 2)) / GetFullScreenSizeX(); }
+static float ScreenY(float y) { return (y * (SCREEN_COORD_CENTER_Y * 2)) / GetFullScreenSizeY(); }
 
 static unsigned char ucharIntensity(unsigned char uc, float intensity) {
 	return (unsigned char)std::clamp((int)round(((float)uc) * intensity), 0, 255);

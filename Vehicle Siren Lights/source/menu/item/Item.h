@@ -35,6 +35,7 @@ public:
 	std::function<void(void)> m_OnUpdate;
 	std::function<void(float, float)> m_OnDraw;
 	std::function<void(void)> m_OnClick;
+	std::function<void(void)> m_OnChange;
 
 	Item();
 

@@ -6,6 +6,7 @@
 #include "../Vehicles.h"
 
 #include "../localization/Localization.h"
+#include "../menu/Menu.h"
 
 LightGroupRotateObject* WindowRotateObject::m_LightGroupRotateObject = NULL;
 

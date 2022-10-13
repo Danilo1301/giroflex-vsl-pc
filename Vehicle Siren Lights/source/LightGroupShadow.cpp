@@ -2,6 +2,8 @@
 
 #include "CTxdStore.h"
 
+#include "log/Log.h"
+
 std::vector<RwTexture*> LightGroupShadows::m_ShadowTextures;
 
 void LightGroupShadows::LoadTextures()

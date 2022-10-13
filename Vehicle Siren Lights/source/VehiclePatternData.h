@@ -7,8 +7,9 @@ class VehiclePatternData {
 public:
 	PatternLoop* patternLoop;
 	PatternLoop* stepLoop;
-	bool lightsOn = true;
+	bool lightsOn = false;
 	bool paused = false;
+	bool autoChangePattern = true;
 
 	VehiclePatternData() {
 		patternLoop = new PatternLoop();

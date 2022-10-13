@@ -9,6 +9,7 @@
 #include "../menu/Menu.h"
 #include "../menu/PositionEditor.h"
 #include "../menu/TextEditor.h"
+#include "../menu/KeySelector.h"
 
 #include "../localization/Localization.h"
 
@@ -27,11 +28,11 @@ void WindowLightGroup::CreateLightGroups() {
 		//lightGroup->AddPoint(CVector(0, 0, 0), CRGBA(255, 255, 255), eSirenPosition::MIDDLE);
 		lightGroup->AddPoint(CVector(0.3f, 0, 0), CRGBA(0, 0, 255), eSirenPosition::RIGHT);
 
-		std::vector<std::string> patternNames = { "Default 1", "Default 2" };
+		std::vector<std::string> patternNames = { "Default 1", "Default 2", "Default 3", "Default 4" };
 		for (auto pn : patternNames)
 		{
 			auto pattern = Patterns::GetPattern(pn);
-			if (pattern) lightGroup->AddPatternCycleStep(pattern, 5000);
+			if (pattern) lightGroup->AddPatternCycleStep(pattern, 10000);
 		}
 
 		Menu::RemoveWindow(window);
@@ -42,16 +43,21 @@ void WindowLightGroup::CreateLightGroups() {
 	buttonAddLightbar->m_OnClick = [veh, window]() mutable {
 
 		auto lightGroup = LightGroups::CreateLightbarLightGroup(veh->m_nModelIndex);
-		
-		std::vector<std::string> patternNames = { "Lightbar 1 [7 lights]", "Lightbar 2 [7 lights]" };
+		lightGroup->name = "Lightbar";
+		lightGroup->position = CVector(0, 0, 2);
+
+		std::vector<std::string> patternNames = { "Lightbar 1 [11 lights]", "Lightbar 2 [11 lights]" };
 		for (auto pn : patternNames)
 		{
 			auto pattern = Patterns::GetPattern(pn);
-			if(pattern) lightGroup->AddPatternCycleStep(pattern, 5000);
+			if(pattern) lightGroup->AddPatternCycleStep(pattern, 10000);
 		}
 
+
+		m_LightGroup = lightGroup;
 		Menu::RemoveWindow(window);
-		CreateLightGroups();
+		Vehicles::m_DrawVehiclePoints = true;
+		CreateSetupLightbar();
 	};
 
 
@@ -68,6 +74,7 @@ void WindowLightGroup::CreateLightGroups() {
 			button1->m_OnClick = [window, lightGroup]() mutable {
 				m_LightGroup = lightGroup;
 				Menu::RemoveWindow(window);
+				Vehicles::m_DrawVehiclePoints = true;
 				CreateEditLightGroup();
 			};
 		}
@@ -83,9 +90,77 @@ void WindowLightGroup::CreateLightGroups() {
 	};
 }
 
+void WindowLightGroup::CreateSetupLightbar() {
+	auto veh = WindowMain::m_Vehicle;
+	auto window = Menu::AddWindow("Vehicle Siren Lights", "Create lightbar");
+	auto lightGroup = m_LightGroup;
+
+	auto positionButton = window->AddButton(Localization::GetLine("edit_position_points"));
+	positionButton->m_OnClick = [lightGroup]() {
+		PositionEditor::Toggle(&lightGroup->position);
+	};
+
+	static int amountLights;
+	amountLights = 11;
+
+	static float distance;
+	distance = 0.1f;
+
+	static float curve;
+	curve = 0.0f;
+
+	static bool shadow;
+	shadow = false;
+
+	auto editAmountLights = window->AddNumberRange(Localization::GetLine("edit_lightbar_amount_lights"), &amountLights, 1, 50);
+	editAmountLights->m_OnChange = [lightGroup]() {
+		lightGroup->RemoveAllPoints();
+		lightGroup->UpdateLightbarPoints(amountLights, curve, distance);
+	};
+
+	auto editCurve = window->AddNumberRange(Localization::GetLine("edit_lightbar_curve"), &curve, 0.0f, 2.0f);
+	editCurve->m_AddBy = 0.0005f;
+	editCurve->m_OnChange = [lightGroup]() {
+		lightGroup->RemoveAllPoints();
+		lightGroup->UpdateLightbarPoints(amountLights, curve, distance);
+	};
+
+	auto editDistance = window->AddNumberRange(Localization::GetLine("edit_lightbar_distance_lights"), &distance, 0.01f, 10.0f);
+	editDistance->m_AddBy = 0.0005f;
+	editDistance->m_OnChange = [lightGroup]() {
+		lightGroup->RemoveAllPoints();
+		lightGroup->UpdateLightbarPoints(amountLights, curve, distance);
+	};
+
+	auto buttonLedPrefix = window->AddButton(Localization::GetLine("edit_led_prefix"));
+	buttonLedPrefix->AddTextStr(&lightGroup->lightbarSettings.object_prefix, CVector2D(10, 0));
+	buttonLedPrefix->m_OnClick = [lightGroup]() {
+		TextEditor::Open(Localization::GetLine("edit_led_prefix"), false, &lightGroup->lightbarSettings.object_prefix);
+	};
+
+	auto size = window->AddNumberRange(Localization::GetLine("size"), &lightGroup->size, 0.0f, 10.0f);
+
+	auto checkboxShadow = window->AddCheckBox(Localization::GetLine("use_shadow"), &shadow);
+	checkboxShadow->m_OnChange = [lightGroup]() {
+		for (auto point : lightGroup->points)
+		{
+			point->shadow.enabled = shadow;
+		}
+	};
+
+	auto buttonBack = window->AddButton(Localization::GetLine("next"));
+	buttonBack->m_OnClick = [window]() {
+		Menu::RemoveWindow(window);
+		CreateEditLightGroup();
+		Vehicles::m_DrawVehiclePoints = false;
+	};
+}
+
 void WindowLightGroup::CreateEditLightGroup() {
 	auto lightGroup = m_LightGroup;
 
+	bool isLightbar = lightGroup->lightbarSettings.isLightbar;
+	
 	/*
 	if (lightGroup->isLightbar)
 	{
@@ -106,7 +181,7 @@ void WindowLightGroup::CreateEditLightGroup() {
 		TextEditor::Open(Localization::GetLine("edit_name"), true, &lightGroup->name);
 	};
 
-	if (lightGroup->isLightbar)
+	if (isLightbar)
 	{
 		auto buttonLedPrefix = window->AddButton(Localization::GetLine("edit_led_prefix"));
 		buttonLedPrefix->AddTextStr(&lightGroup->lightbarSettings.object_prefix, CVector2D(10, 0));
@@ -158,6 +233,7 @@ void WindowLightGroup::CreateEditLightGroup() {
 		};
 		WindowSelectPattern::m_OnBack = []() {
 			WindowSelectPattern::Close();
+			Vehicles::m_DrawVehiclePoints = true;
 			CreateEditLightGroup();
 		};
 		WindowSelectPattern::CreatePatterns();
@@ -242,27 +318,30 @@ void WindowLightGroup::CreateEditLightGroup() {
 	auto buttonKey = window->AddButtonKey("Key to toggle", lightGroup->keys);
 	*/
 
+	auto buttonKeybind = window->AddButtonKey(Localization::GetLine("lightgroup_keybind"), &lightGroup->keybindMenu);
+	
+	buttonKeybind->m_OnClick = [window, lightGroup]() {
+		KeySelector::Toggle(&lightGroup->keybindMenu);
+	};
+
 	auto buttonDelete = window->AddButton(Localization::GetLine("delete"));
 	buttonDelete->m_BackgroundColor = CRGBA(255, 0, 0, 80);
 	buttonDelete->m_BackgroundColorSelected = CRGBA(255, 0, 0, 172);
 	buttonDelete->m_OnClick = [window, lightGroup]() {
-		Vehicles::RemoveAllVehicles();
-		LightGroups::RemoveLightGroup(lightGroup);
-		Vehicles::TryAddAllVehicles();
+		Menu::CreateConfirmWindow("", "Delete this lightgroup?", "Yes, delete", "No, cancel", [window, lightGroup](){
+			Vehicles::RemoveAllVehicles();
+			LightGroups::RemoveLightGroup(lightGroup);
+			Vehicles::TryAddAllVehicles();
 
-		Menu::RemoveWindow(window);
-		CreateLightGroups();
+			Menu::RemoveWindow(window);
+			CreateLightGroups();
+		});
 	};
 
 	auto buttonBack = window->AddButton(Localization::GetLine("back"));
 	buttonBack->m_OnClick = [window]() {
 		Menu::RemoveWindow(window);
+		m_LightGroup = NULL;
 		CreateLightGroups();
 	};
-}
-
-void WindowLightGroup::CreateEditLightGroup_Lightbar()
-{
-	
-
 }

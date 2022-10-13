@@ -15,6 +15,8 @@ void CheckBox::Update() {
 
 	if (Input::GetKeyDown(VK_SPACE)) {
 		(*m_Value) = !(*m_Value);
+
+		if (m_OnChange) m_OnChange();
 	}
 }
 

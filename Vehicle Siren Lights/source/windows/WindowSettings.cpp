@@ -3,6 +3,9 @@
 
 #include "../Vehicle.h"
 
+#include "../menu/Menu.h"
+#include "../localization/Localization.h"
+
 void WindowSettings::CreateSettings() {
 	auto window = Menu::AddWindow("Vehicle Siren Lights", Localization::GetLine("main_settings"));
 

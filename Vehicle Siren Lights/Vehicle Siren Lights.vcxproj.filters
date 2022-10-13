@@ -126,6 +126,12 @@
     <ClCompile Include="source\Keybinds.cpp">
       <Filter>source</Filter>
     </ClCompile>
+    <ClCompile Include="source\windows\WindowLightgroupMenu.cpp">
+      <Filter>source\windows</Filter>
+    </ClCompile>
+    <ClCompile Include="source\menu\KeySelector.cpp">
+      <Filter>source\menu</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="source\Mod.h">
@@ -244,6 +250,12 @@
     </ClInclude>
     <ClInclude Include="source\VehiclePatternData.h">
       <Filter>source</Filter>
+    </ClInclude>
+    <ClInclude Include="source\windows\WindowLightgroupMenu.h">
+      <Filter>source\windows</Filter>
+    </ClInclude>
+    <ClInclude Include="source\menu\KeySelector.h">
+      <Filter>source\menu</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

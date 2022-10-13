@@ -1,5 +1,5 @@
 ## Required
-1. ASI Loader
+1. ASI Loader or CLEO
 2. Modloader
 3. Version **GTA 1.0 US** (You can [download here](http://miscellaneous-c.blogspot.com/2016/04/crack-gta-sa-v10-us-hoodlum-no-cd-fixed.html))
 4. Open Limit Adjuster
@@ -15,6 +15,9 @@ Press CTRL + J to enable/disable lights only
 
 Press CTRL + R to reload config
 
+## Made with
+[plugin-sdk](https://github.com/DK22Pac/plugin-sdk)
+
 ----------------------------------------------------------------------
 ----------------------------------------------------------------------
 ----------------------------------------------------------------------
@@ -23,7 +26,7 @@ Press CTRL + R to reload config
 
 
 ## Necessário
-1. ASI Loader
+1. ASI Loader ou CLEO
 2. Modloader
 3. Versão **GTA 1.0 US** (Você pode [baixar aqui](http://miscellaneous-c.blogspot.com/2016/04/crack-gta-sa-v10-us-hoodlum-no-cd-fixed.html))
 4. Open Limit Adjuster
@@ -38,3 +41,6 @@ Aperte CTRL + L dentro de um veículo para abrir o menu
 Aperte CTRL + J para ativar/desativar somente as luzes
 
 Aperte CTRL + R para recarregar a config
+
+## Made with
+[plugin-sdk](https://github.com/DK22Pac/plugin-sdk)

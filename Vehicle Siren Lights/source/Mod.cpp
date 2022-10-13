@@ -2,6 +2,7 @@
 
 #include "windows/WindowMain.h"
 #include "windows/WindowTest.h"
+#include "windows/WindowLightgroupMenu.h"
 
 #include "Patterns.h"
 #include "Vehicles.h"
@@ -10,92 +11,20 @@
 #include "Config.h"
 #include "Keybinds.h"
 #include "VehicleDummy.h"
+#include "TestHelper.h"
+
+#include "menu/Menu.h"
+#include "menu/KeySelector.h"
+#include "localization/Localization.h"
 
 #include "CVisibilityPlugins.h"
 
 bool Mod::m_DebugEnabled = false;
 bool Mod::m_IsSamp = false;
-std::string Mod::m_Version = "1.5.1";
+std::string Mod::m_Version = "2.0.0";
 
 CVehicle* testVehicle = NULL;
 unsigned int _prevTime = 0;
-
-void TestUpdate() {
-	if (Input::GetKeyDown(74)) {
-		testVehicle = FindPlayerVehicle(0, false);
-
-		if (testVehicle) {
-
-			//RwFrameForAllChildren((RwFrame*)testVehicle->m_pRwClump->object.parent, Callback, 0);
-
-			auto frames = VehicleDummy::GetFramesOnVehicle(testVehicle);
-
-			
-
-			/*
-
-			for (auto frame : frames) {
-				std::string name = GetFrameNodeName(frame);
-
-				auto p = frame->modelling.pos;
-				auto parent = RwFrameGetParent(frame);
-
-				Log::file << "---------------" << std::endl;
-				Log::file << GetFrameInfo(frame) + "\nchild=" << GetFrameInfo(frame->child) << "\nnext=" << GetFrameInfo(frame->next) << "\nparent=" << GetFrameInfo(parent) << std::endl;
-			
-				std::vector<RwFrame*> hie;
-				RwFrame* f = frame;
-
-				while (f != NULL && f != testVehicle->m_pRwClump->object.parent)
-				{
-					hie.insert(hie.begin(), f);
-
-					f = RwFrameGetParent(f);
-				}
-
-				for (auto tf : hie) {
-					std::string tfname = GetFrameNodeName(tf);
-					Log::file << tfname << " | ";
-				}
-				Log::file << std::endl;
-			}
-
-			for (auto frame : frames) {
-				
-				
-			}
-			*/
-		}
-	}
-}
-
-/*
-
-
-void TestDraw() {
-	if (testVehicle) {
-		char text[512];
-		auto frames = VehicleDummy::GetFramesOnVehicle(testVehicle);
-
-		for (auto frame : frames) {
-			if (frame == testVehicle->m_pRwClump->object.parent) continue;
-
-
-			
-			//auto p = frame->modelling.pos;
-
-			//CVector position = m_Vehicle->TransformFromObjectSpace(GetFrameNodePosition(frame));
-
-			//sprintf(text, "%s", GetFrameInfo(frame).c_str());
-			//DrawWorldText(text, position);
-		}
-
-		DrawWorldText("testVeh", testVehicle->GetPosition());
-
-	}
-
-}
-*/
 
 static float float1 = 0.0f;
 static float float2 = 7.0f;
@@ -123,7 +52,7 @@ void TestShadowMenu()
 void Mod::Update() {
 	Input::Update();
 
-	TestUpdate();
+	//TestUpdate();
 	//
 
 	if (Input::GetKey(17)) {
@@ -140,9 +69,10 @@ void Mod::Update() {
 		}
 	}
 
+
+
 	//
 
-	/*
 	if (Keybinds::toggleLights.CheckKeybind())
 	{
 		auto veh = FindPlayerVehicle(0, false);
@@ -151,10 +81,11 @@ void Mod::Update() {
 			if (Vehicles::HasVehicle(veh)) {
 				auto vehicle = Vehicles::m_Vehicles[veh];
 				vehicle->SetAllLightGroupState(!vehicle->m_PrevLightState);
+
+				WindowLightgroupMenu::Reopen();
 			}
 		}
 	}
-	*/
 
 	//
 
@@ -170,7 +101,7 @@ void Mod::Update() {
 		ToggleMenu();
 	}
 
-	if (Menu::m_IsOpen) {
+	if (Menu::m_IsOpen && !KeySelector::m_Visible) {
 		if (Input::GetKeyDown(18)) {
 			SetPlayerControl(true);
 			Menu::m_Hide = true;
@@ -194,6 +125,8 @@ void Mod::Update() {
 		Vehicle* vehicle = pair.second;
 		vehicle->Update();
 	}
+
+	WindowLightgroupMenu::Check();
 
 	_prevTime = CTimer::m_snTimeInMilliseconds;
 }
@@ -224,7 +157,8 @@ void Mod::Draw() {
 	}
 
 	Menu::Draw();
-	TestHelper::Draw();
+
+	if(m_DebugEnabled) TestHelper::Draw();
 }
 
 unsigned int Mod::GetDeltaTime()

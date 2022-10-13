@@ -6,6 +6,7 @@
 
 #include "menu/Menu.h"
 #include "windows/WindowLightGroup.h"
+#include "windows/WindowLightgroupMenu.h"
 
 #include "CVisibilityPlugins.h"
 #include "CShadows.h"
@@ -31,6 +32,7 @@ void Vehicle::Update() {
 	CheckForLightGroups();
 	UpdatePatternAndSteps();
 
+	/*
 	for (auto pair : m_LightGroupData)
 	{
 		auto lightGroup = pair.first;
@@ -46,6 +48,7 @@ void Vehicle::Update() {
 			vehiclePatternData->paused = !vehiclePatternData->paused;
 		}
 	}
+	*/
 
 	UpdateSirenState();
 	RegisterCoronas();
@@ -198,8 +201,23 @@ void Vehicle::DrawPoints() {
 		for (auto point : lightGroup->points) {
 			auto position = VehicleDummy::GetTransformedPosition(m_Vehicle, lightGroup->position + point->position);
 
-			sprintf(text, "(%d)", i + 1);
-			DrawWorldText(text, position);
+
+			CFont::SetOrientation(ALIGN_CENTER);
+			CFont::SetColor(CRGBA(255, 255, 255));
+			CFont::SetDropShadowPosition(1);
+			CFont::SetBackground(false, false);
+			CFont::SetWrapx(500.0);
+			CFont::SetScale(0.5 * 0.5f, 1.0 * 0.5f);
+			CFont::SetFontStyle(FONT_SUBTITLES);
+			CFont::SetProportional(true);
+
+			RwV3d rwp = { position.x, position.y, position.z };
+			RwV3d screenCoors; float w, h;
+
+			CSprite::CalcScreenCoors(rwp, &screenCoors, &w, &h, true, true);
+
+			sprintf(text, "%d", i + 1);
+			CFont::PrintString(screenCoors.x, screenCoors.y, text);
 
 			i++;
 		}
@@ -235,7 +253,7 @@ void Vehicle::GoToNextLightGroupPattern(LightGroup* lightGroup)
 }
 
 bool Vehicle::GetSirenState() {
-	if (Menu::m_IsOpen && FindPlayerVehicle(0, false) == m_Vehicle) return true;
+	if ((Menu::m_IsOpen && !WindowLightgroupMenu::m_Window) && FindPlayerVehicle(0, false) == m_Vehicle) return true;
 	return m_Vehicle->m_nVehicleFlags.bSirenOrAlarm;
 }
 
@@ -274,10 +292,12 @@ void Vehicle::RenderBefore()
 
 				//CVector position = point->position;
 
-				CRGBA color = lightGroup->isLightbar ? lightGroup->lightbarSettings.ledOnColor : point->color;
+				bool isLightbar = lightGroup->lightbarSettings.isLightbar;
+
+				CRGBA color = isLightbar ? lightGroup->lightbarSettings.ledOnColor : point->color;
 				bool enabled = true;
 
-				if (lightGroup->isLightbar)
+				if (isLightbar)
 				{
 					if (ToUpper(name).compare(ToUpper(lightGroup->lightbarSettings.object_prefix + std::to_string(point_i + 1))) != 0) continue;
 					enabled = point->GetIsEnabled(step, point_i);
@@ -290,7 +310,7 @@ void Vehicle::RenderBefore()
 				if (!vehiclePatternData->lightsOn) enabled = false;
 				if (m_FreezeLights) enabled = true;
 
-				if (!enabled) color = lightGroup->isLightbar ? lightGroup->lightbarSettings.ledOffColor : point->disabledColor;
+				if (!enabled) color = isLightbar ? lightGroup->lightbarSettings.ledOffColor : point->disabledColor;
 
 				//TestHelper::AddLine("found " + name);
 
@@ -386,7 +406,9 @@ void Vehicle::RenderShadows()
 			CRGBA color = point->color;
 			bool enabled = true;
 
-			if (lightGroup->isLightbar) {
+			bool isLightbar = lightGroup->IsLightbar();
+
+			if (isLightbar) {
 				enabled = point->GetIsEnabled(step, point_i);
 			}
 			else {
@@ -461,14 +483,13 @@ void Vehicle::CheckForLightGroups() {
 		Log::file << "[Vehicle " << m_Vehicle << "] Add VehiclePatternData for light group '" << lightGroup->name << "' (" << std::to_string(m_LightGroupData.size()) << " total) with " << lightGroup->patternCycleSteps.size() << " patterns" << std::endl;
 
 		auto vehiclePatternData = new VehiclePatternData();
-		vehiclePatternData->patternLoop->DontChangeSteps = true; //manually change
 
 		for (auto patternCycleStep : lightGroup->patternCycleSteps)
 		{
 			vehiclePatternData->patternLoop->AddStep(&patternCycleStep->duration);
 		}
 
-		//if (lightGroup->turnOnSiren) vehiclePatternData->enabled = GetSirenState();
+		if (lightGroup->turnOnSiren) vehiclePatternData->lightsOn = GetSirenState();
 
 		m_LightGroupData[lightGroup] = vehiclePatternData;
 	}
@@ -484,6 +505,8 @@ void Vehicle::UpdatePatternAndSteps() {
 	{
 		auto lightGroup = pair.first;
 		auto vehiclePatternData = pair.second;
+
+		vehiclePatternData->patternLoop->DontChangeSteps = !vehiclePatternData->autoChangePattern; //manually change
 
 		if (vehiclePatternData->paused || !vehiclePatternData->lightsOn) continue;
 
@@ -545,7 +568,9 @@ void Vehicle::RegisterCoronas()
 			CRGBA color = point->color;
 			bool enabled = true;
 
-			if (lightGroup->isLightbar) {
+			bool isLightbar = lightGroup->lightbarSettings.isLightbar;
+
+			if (isLightbar) {
 				enabled = point->GetIsEnabled(step, point_i);
 			}
 			else {

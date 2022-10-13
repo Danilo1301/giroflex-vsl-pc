@@ -1,5 +1,7 @@
 #include "Patterns.h"
 
+#include "log/Log.h"
+
 std::vector<Pattern*> Patterns::m_Patterns;
 
 Pattern* Patterns::CreatePattern(std::string name) {

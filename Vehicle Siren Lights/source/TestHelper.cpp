@@ -55,15 +55,15 @@ void TestHelper::Draw()
 		sprintf_s(buffer, "%s", line.c_str());
 
 		CFont::m_fWrapx = 100000.0f;
-		CFont::SetOrientation(eFontAlignment::ALIGN_LEFT);
-		CFont::SetDropShadowPosition(0);
-		CFont::SetRightJustifyWrap(false);
-		CFont::SetJustify(false);
+		CFont::SetOrientation(ALIGN_LEFT);
+		CFont::SetColor(CRGBA(255, 255, 0));
+		CFont::SetDropShadowPosition(1);
 		CFont::SetBackground(false, false);
-		CFont::SetScale(0.35f, 0.95f);
+		CFont::SetWrapx(500.0);
+		CFont::SetScale(0.5 * 0.7f, 1.0 * 0.7f);
 		CFont::SetFontStyle(FONT_SUBTITLES);
 		CFont::SetProportional(true);
-		CFont::SetColor(CRGBA(0, 0, 0));
+
 		CFont::PrintString(x, y, buffer);
 
 		y += 20;

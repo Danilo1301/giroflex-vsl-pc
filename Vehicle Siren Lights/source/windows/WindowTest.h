@@ -7,6 +7,7 @@ int testInt = 0;
 class WindowTest {
 public:
 	static void Create() {
+		/*
 		auto window = Menu::AddWindow("title", "test");
 
 		auto testint = window->AddNumberRange("testint", &testInt, 0, 5000);
@@ -21,5 +22,6 @@ public:
 		}
 
 		//Menu::SetOpen(true);
+		*/
 	}
 };

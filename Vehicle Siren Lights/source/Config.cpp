@@ -4,6 +4,9 @@
 #include "Vehicle.h"
 #include "Keybinds.h"
 
+#include "log/Log.h"
+#include "localization/Localization.h"
+
 std::string Config::m_DataPath = "\\data\\";
 std::string Config::m_VehiclesPath = "\\vehicles\\";
 std::string Config::m_PatternsPath = "\\patterns\\";
@@ -11,7 +14,7 @@ std::string Config::m_LocalizationPath = "\\localization\\";
 std::string Config::m_LightGroupsPath = "\\lightgroups\\";
 
 void Config::SaveJSON() {
-	Log::file << "[Config] Saving config" << std::endl;
+	Log::file << "[Config] * Saving config..." << std::endl;
 
 	CreatePath(m_DataPath);
 	CreatePath(m_DataPath + m_PatternsPath);
@@ -19,6 +22,8 @@ void Config::SaveJSON() {
 	CreatePath(m_DataPath + m_LocalizationPath);
 
 	DeleteAllConfig();
+
+	Log::file << "[Config] Saving settings..." << std::endl;
 
 	SaveSettings();
 
@@ -42,7 +47,7 @@ void Config::SaveJSON() {
 }
 
 void Config::LoadJSON() {
-	Log::file << "[Config] Loading config..." << std::endl;
+	Log::file << "[Config] * Loading config..." << std::endl;
 
 	CreatePath(m_DataPath);
 	CreatePath(m_DataPath + m_PatternsPath);
@@ -58,8 +63,6 @@ void Config::LoadJSON() {
 	for (const auto& entry : std::filesystem::directory_iterator(pathPatterns)) {
 		std::string fileName = entry.path().filename().replace_extension().string();
 
-		Log::file << "[Config] Pattern " << fileName << std::endl;
-
 		LoadPattern(fileName);
 	}
 	
@@ -72,14 +75,12 @@ void Config::LoadJSON() {
 	for (const auto& entry : std::filesystem::directory_iterator(pathVehicles)) {
 		int modelId = std::stoi(entry.path().filename().replace_extension());
 
-		Log::file << "[Config] Vehicle [" << modelId  << "]" << std::endl;
+		Log::file << "[Config] Loading vehicle ID " << modelId  << "..." << std::endl;
 
 		std::string pathLightGroups = GetFullPath(m_DataPath + m_VehiclesPath + std::to_string(modelId) + m_LightGroupsPath);
 
 		for (const auto& entry2 : std::filesystem::directory_iterator(pathLightGroups)) {
 			std::string fileName = entry2.path().filename().replace_extension().string();
-
-			Log::file << "[Config] LightGroup " << fileName << std::endl;
 
 			LoadLightGroup(fileName, modelId);
 		}
@@ -200,6 +201,8 @@ void Config::SavePattern(int index, Pattern* pattern) {
 */
 
 Pattern* Config::LoadPattern(std::string fileName) {
+	Log::file << "[Config] Loading pattern: " << fileName << std::endl;
+
 	Json::Value value = ReadFile(m_DataPath + m_PatternsPath + fileName + ".json");
 
 	Pattern* pattern = Patterns::CreatePattern(value["name"].asString());
@@ -210,6 +213,8 @@ Pattern* Config::LoadPattern(std::string fileName) {
 }
 
 void Config::SaveLightGroup(LightGroup* lightGroup) {
+	Log::file << "[Config] Saving lightGroup: " << lightGroup->fileName << std::endl;
+
 	CreatePath(m_DataPath);
 	CreatePath(m_DataPath + m_VehiclesPath);
 	CreatePath(m_DataPath + m_VehiclesPath + std::to_string(lightGroup->modelId));
@@ -221,6 +226,8 @@ void Config::SaveLightGroup(LightGroup* lightGroup) {
 }
 
 LightGroup* Config::LoadLightGroup(std::string fileName, int modelId) {
+	Log::file << "[Config] Loading lightGroup: " << fileName << " for ID " << modelId << std::endl;
+
 	Json::Value value = ReadFile(m_DataPath + m_VehiclesPath + std::to_string(modelId) + m_LightGroupsPath + fileName + ".json");
 
 	LightGroup* lightGroup = LightGroups::CreateLightGroup(modelId);
@@ -247,6 +254,7 @@ void Config::SaveSettings() {
 
 	value["material_ambient"] = Vehicle::m_MatAmbient;
 	value["keybinds"] = Keybinds::ToJSON();
+	value["language"] = Localization::m_CurrentLanguage;
 
 	WriteToFile(path, value);
 }
@@ -265,6 +273,7 @@ void Config::LoadSettings() {
 
 	Vehicle::m_MatAmbient = value["material_ambient"].asFloat();
 	Keybinds::FromJSON(value["keybinds"]);
+	if (!value["language"].isNull()) Localization::m_CurrentLanguage = value["language"].asString();
 
 	Log::file << "[Keybind] openMenu: " << Keybinds::openMenu.GetKeybindString() << std::endl;
 	Log::file << "[Keybind] reloadConfig: " << Keybinds::reloadConfig.GetKeybindString() << std::endl;

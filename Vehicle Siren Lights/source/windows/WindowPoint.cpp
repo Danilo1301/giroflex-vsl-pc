@@ -16,7 +16,7 @@
 Point* WindowPoint::m_Point = nullptr;
 
 void WindowPoint::Create() {
-	Vehicles::m_DrawVehiclePoints = true;
+	//Vehicles::m_DrawVehiclePoints = true;
 
 	CVehicle* veh = WindowMain::m_Vehicle;
 	auto lightGroup = WindowLightGroup::m_LightGroup;
@@ -53,13 +53,14 @@ void WindowPoint::Create() {
 		Menu::RemoveWindow(window);
 		WindowLightGroup::CreateEditLightGroup();
 
-		Vehicles::m_DrawVehiclePoints = false;
+		//Vehicles::m_DrawVehiclePoints = false;
 	};
 }
 
 void WindowPoint::CreateEditPoint() {
 	CVehicle* veh = WindowMain::m_Vehicle;
 	auto lightGroup = WindowLightGroup::m_LightGroup;
+
 	auto point = m_Point;
 
 	auto window = Menu::AddWindow("Vehicle Siren Lights", "LightGroups > " + lightGroup->name + " > Points");
@@ -78,7 +79,7 @@ void WindowPoint::CreateEditPoint() {
 	static int tmpVal;
 	tmpVal = (int)point->sirenPosition;
 
-	if (!lightGroup->isLightbar)
+	if (!lightGroup->IsLightbar())
 	{
 		auto optionsSirenPos = window->AddOptions(Localization::GetLine("siren_position"), &tmpVal);
 		optionsSirenPos->AddOption(Localization::GetLine("left"), (int)eSirenPosition::LEFT);
@@ -97,7 +98,7 @@ void WindowPoint::CreateEditPoint() {
 		});
 	};
 
-	if (!lightGroup->isLightbar)
+	if (!lightGroup->IsLightbar())
 	{
 		auto buttonObjName = window->AddButton(Localization::GetLine("select_object"));
 		buttonObjName->AddTextStr(&point->object, CVector2D(10, 0));
@@ -150,7 +151,7 @@ void WindowPoint::CreateEditPoint() {
 		WindowShadow::Create();
 	};
 
-	if (!lightGroup->isLightbar)
+	if (!lightGroup->IsLightbar())
 	{
 		auto buttonRotateObject = window->AddButton("Rotate Object");
 		buttonRotateObject->m_OnClick = [point, window]() {

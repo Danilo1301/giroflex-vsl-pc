@@ -26,6 +26,7 @@
     <ClCompile Include="source\menu\item\Item.cpp" />
     <ClCompile Include="source\menu\item\NumberRange.cpp" />
     <ClCompile Include="source\menu\item\Options.cpp" />
+    <ClCompile Include="source\menu\KeySelector.cpp" />
     <ClCompile Include="source\menu\Menu.cpp" />
     <ClCompile Include="source\menu\PositionEditor.cpp" />
     <ClCompile Include="source\menu\TextEditor.cpp" />
@@ -38,6 +39,7 @@
     <ClCompile Include="source\VehicleDummy.cpp" />
     <ClCompile Include="source\Vehicles.cpp" />
     <ClCompile Include="source\windows\WindowLightGroup.cpp" />
+    <ClCompile Include="source\windows\WindowLightgroupMenu.cpp" />
     <ClCompile Include="source\windows\WindowMain.cpp" />
     <ClCompile Include="source\windows\WindowPoint.cpp" />
     <ClCompile Include="source\windows\WindowRotateObject.cpp" />
@@ -61,6 +63,7 @@
     <ClInclude Include="source\menu\item\Item.h" />
     <ClInclude Include="source\menu\item\NumberRange.h" />
     <ClInclude Include="source\menu\item\Options.h" />
+    <ClInclude Include="source\menu\KeySelector.h" />
     <ClInclude Include="source\menu\Menu.h" />
     <ClInclude Include="source\menu\PositionEditor.h" />
     <ClInclude Include="source\menu\TextEditor.h" />
@@ -78,6 +81,7 @@
     <ClInclude Include="source\VehiclePatternData.h" />
     <ClInclude Include="source\Vehicles.h" />
     <ClInclude Include="source\windows\WindowLightGroup.h" />
+    <ClInclude Include="source\windows\WindowLightgroupMenu.h" />
     <ClInclude Include="source\windows\WindowMain.h" />
     <ClInclude Include="source\windows\WindowPoint.h" />
     <ClInclude Include="source\windows\WindowRotateObject.h" />

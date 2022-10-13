@@ -58,6 +58,8 @@ void NumberRange<T>::Update()
 
 	if (!m_IsSelected) return;
 
+	auto prevVal = *m_Value;
+
 	if ((*m_Value > m_Min)) {
 		if (m_HoldToChange) {
 			if (Input::GetKey(VK_LEFT)) {
@@ -86,6 +88,11 @@ void NumberRange<T>::Update()
 
 	if (*m_Value < m_Min) *m_Value = m_Min;
 	if (*m_Value > m_Max) *m_Value = m_Max;
+
+	if (prevVal != *m_Value)
+	{
+		if (m_OnChange) m_OnChange();
+	}
 }
 
 template<class T>

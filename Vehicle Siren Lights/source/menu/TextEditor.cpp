@@ -29,6 +29,8 @@ void TextEditor::Update() {
 		if (Input::GetKeyDown(i)) {
 			bool capslockOn = GetKeyState(20) || (GetKeyState(VK_LSHIFT) & 0x8000) || (GetKeyState(VK_RSHIFT) & 0x8000);
 
+			bool shiftDown = ((GetKeyState(VK_SHIFT) & 0x8000) != 0);
+
 			char c = MapVirtualKey(i, MAPVK_VK_TO_CHAR);
 			std::string charUpperStr(1, std::toupper(c));
 			std::string charLowerStr(1, std::tolower(c));
@@ -41,8 +43,15 @@ void TextEditor::Update() {
 			else {
 				//Log::file << i << ": (" << c << ") (" << charUpperStr << ")" << (capslockOn ? "CAPS" : "NOCAPS") << std::endl;
 
-				if (((m_AvailableChars.find(charLowerStr) != std::string::npos && !m_NumbersOnly) || m_Numbers.find(charLowerStr) != std::string::npos) && len < 80) {
-					m_Value += capslockOn ? charUpperStr : charLowerStr;
+				if (i == 189 && shiftDown)
+				{
+					m_Value += "_";
+				}
+				else
+				{
+					if (((m_AvailableChars.find(charLowerStr) != std::string::npos && !m_NumbersOnly) || m_Numbers.find(charLowerStr) != std::string::npos) && len < 80) {
+						m_Value += capslockOn ? charUpperStr : charLowerStr;
+					}
 				}
 			}
 

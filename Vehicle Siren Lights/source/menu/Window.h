@@ -8,8 +8,6 @@
 #include "item/NumberRange.h"
 #include "item/ButtonKey.h"
 
-
-
 class Window {
 public:
 	enum FIND_INDEX_DIR
@@ -27,12 +25,12 @@ public:
 	CVector2D m_Position;
 	std::vector<Item*> m_Items;
 	int m_SelectedIndex = 0;
-	int m_MaxItemsByPage = 17;
+	int m_MaxItemsByPage = 16;
 
-	std::string m_Title = "Title";
-	std::string m_Description = "Desc";
+	std::string m_Title = "";
+	std::string m_Description = "";
 
-	CVector2D m_Size = CVector2D(400, 0);
+	CVector2D m_Size = CVector2D(350, 0);
 
 	Window* m_PrevWindow = nullptr;
 
@@ -67,5 +65,5 @@ public:
 	Item* AddDivider();
 	Item* AddDivider(float height);
 
-	ButtonKey* AddButtonKey(std::string text, int* keys);
+	ButtonKey* AddButtonKey(std::string text, Keybind* keybind);
 };

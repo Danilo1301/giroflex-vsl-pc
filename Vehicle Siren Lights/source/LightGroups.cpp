@@ -1,5 +1,7 @@
 #include "LightGroups.h"
 
+#include "log/Log.h"
+
 std::map<int, std::vector<LightGroup*>> LightGroups::m_LightGroups;
 
 LightGroup* LightGroups::CreateLightGroup(int modelId)
@@ -22,8 +24,8 @@ LightGroup* LightGroups::CreateLightbarLightGroup(int modelId) {
 	Log::file << "[LightGroups] CreateLightbarLightGroup for model ID " << modelId << std::endl;
 
 	LightGroup* lightGroup = new LightGroup(modelId);
-	lightGroup->isLightbar = true;
-	lightGroup->UpdateLightbarPoints();
+	lightGroup->lightbarSettings.isLightbar = true;
+	lightGroup->UpdateLightbarPoints(11, 0, 0.1f);
 
 	FindUniqueName(lightGroup);
 	//Log::file << "[LightGroups] Default fileName set to: " << lightGroup->fileName << std::endl;
@@ -35,7 +37,7 @@ LightGroup* LightGroups::CreateLightbarLightGroup(int modelId) {
 
 
 void LightGroups::RemoveLightGroup(LightGroup* lightGroup) {
-	Log::file << "[LightGroups] RemoveLightGroup" << lightGroup->modelId << std::endl;
+	Log::file << "[LightGroups] RemoveLightGroup " << lightGroup->fileName << std::endl;
 
 	for (auto pair : m_LightGroups) {
 		auto id = pair.first;
@@ -99,18 +101,22 @@ void LightGroups::RemoveAllLightGroups() {
 
 void LightGroups::FindUniqueName(LightGroup* lightGroup)
 {
+	Log::file << "[LightGroups] FindUniqueName for lightGroup..." << std::endl;
+
 	int i = 0;
 	while (lightGroup->fileName.empty())
 	{
 		std::string newName = "lightGroup" + std::to_string(i);
 
-		int c = 0;
-		for (auto p : m_LightGroups)
-		{
-			for (auto l : p.second)
-			{
-				c++;
+		auto& lightGroups = m_LightGroups[lightGroup->modelId];
 
+		if (lightGroups.size() == 0)
+		{
+			lightGroup->fileName = newName;
+		}
+		else {
+			for (auto l : lightGroups)
+			{
 				if (l->fileName.compare(newName) != 0)
 				{
 					lightGroup->fileName = newName;
@@ -118,9 +124,7 @@ void LightGroups::FindUniqueName(LightGroup* lightGroup)
 				}
 			}
 		}
-
-		if(c == 0) lightGroup->fileName = newName;
-
 		i++;
 	}
+	Log::file << "[LightGroups] Found: " << lightGroup->fileName << std::endl;
 }
