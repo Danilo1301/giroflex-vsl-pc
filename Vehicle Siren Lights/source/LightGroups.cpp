@@ -25,7 +25,7 @@ LightGroup* LightGroups::CreateLightbarLightGroup(int modelId) {
 
 	LightGroup* lightGroup = new LightGroup(modelId);
 	lightGroup->lightbarSettings.isLightbar = true;
-	lightGroup->UpdateLightbarPoints(11, 0, 0.1f);
+	lightGroup->UpdateLightbarPoints(11, 0, 0.1f, false);
 
 	FindUniqueName(lightGroup);
 	//Log::file << "[LightGroups] Default fileName set to: " << lightGroup->fileName << std::endl;

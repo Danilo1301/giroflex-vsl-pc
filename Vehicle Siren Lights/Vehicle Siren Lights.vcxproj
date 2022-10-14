@@ -93,6 +93,9 @@
   <ItemGroup>
     <None Include="..\include\json_valueiterator.inl" />
   </ItemGroup>
+  <ItemGroup>
+    <Text Include="..\notes.txt" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{B212DDA4-2A8E-45B2-914D-7BEEB31D06B1}</ProjectGuid>
     <IgnoreWarnCompileDuplicatedFilename>true</IgnoreWarnCompileDuplicatedFilename>

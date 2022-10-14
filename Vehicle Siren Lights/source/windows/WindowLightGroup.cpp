@@ -15,6 +15,11 @@
 
 LightGroup* WindowLightGroup::m_LightGroup = nullptr;
 
+static int amountLights;
+static float distance;
+static float curve;
+static bool shadow;
+
 void WindowLightGroup::CreateLightGroups() {
 	auto veh = WindowMain::m_Vehicle;
 	auto window = Menu::AddWindow("Vehicle Siren Lights", "LightGroups");
@@ -28,11 +33,12 @@ void WindowLightGroup::CreateLightGroups() {
 		//lightGroup->AddPoint(CVector(0, 0, 0), CRGBA(255, 255, 255), eSirenPosition::MIDDLE);
 		lightGroup->AddPoint(CVector(0.3f, 0, 0), CRGBA(0, 0, 255), eSirenPosition::RIGHT);
 
-		std::vector<std::string> patternNames = { "Default 1", "Default 2", "Default 3", "Default 4" };
-		for (auto pn : patternNames)
+		for (auto pattern : Patterns::m_Patterns)
 		{
-			auto pattern = Patterns::GetPattern(pn);
-			if (pattern) lightGroup->AddPatternCycleStep(pattern, 10000);
+			if (pattern->fileName.find("default") != std::string::npos)
+			{
+				lightGroup->AddPatternCycleStep(pattern, 10000);
+			}
 		}
 
 		Menu::RemoveWindow(window);
@@ -46,17 +52,22 @@ void WindowLightGroup::CreateLightGroups() {
 		lightGroup->name = "Lightbar";
 		lightGroup->position = CVector(0, 0, 2);
 
-		std::vector<std::string> patternNames = { "Lightbar 1 [11 lights]", "Lightbar 2 [11 lights]" };
-		for (auto pn : patternNames)
+		for (auto pattern : Patterns::m_Patterns)
 		{
-			auto pattern = Patterns::GetPattern(pn);
-			if(pattern) lightGroup->AddPatternCycleStep(pattern, 10000);
+			if (pattern->fileName.find("lightbar-7lights") != std::string::npos)
+			{
+				lightGroup->AddPatternCycleStep(pattern, 10000);
+			}
 		}
-
 
 		m_LightGroup = lightGroup;
 		Menu::RemoveWindow(window);
 		Vehicles::m_DrawVehiclePoints = true;
+
+		amountLights = 11;
+		distance = 0.1f;
+		curve = 0.0f;
+		shadow = false;
 		CreateSetupLightbar();
 	};
 
@@ -100,36 +111,50 @@ void WindowLightGroup::CreateSetupLightbar() {
 		PositionEditor::Toggle(&lightGroup->position);
 	};
 
-	static int amountLights;
-	amountLights = 11;
+	auto editPatterns = window->AddButton(Localization::GetLineFormatted("edit_patterns", lightGroup->patternCycleSteps.size()));
+	editPatterns->m_OnClick = [window, lightGroup]() mutable {
+		Menu::RemoveWindow(window);
 
-	static float distance;
-	distance = 0.1f;
+		WindowSelectPattern::m_PatternCycleSteps = &lightGroup->patternCycleSteps;
+		WindowSelectPattern::m_OnAddPatternCycleStep = [lightGroup](Pattern* pattern, int time) {
+			Vehicles::RemoveAllVehicles();
+			lightGroup->AddPatternCycleStep(pattern, time);
+			Vehicles::TryAddAllVehicles();
+		};
+		WindowSelectPattern::m_OnDeletePatternCycleStep = [lightGroup](PatternCycleStep* patternCycleStep) {
+			if (lightGroup->patternCycleSteps.size() == 1) {
+				Localization::PrintString("error_need_at_least_one", 1000);
+			}
 
-	static float curve;
-	curve = 0.0f;
-
-	static bool shadow;
-	shadow = false;
+			Vehicles::RemoveAllVehicles();
+			lightGroup->RemovePatternCycleStep(patternCycleStep);
+			Vehicles::TryAddAllVehicles();
+		};
+		WindowSelectPattern::m_OnBack = []() {
+			WindowSelectPattern::Close();
+			CreateSetupLightbar();
+		};
+		WindowSelectPattern::CreatePatterns();
+	};
 
 	auto editAmountLights = window->AddNumberRange(Localization::GetLine("edit_lightbar_amount_lights"), &amountLights, 1, 50);
 	editAmountLights->m_OnChange = [lightGroup]() {
 		lightGroup->RemoveAllPoints();
-		lightGroup->UpdateLightbarPoints(amountLights, curve, distance);
+		lightGroup->UpdateLightbarPoints(amountLights, curve, distance, shadow);
 	};
 
 	auto editCurve = window->AddNumberRange(Localization::GetLine("edit_lightbar_curve"), &curve, 0.0f, 2.0f);
 	editCurve->m_AddBy = 0.0005f;
 	editCurve->m_OnChange = [lightGroup]() {
 		lightGroup->RemoveAllPoints();
-		lightGroup->UpdateLightbarPoints(amountLights, curve, distance);
+		lightGroup->UpdateLightbarPoints(amountLights, curve, distance, shadow);
 	};
 
 	auto editDistance = window->AddNumberRange(Localization::GetLine("edit_lightbar_distance_lights"), &distance, 0.01f, 10.0f);
 	editDistance->m_AddBy = 0.0005f;
 	editDistance->m_OnChange = [lightGroup]() {
 		lightGroup->RemoveAllPoints();
-		lightGroup->UpdateLightbarPoints(amountLights, curve, distance);
+		lightGroup->UpdateLightbarPoints(amountLights, curve, distance, shadow);
 	};
 
 	auto buttonLedPrefix = window->AddButton(Localization::GetLine("edit_led_prefix"));
@@ -142,10 +167,7 @@ void WindowLightGroup::CreateSetupLightbar() {
 
 	auto checkboxShadow = window->AddCheckBox(Localization::GetLine("use_shadow"), &shadow);
 	checkboxShadow->m_OnChange = [lightGroup]() {
-		for (auto point : lightGroup->points)
-		{
-			point->shadow.enabled = shadow;
-		}
+		lightGroup->UpdateLightbarPoints(amountLights, curve, distance, shadow);
 	};
 
 	auto buttonBack = window->AddButton(Localization::GetLine("next"));
@@ -161,6 +183,10 @@ void WindowLightGroup::CreateEditLightGroup() {
 
 	bool isLightbar = lightGroup->lightbarSettings.isLightbar;
 	
+	if (lightGroup->patternCycleSteps.size() == 0)
+	{
+		CMessages::AddMessageJumpQ("WARNING: This light group has 0 patterns set! It won't be visible", 2000, 0, false);
+	}
 	/*
 	if (lightGroup->isLightbar)
 	{

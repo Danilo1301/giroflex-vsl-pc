@@ -58,7 +58,7 @@ public:
 		return lightbarSettings.isLightbar;
 	}
 
-	void UpdateLightbarPoints(int amountOfLights, float curve, float distance)
+	void UpdateLightbarPoints(int amountOfLights, float curve, float distance, bool shadow)
 	{
 		if (!IsLightbar()) return;
 
@@ -89,6 +89,11 @@ public:
 		{
 			Point* lastPoint = points[points.size() - 1];
 			RemovePoint(lastPoint);
+		}
+
+		for (auto point : points)
+		{
+			point->shadow.enabled = shadow;
 		}
 	}
 

@@ -28,10 +28,10 @@ void Item::Draw(float x, float y) {
 	for (auto a : m_Strings)
 	{
 		Menu::m_FontAlign = a.align;
-		Menu::m_FontStyle = eFontStyle::FONT_MENU;
+		//Menu::m_FontStyle = eFontStyle::FONT_MENU;
 		Menu::DrawString(*a.ptr, x + m_Size.x - 5.0f - a.position.x, y + m_Size.y / 2 - 10 - a.position.y, textColor);
 		Menu::m_FontAlign = eFontAlignment::ALIGN_LEFT;
-		Menu::m_FontStyle = eFontStyle::FONT_SUBTITLES;
+		//Menu::m_FontStyle = eFontStyle::FONT_SUBTITLES;
 	}
 
 	for (auto a : m_ColorIndicators)

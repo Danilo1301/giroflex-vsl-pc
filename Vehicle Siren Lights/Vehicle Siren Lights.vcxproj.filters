@@ -263,4 +263,7 @@
       <Filter>source\json</Filter>
     </None>
   </ItemGroup>
+  <ItemGroup>
+    <Text Include="..\notes.txt" />
+  </ItemGroup>
 </Project>

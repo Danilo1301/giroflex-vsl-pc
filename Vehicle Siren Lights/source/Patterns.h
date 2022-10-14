@@ -8,7 +8,7 @@ public:
 	static std::vector<Pattern*> m_Patterns;
 
 	static Pattern* CreatePattern(std::string name);
-	static Pattern* GetPattern(std::string name);
+	static Pattern* GetPatternByFileName(std::string fileName);
 	static void RemovePattern(Pattern* pattern);
 	static void RemoveAllPatterns();
 };
@@ -18,7 +18,7 @@ static Json::Value PatternCycleStepToJSON(PatternCycleStep* patternCycleStep) {
 
 	//auto index = (std::find(Patterns::m_Patterns.begin(), Patterns::m_Patterns.end(), patternCycleStep->pattern) - Patterns::m_Patterns.begin());
 
-	value["pattern"] = patternCycleStep->pattern->name;
+	value["pattern"] = patternCycleStep->pattern->fileName;
 	value["duration"] = patternCycleStep->duration;
 	value["lerpColor"] = patternCycleStep->lerpColor;
 
@@ -38,7 +38,7 @@ static PatternCycleStep* PatternCycleStepFromJSON(Json::Value value) {
 		}
 	}
 	else {
-		pattern = Patterns::GetPattern(value["pattern"].asString());
+		pattern = Patterns::GetPatternByFileName(value["pattern"].asString());
 	}
 
 	patternCycleStep->pattern = pattern;

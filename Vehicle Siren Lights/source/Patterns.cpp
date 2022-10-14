@@ -12,11 +12,11 @@ Pattern* Patterns::CreatePattern(std::string name) {
 	return pattern;
 }
 
-Pattern* Patterns::GetPattern(std::string name) {
+Pattern* Patterns::GetPatternByFileName(std::string fileName) {
 	
 	for (auto pattern : m_Patterns)
 	{
-		if (name.compare(pattern->name) == 0) return pattern;
+		if (fileName.compare(pattern->fileName) == 0) return pattern;
 	}
 
 	return NULL;

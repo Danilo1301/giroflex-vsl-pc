@@ -253,3 +253,15 @@ static std::string join(const T& v, const std::string& delim) {
 	}
 	return s.str();
 }
+
+static bool ends_with(std::string const& value, std::string const& ending)
+{
+	if (ending.size() > value.size()) return false;
+	return std::equal(ending.rbegin(), ending.rend(), value.rbegin());
+}
+
+static bool starts_with(std::string const& value, std::string const& starting)
+{
+	if (starting.size() > value.size()) return false;
+	return std::equal(starting.rend(), starting.rbegin(), value.rbegin());
+}
