@@ -11,7 +11,7 @@
 #include "CVisibilityPlugins.h"
 #include "CShadows.h"
 
-float Vehicle::m_MatAmbient = 2.5f;
+float Vehicle::m_MatAmbient = 3.5f;
 bool Vehicle::m_FreezeLights = false;
 
 static std::list<std::pair<unsigned int*, unsigned int>> m_ResetEntries;
@@ -30,6 +30,13 @@ Vehicle::Vehicle(CVehicle* veh) {
 
 void Vehicle::Update() {
 	CheckForLightGroups();
+
+	if (!m_FreezeLights)
+	{
+		m_RotateShadowAngle += Mod::GetDeltaTime() * 0.5f;
+		while (m_RotateShadowAngle >= 360) m_RotateShadowAngle -= 360;
+	}
+
 	UpdatePatternAndSteps();
 
 	/*
@@ -289,9 +296,6 @@ void Vehicle::RenderBefore()
 			{
 				auto point = lightGroup->points[point_i];
 
-
-				//CVector position = point->position;
-
 				bool isLightbar = lightGroup->lightbarSettings.isLightbar;
 
 				CRGBA color = isLightbar ? lightGroup->lightbarSettings.ledOnColor : point->color;
@@ -307,12 +311,33 @@ void Vehicle::RenderBefore()
 					enabled = point->GetIsEnabled(step);
 				}
 
+				//TestHelper::AddLine("found " + name);
+
 				if (!vehiclePatternData->lightsOn) enabled = false;
 				if (m_FreezeLights) enabled = true;
 
 				if (!enabled) color = isLightbar ? lightGroup->lightbarSettings.ledOffColor : point->disabledColor;
 
-				//TestHelper::AddLine("found " + name);
+				//
+
+				if (point->rotateObject.rotate)
+				{
+					if (vehiclePatternData->lightsOn || point->rotateObject.rotateAlways)
+					{
+						auto axisVal = point->rotateObject.axis;
+
+						RwV3d axis = {
+							(float)(axisVal == eRotateObjectAxis::X ? 1 : 0),
+							(float)(axisVal == eRotateObjectAxis::Y ? 1 : 0),
+							(float)(axisVal == eRotateObjectAxis::Z ? 1 : 0)
+						};
+						RwReal angle = point->rotateObject.speed;
+
+						RwMatrixRotate(&frameAtomic->modelling, &axis, angle, rwCOMBINEPRECONCAT);
+					}
+				}
+
+				//
 
 				auto materials = VehicleDummy::RpGeometryGetAllMaterials(atomic->geometry);
 				for (auto material : materials)
@@ -321,9 +346,9 @@ void Vehicle::RenderBefore()
 
 					material->color = { color.r, color.g, color.b, color.a };
 
-					material->surfaceProps.ambient = 10;
-					material->surfaceProps.diffuse = 10;
-					material->surfaceProps.specular = 10;
+					material->surfaceProps.ambient = m_MatAmbient;
+					material->surfaceProps.diffuse = m_MatAmbient;
+					material->surfaceProps.specular = m_MatAmbient;
 				}
 			}
 		}

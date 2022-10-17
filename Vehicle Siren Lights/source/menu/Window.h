@@ -30,7 +30,7 @@ public:
 	std::string m_Title = "";
 	std::string m_Description = "";
 
-	CVector2D m_Size = CVector2D(350, 0);
+	CVector2D m_Size = CVector2D(400, 0);
 
 	Window* m_PrevWindow = nullptr;
 
