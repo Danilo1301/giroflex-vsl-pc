@@ -47,28 +47,8 @@ void WindowLightGroup::CreateLightGroups() {
 
 	auto buttonAddLightbar = window->AddButton(Localization::GetLine("add_lightbar"));
 	buttonAddLightbar->m_OnClick = [veh, window]() mutable {
-
-		auto lightGroup = LightGroups::CreateLightbarLightGroup(veh->m_nModelIndex);
-		lightGroup->name = "Lightbar";
-		lightGroup->position = CVector(0, 0, 2);
-
-		for (auto pattern : Patterns::m_Patterns)
-		{
-			if (pattern->fileName.find("lightbar-7lights") != std::string::npos)
-			{
-				lightGroup->AddPatternCycleStep(pattern, 10000);
-			}
-		}
-
-		m_LightGroup = lightGroup;
 		Menu::RemoveWindow(window);
-		Vehicles::m_DrawVehiclePoints = true;
-
-		amountLights = 11;
-		distance = 0.1f;
-		curve = 0.0f;
-		shadow = false;
-		CreateSetupLightbar();
+		CreateSetupLightbar_Pre();
 	};
 
 
@@ -101,10 +81,64 @@ void WindowLightGroup::CreateLightGroups() {
 	};
 }
 
+void WindowLightGroup::CreateSetupLightbar_Pre() {
+	auto veh = WindowMain::m_Vehicle;
+	auto window = Menu::AddWindow("Vehicle Siren Lights", "Create lightbar");
+
+	auto create = [veh]() {
+		auto lightGroup = LightGroups::CreateLightbarLightGroup(veh->m_nModelIndex);
+		lightGroup->name = "Lightbar";
+		lightGroup->position = CVector(0, 0, 2);
+
+		m_LightGroup = lightGroup;
+		Vehicles::m_DrawVehiclePoints = true;
+
+		distance = 0.1f;
+		curve = 0.0f;
+		shadow = false;
+	};
+
+	auto btn7Lights = window->AddButton(Localization::GetLine("lightbar_7_lights"));
+	btn7Lights->m_OnClick = [create, window]() {
+
+		create();
+
+		amountLights = 7;
+
+		for (auto pattern : Patterns::m_Patterns)
+		{
+			if (pattern->fileName.find("lightbar-7lights") != std::string::npos)
+				m_LightGroup->AddPatternCycleStep(pattern, 10000);
+		}
+
+		Menu::RemoveWindow(window);
+		CreateSetupLightbar();
+	};
+
+	auto btn11Lights = window->AddButton(Localization::GetLine("lightbar_11_lights"));
+	btn11Lights->m_OnClick = [create, window]() {
+
+		create();
+
+		amountLights = 11;
+
+		for (auto pattern : Patterns::m_Patterns)
+		{
+			if (pattern->fileName.find("lightbar-11lights") != std::string::npos)
+				m_LightGroup->AddPatternCycleStep(pattern, 10000);
+		}
+
+		Menu::RemoveWindow(window);
+		CreateSetupLightbar();
+	};
+}
+
 void WindowLightGroup::CreateSetupLightbar() {
 	auto veh = WindowMain::m_Vehicle;
 	auto window = Menu::AddWindow("Vehicle Siren Lights", "Create lightbar");
 	auto lightGroup = m_LightGroup;
+
+	lightGroup->UpdateLightbarPoints(amountLights, curve, distance, shadow);
 
 	auto positionButton = window->AddButton(Localization::GetLine("edit_position_points"));
 	positionButton->m_OnClick = [lightGroup]() {
@@ -354,7 +388,7 @@ void WindowLightGroup::CreateEditLightGroup() {
 	buttonDelete->m_BackgroundColor = CRGBA(255, 0, 0, 80);
 	buttonDelete->m_BackgroundColorSelected = CRGBA(255, 0, 0, 172);
 	buttonDelete->m_OnClick = [window, lightGroup]() {
-		Menu::CreateConfirmWindow("", "Delete this lightgroup?", "Yes, delete", "No, cancel", [window, lightGroup](){
+		Menu::CreateConfirmWindow("", Localization::GetLine("delete_lightgroup_text"), Localization::GetLine("delete_lightgroup_confirm"), Localization::GetLine("delete_lightgroup_cancel"), [window, lightGroup](){
 			Vehicles::RemoveAllVehicles();
 			LightGroups::RemoveLightGroup(lightGroup);
 			Vehicles::TryAddAllVehicles();

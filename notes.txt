@@ -1,4 +1,4 @@
-[3.0]
+[2.0]
 [X] FIX: lightbar not saving
 [X] FIX: support for older vehicles when loading lightbar settings
 [~] ADD MAYBE: add mod version inside vehicle
@@ -12,12 +12,23 @@
 [X] adapt default vehicles with no graphics mod
 [X] create default patterns for lightgroups and lightbars
 
+[2.1]
+[X] FIX: useShadows bug
+[X] FIX: bug when changing patterns inside setuplightbar menu
+
+[X] ADD: new pattern for 7 lights
+[X] CHANGE: pattern file names
+[x] FIX: change font back
+
+[2.2]
+[ ] FIX: menu text bug
+[ ] FIX: rotation not working bruh
+
+[ ] FIX: select pattern makes points invisible at WindowSelectPattern::m_OnBack
+
+[ ] FIX: fix material ambient settings (for giroflex and non giroflex)
 [ ] ADD: intensity to flare
 [ ] ADD: intensity to all point shadows 
-[ ] FIX: instead of useShadows, use applyShadows
-[ ] FIX: fix material ambient settings (for giroflex and non giroflex)
-
---
 
 Check Mod::m_Version
 Check logs

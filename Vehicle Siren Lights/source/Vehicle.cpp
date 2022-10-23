@@ -345,10 +345,17 @@ void Vehicle::RenderBefore()
 					//if (!material) continue;
 
 					material->color = { color.r, color.g, color.b, color.a };
+					
 
+					material->surfaceProps.ambient = 10;
+					material->surfaceProps.diffuse = 10;
+					material->surfaceProps.specular = 10;
+
+					/*
 					material->surfaceProps.ambient = m_MatAmbient;
 					material->surfaceProps.diffuse = m_MatAmbient;
 					material->surfaceProps.specular = m_MatAmbient;
+					*/
 				}
 			}
 		}
