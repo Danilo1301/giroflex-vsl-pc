@@ -15,17 +15,13 @@
 [2.1]
 [X] FIX: useShadows bug
 [X] FIX: bug when changing patterns inside setuplightbar menu
-
 [X] ADD: new pattern for 7 lights
 [X] CHANGE: pattern file names
-[x] FIX: change font back
+[X] FIX: change font back
+[X] FIX: rotation not working bruh
 
 [2.2]
-[ ] FIX: menu text bug
-[ ] FIX: rotation not working bruh
-
 [ ] FIX: select pattern makes points invisible at WindowSelectPattern::m_OnBack
-
 [ ] FIX: fix material ambient settings (for giroflex and non giroflex)
 [ ] ADD: intensity to flare
 [ ] ADD: intensity to all point shadows 
