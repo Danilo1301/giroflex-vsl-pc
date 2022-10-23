@@ -3,7 +3,7 @@
 1. CLEO
 2. Modloader
 3. Versão **GTA 1.0 US** (Você pode [baixar aqui](http://miscellaneous-c.blogspot.com/2016/04/crack-gta-sa-v10-us-hoodlum-no-cd-fixed.html))
-4. Open Limit Adjuster or Fastman92 Limit Adjuster
+4. Open Limit Adjuster ou Fastman92 Limit Adjuster
 
 ## Como instalar
 1. [Baixe aqui](https://github.com/Danilo1301/vehicle-siren-lights-v2/releases)
