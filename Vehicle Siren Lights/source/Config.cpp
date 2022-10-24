@@ -2,6 +2,7 @@
 #include <filesystem>
 
 #include "Vehicle.h"
+#include "TestHelper.h"
 #include "Keybinds.h"
 
 #include "log/Log.h"
@@ -230,9 +231,10 @@ LightGroup* Config::LoadLightGroup(std::string fileName, int modelId) {
 
 	Json::Value value = ReadFile(m_DataPath + m_VehiclesPath + std::to_string(modelId) + m_LightGroupsPath + fileName + ".json");
 
-	LightGroup* lightGroup = LightGroups::CreateLightGroup(modelId);
+	LightGroup* lightGroup = LightGroups::CreateLightGroup(modelId, fileName);
 	lightGroup->FromJSON(value);
-	lightGroup->fileName = fileName;
+
+	TestHelper::AddLine("Load lightgroup, fileName set to " + fileName);
 
 	return lightGroup;
 }

@@ -6,8 +6,8 @@ class LightGroups {
 public:
 	static std::map<int, std::vector<LightGroup*>> m_LightGroups;
 
-	static LightGroup* CreateLightGroup(int modelId);
-	static LightGroup* CreateLightbarLightGroup(int modelId);
+	static LightGroup* CreateLightGroup(int modelId, std::string fileName);
+	static LightGroup* CreateLightbarLightGroup(int modelId, std::string fileName);
 
 	static void RemoveLightGroup(LightGroup* lightGroup);
 	static std::vector<LightGroup*> GetLightGroups(int modelId);
@@ -16,5 +16,7 @@ public:
 	static void RemovePatternReferences(Pattern* removePattern);
 
 	static void RemoveAllLightGroups();
-	static void FindUniqueName(LightGroup* lightGroup);
+
+	static LightGroup* FindLightGroupByFileName(int model, std::string fileName);
+	static void FindUniqueName(LightGroup* lightGroup, std::string prefix);
 };

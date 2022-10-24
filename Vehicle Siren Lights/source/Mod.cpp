@@ -21,7 +21,7 @@
 
 bool Mod::m_DebugEnabled = false;
 bool Mod::m_IsSamp = false;
-std::string Mod::m_Version = "2.1";
+std::string Mod::m_Version = "2.1.1";
 
 CVehicle* testVehicle = NULL;
 unsigned int _prevTime = 0;

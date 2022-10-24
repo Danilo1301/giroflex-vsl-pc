@@ -27,7 +27,7 @@ void WindowLightGroup::CreateLightGroups() {
 	auto buttonAddLightGroupSiren = window->AddButton(Localization::GetLine("add_light_group"));
 	buttonAddLightGroupSiren->m_OnClick = [veh, window]() mutable {
 
-		auto lightGroup = LightGroups::CreateLightGroup(veh->m_nModelIndex);
+		auto lightGroup = LightGroups::CreateLightGroup(veh->m_nModelIndex, "");
 		lightGroup->position = CVector(0, 0, 2);
 		lightGroup->AddPoint(CVector(-0.3f, 0, 0), CRGBA(255, 0, 0), eSirenPosition::LEFT);
 		//lightGroup->AddPoint(CVector(0, 0, 0), CRGBA(255, 255, 255), eSirenPosition::MIDDLE);
@@ -86,7 +86,7 @@ void WindowLightGroup::CreateSetupLightbar_Pre() {
 	auto window = Menu::AddWindow("Vehicle Siren Lights", "Create lightbar");
 
 	auto create = [veh]() {
-		auto lightGroup = LightGroups::CreateLightbarLightGroup(veh->m_nModelIndex);
+		auto lightGroup = LightGroups::CreateLightbarLightGroup(veh->m_nModelIndex, "");
 		lightGroup->name = "Lightbar";
 		lightGroup->position = CVector(0, 0, 2);
 

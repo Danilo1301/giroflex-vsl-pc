@@ -1,17 +1,18 @@
 #include "LightGroups.h"
+#include "TestHelper.h"
 
 #include "log/Log.h"
 
 std::map<int, std::vector<LightGroup*>> LightGroups::m_LightGroups;
 
-LightGroup* LightGroups::CreateLightGroup(int modelId)
+LightGroup* LightGroups::CreateLightGroup(int modelId, std::string fileName)
 {
-	Log::file << "[LightGroups] CreateLightGroup for model ID " << modelId << std::endl;
+	Log::file << "[LightGroups] Create LightGroup '" << fileName << "' for model ID " << modelId << std::endl;
 
 	LightGroup* lightGroup = new LightGroup(modelId);
 	
-	FindUniqueName(lightGroup);
-	//Log::file << "[LightGroups] Default fileName set to: " << lightGroup->fileName << std::endl;
+	if (fileName.empty()) FindUniqueName(lightGroup, "lightGroup");
+	else lightGroup->fileName = fileName;
 
 	m_LightGroups[modelId].push_back(lightGroup);
 
@@ -19,16 +20,16 @@ LightGroup* LightGroups::CreateLightGroup(int modelId)
 }
 
 
-LightGroup* LightGroups::CreateLightbarLightGroup(int modelId) {
+LightGroup* LightGroups::CreateLightbarLightGroup(int modelId, std::string fileName) {
 
-	Log::file << "[LightGroups] CreateLightbarLightGroup for model ID " << modelId << std::endl;
+	Log::file << "[LightGroups] Create LightBar '" << fileName << "' for model ID " << modelId << std::endl;
 
 	LightGroup* lightGroup = new LightGroup(modelId);
 	lightGroup->lightbarSettings.isLightbar = true;
 	lightGroup->UpdateLightbarPoints(11, 0, 0.1f, false);
 
-	FindUniqueName(lightGroup);
-	//Log::file << "[LightGroups] Default fileName set to: " << lightGroup->fileName << std::endl;
+	if (fileName.empty()) FindUniqueName(lightGroup, "lightBar");
+	else lightGroup->fileName = fileName;
 
 	m_LightGroups[modelId].push_back(lightGroup);
 
@@ -99,32 +100,45 @@ void LightGroups::RemoveAllLightGroups() {
 	}
 }
 
-void LightGroups::FindUniqueName(LightGroup* lightGroup)
+LightGroup* LightGroups::FindLightGroupByFileName(int model, std::string fileName)
 {
-	Log::file << "[LightGroups] FindUniqueName for lightGroup..." << std::endl;
+	TestHelper::AddLine("[FindLightGroupByFileName] " + fileName);
+
+	auto& lightGroups = m_LightGroups[model];
+
+	for (auto lightGroup : lightGroups)
+	{
+		TestHelper::AddLine("[FindLightGroupByFileName] compare with " + lightGroup->fileName);
+		if (fileName.compare(lightGroup->fileName) == 0) return lightGroup;
+	}
+
+	TestHelper::AddLine("[FindLightGroupByFileName] found none with this fileName");
+
+	return NULL;
+}
+
+void LightGroups::FindUniqueName(LightGroup* lightGroup, std::string prefix)
+{
+	TestHelper::AddLine("Find name.. Was: '" + lightGroup->fileName + "'");
 
 	int i = 0;
 	while (lightGroup->fileName.empty())
 	{
-		std::string newName = "lightGroup" + std::to_string(i);
+		std::string newName = prefix + std::to_string(i);
 
-		auto& lightGroups = m_LightGroups[lightGroup->modelId];
+		TestHelper::AddLine("Testing '" + newName + "'");
 
-		if (lightGroups.size() == 0)
+		auto sameName = FindLightGroupByFileName(lightGroup->modelId, newName);
+		if (sameName)
 		{
-			lightGroup->fileName = newName;
+			TestHelper::AddLine("Already exists");
+			i++;
 		}
 		else {
-			for (auto l : lightGroups)
-			{
-				if (l->fileName.compare(newName) != 0)
-				{
-					lightGroup->fileName = newName;
-					break;
-				}
-			}
+			TestHelper::AddLine("Available");
+			lightGroup->fileName = newName;
 		}
-		i++;
 	}
-	Log::file << "[LightGroups] Found: " << lightGroup->fileName << std::endl;
+
+	TestHelper::AddLine("Set to '" + lightGroup->fileName + "'");
 }
