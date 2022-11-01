@@ -301,6 +301,8 @@ void Vehicle::RenderBefore()
 				CRGBA color = isLightbar ? lightGroup->lightbarSettings.ledOnColor : point->color;
 				bool enabled = true;
 
+				if (point->object.length() == 0 || name.length() == 0) continue;
+
 				if (isLightbar)
 				{
 					if (ToUpper(name).compare(ToUpper(lightGroup->lightbarSettings.object_prefix + std::to_string(point_i + 1))) != 0) continue;
