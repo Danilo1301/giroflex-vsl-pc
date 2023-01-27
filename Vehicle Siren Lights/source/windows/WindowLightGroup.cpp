@@ -369,6 +369,17 @@ void WindowLightGroup::CreateEditLightGroup() {
 		lightGroup->flareType = (eCoronaFlareType)flareTypeVal;
 	};
 
+
+	auto flare_distance = window->AddNumberRange(Localization::GetLine("flare_distance"), &lightGroup->flareDistance, 0.0f, 1000.0f);
+
+	auto flare_intensity = window->AddNumberRange(Localization::GetLine("flare_intensity"), &lightGroup->flareIntensity, 0.0f, 1.0f);
+
+
+	auto useSmallWhiteCorona = window->AddCheckBox(Localization::GetLine("use_small_white_corona"), &lightGroup->useSmallWhiteCorona);
+
+	auto smallWhiteCoronaScale = window->AddNumberRange(Localization::GetLine("small_white_corona_scale"), &lightGroup->smallWhiteCoronaScale, 0.0f, 1.0f);
+
+
 	/*
 	auto checkBoxLerp = window->AddCheckBox("Lerp color", &lightGroup->lerpColor);
 

@@ -622,10 +622,74 @@ void Vehicle::RegisterCoronas()
 			auto radiusMult = point->GetRadiusMultiplier(angle, lightGroup->direction, positionY);
 			auto radius = lightGroup->size * radiusMult;
 
+			//
+
 			auto flareType = lightGroup->flareType;
-			if (!enabled || distanceFromPlayer > 70.0f) flareType = eCoronaFlareType::FLARETYPE_NONE;
+			//if (!enabled || distanceFromPlayer > 70.0f) flareType = eCoronaFlareType::FLARETYPE_NONE;
+			if (flareType != eCoronaFlareType::FLARETYPE_NONE)
+			{
+				float distScale = 1.0f - (distanceFromPlayer / lightGroup->flareDistance);
+				distScale *= lightGroup->flareIntensity;
+
+				unsigned char flareAlpha = ucharIntensity(color.a, distScale);
+
+				if (!enabled) flareAlpha = 0;
+
+				CCoronas::RegisterCorona(
+					lightId++,
+					m_Vehicle,
+					color.r,
+					color.g,
+					color.b,
+					flareAlpha,
+					lightGroup->position + position,
+					0.0f,
+					1000.0f,
+					lightGroup->type,
+					flareType,
+					false, //enableReflection
+					false, //checkObstacles
+					0,
+					0.0f,
+					false,
+					lightGroup->nearClip,
+					0,
+					100.0f,
+					false,
+					false
+				);
+			}
 
 			//
+
+			if (lightGroup->useSmallWhiteCorona)
+			{
+
+
+				CCoronas::RegisterCorona(
+					lightId++,
+					m_Vehicle,
+					255,
+					255,
+					255,
+					color.a,
+					lightGroup->position + position,
+					enabled ? (radius * lightGroup->smallWhiteCoronaScale) : 0.0f,
+					1000.0f,
+					lightGroup->type,
+					eCoronaFlareType::FLARETYPE_NONE,
+					false, //enableReflection
+					false, //checkObstacles
+					0,
+					0.0f,
+					false,
+					lightGroup->nearClip,
+					0,
+					100.0f,
+					false,
+					false
+				);
+			}
 
 			CCoronas::RegisterCorona(
 				lightId++,
@@ -638,7 +702,7 @@ void Vehicle::RegisterCoronas()
 				enabled ? radius : 0.0f,
 				1000.0f,
 				lightGroup->type,
-				flareType,
+				eCoronaFlareType::FLARETYPE_NONE,
 				true, //enableReflection
 				false, //checkObstacles
 				0,

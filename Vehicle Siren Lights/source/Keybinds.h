@@ -9,7 +9,6 @@ public:
 	static Keybind openMenu;
 	static Keybind toggleDebug;
 	static Keybind toggleLights;
-	static Keybind editorUpDown;
 	static Keybind editorSlower;
 	static Keybind reloadConfig;
 

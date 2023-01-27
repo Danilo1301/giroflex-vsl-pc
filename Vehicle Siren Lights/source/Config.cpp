@@ -280,6 +280,5 @@ void Config::LoadSettings() {
 	Log::file << "[Keybind] openMenu: " << Keybinds::openMenu.GetKeybindString() << std::endl;
 	Log::file << "[Keybind] reloadConfig: " << Keybinds::reloadConfig.GetKeybindString() << std::endl;
 	Log::file << "[Keybind] toggleDebug: " << Keybinds::toggleDebug.GetKeybindString() << std::endl;
-	Log::file << "[Keybind] editorUpDown: " << Keybinds::editorUpDown.GetKeybindString() << std::endl;
 	Log::file << "[Keybind] editorSlower: " << Keybinds::editorSlower.GetKeybindString() << std::endl;
 }

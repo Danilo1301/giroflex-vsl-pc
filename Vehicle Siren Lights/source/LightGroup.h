@@ -40,6 +40,8 @@ public:
 	float size = 0.2f;
 	float nearClip = 0.3f;
 	eCoronaFlareType flareType = eCoronaFlareType::FLARETYPE_NONE;
+	float flareDistance = 150.0;
+	float flareIntensity = 1.0f;
 	eCoronaType type = eCoronaType::CORONATYPE_SHINYSTAR;
 	eSirenDirection direction = eSirenDirection::BOTH;
 	bool usePatternColors = false;
@@ -47,6 +49,8 @@ public:
 	std::vector<Point*> points;
 	std::vector<PatternCycleStep*> patternCycleSteps;
 	int offsetId = 0;
+	bool useSmallWhiteCorona = false;
+	float smallWhiteCoronaScale = 0.4f;
 
 	LightGroup(int modelId) {
 		this->modelId = modelId;
@@ -167,11 +171,16 @@ public:
 		value["size"] = size;
 		value["nearClip"] = nearClip;
 		value["flareType"] = (int)flareType;
+		value["flareDistance"] = flareDistance;
+		value["flareIntensity"] = flareIntensity;
 		value["type"] = (int)type;
 		value["direction"] = (int)direction;
 		value["usePatternColors"] = usePatternColors;
 		value["position"] = CVectorToJSON(position);
 		value["offsetId"] = offsetId;
+
+		value["useSmallWhiteCorona"] = useSmallWhiteCorona;
+		value["smallWhiteCoronaScale"] = smallWhiteCoronaScale;
 
 		value["points"] = Json::arrayValue;
 		for (auto point : points) {
@@ -208,11 +217,15 @@ public:
 		size = value["size"].asFloat();
 		nearClip = value["nearClip"].asFloat();
 		flareType = (eCoronaFlareType)value["flareType"].asInt();
+		flareDistance = value["flareDistance"].asFloat();
+		flareIntensity = value["flareIntensity"].asFloat();
 		type = (eCoronaType)value["type"].asInt();
 		direction = (eSirenDirection)value["direction"].asInt();
 		usePatternColors = value["usePatternColors"].asBool();
 		position = CVectorFromJSON(value["position"]);
 		offsetId = ValidateValue(value["offsetId"], offsetId).asInt();
+		useSmallWhiteCorona = ValidateValue(value["useSmallWhiteCorona"], useSmallWhiteCorona).asBool();
+		smallWhiteCoronaScale = ValidateValue(value["smallWhiteCoronaScale"], smallWhiteCoronaScale).asFloat();
 
 		for (size_t i = 0; i < value["points"].size(); i++)
 		{

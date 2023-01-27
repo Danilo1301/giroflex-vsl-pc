@@ -20,10 +20,16 @@
 [X] FIX: change font back
 [X] FIX: rotation not working bruh
 
-[2.2]
+[2.2 current]
+[X] CHANGE: position editor keys
+[X] REMOVE: editorUpDown key from config
+[X] ADD: small white corona
+[X] ADD: flare distanc
+[X] ADD: flare intensity
+
+
 [ ] FIX: select pattern makes points invisible at WindowSelectPattern::m_OnBack
 [ ] FIX: fix material ambient settings (for giroflex and non giroflex)
-[ ] ADD: intensity to flare
 [ ] ADD: intensity to all point shadows 
 
 Check Mod::m_Version
