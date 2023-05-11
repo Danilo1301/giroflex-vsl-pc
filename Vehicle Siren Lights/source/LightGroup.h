@@ -51,6 +51,7 @@ public:
 	int offsetId = 0;
 	bool useSmallWhiteCorona = false;
 	float smallWhiteCoronaScale = 0.4f;
+	eCoronaType smallWhiteCoronaType = eCoronaType::CORONATYPE_SHINYSTAR;
 
 	LightGroup(int modelId) {
 		this->modelId = modelId;
@@ -178,9 +179,9 @@ public:
 		value["usePatternColors"] = usePatternColors;
 		value["position"] = CVectorToJSON(position);
 		value["offsetId"] = offsetId;
-
 		value["useSmallWhiteCorona"] = useSmallWhiteCorona;
 		value["smallWhiteCoronaScale"] = smallWhiteCoronaScale;
+		value["smallWhiteCoronaType"] = (int)smallWhiteCoronaType;
 
 		value["points"] = Json::arrayValue;
 		for (auto point : points) {
@@ -226,6 +227,7 @@ public:
 		offsetId = ValidateValue(value["offsetId"], offsetId).asInt();
 		useSmallWhiteCorona = ValidateValue(value["useSmallWhiteCorona"], useSmallWhiteCorona).asBool();
 		smallWhiteCoronaScale = ValidateValue(value["smallWhiteCoronaScale"], smallWhiteCoronaScale).asFloat();
+		smallWhiteCoronaType = (eCoronaType)ValidateValue(value["smallWhiteCoronaType"], (int)smallWhiteCoronaType).asInt();
 
 		for (size_t i = 0; i < value["points"].size(); i++)
 		{

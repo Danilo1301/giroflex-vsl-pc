@@ -14,7 +14,7 @@ void Window::Draw() {
 	}
 
 	if (m_Description.length() > 0) {
-		Menu::DrawRect(drawPos.x, drawPos.y, m_Size.x, 20, CRGBA(0, 0, 0, 200));
+		Menu::DrawRect(drawPos.x, drawPos.y, m_Size.x, 20, CRGBA(100, 100, 100, 200));
 		Menu::DrawString(m_Description, drawPos.x + 5, drawPos.y + 20.0f / 2 - 10, CRGBA(255, 255, 255));
 		drawPos.y += 20.0f;
 	}
@@ -72,7 +72,7 @@ void Window::Draw() {
 		}
 	}
 
-	Menu::DrawRect(drawPos.x, drawPos.y, m_Size.x, m_Size.y, CRGBA(0, 0, 0, 190));
+	Menu::DrawRect(drawPos.x, drawPos.y, m_Size.x, m_Size.y, CRGBA(0, 0, 20, 190));
 
 	for (Item* item : items) {
 		//item->m_Size.x = m_Size.x;

@@ -1,3 +1,5 @@
+--- version notes ---
+
 [2.0]
 [X] FIX: lightbar not saving
 [X] FIX: support for older vehicles when loading lightbar settings
@@ -20,17 +22,29 @@
 [X] FIX: change font back
 [X] FIX: rotation not working bruh
 
-[2.2 current]
+[2.2]
 [X] CHANGE: position editor keys
 [X] REMOVE: editorUpDown key from config
 [X] ADD: small white corona
 [X] ADD: flare distanc
 [X] ADD: flare intensity
 
+[2.3]
+[ ] ADD: white corona type
+[ ] CHANGE: localization files
+[ ] CHANGE: some menu colors
+
+
+--- todo (maybe) ---
+
 
 [ ] FIX: select pattern makes points invisible at WindowSelectPattern::m_OnBack
 [ ] FIX: fix material ambient settings (for giroflex and non giroflex)
 [ ] ADD: intensity to all point shadows 
+
+
+--- release ---
+
 
 Check Mod::m_Version
 Check logs

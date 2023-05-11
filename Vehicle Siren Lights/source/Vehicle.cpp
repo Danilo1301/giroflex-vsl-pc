@@ -664,8 +664,6 @@ void Vehicle::RegisterCoronas()
 
 			if (lightGroup->useSmallWhiteCorona)
 			{
-
-
 				CCoronas::RegisterCorona(
 					lightId++,
 					m_Vehicle,
@@ -676,7 +674,7 @@ void Vehicle::RegisterCoronas()
 					lightGroup->position + position,
 					enabled ? (radius * lightGroup->smallWhiteCoronaScale) : 0.0f,
 					1000.0f,
-					lightGroup->type,
+					lightGroup->smallWhiteCoronaType,
 					eCoronaFlareType::FLARETYPE_NONE,
 					false, //enableReflection
 					false, //checkObstacles

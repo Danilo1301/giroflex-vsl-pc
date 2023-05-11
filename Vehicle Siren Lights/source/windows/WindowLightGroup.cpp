@@ -377,8 +377,26 @@ void WindowLightGroup::CreateEditLightGroup() {
 
 	auto useSmallWhiteCorona = window->AddCheckBox(Localization::GetLine("use_small_white_corona"), &lightGroup->useSmallWhiteCorona);
 
+	static int smallWhiteCoronaTypeVal;
+	smallWhiteCoronaTypeVal = (int)lightGroup->smallWhiteCoronaType;
+	auto options_smallWhiteCoronaType = window->AddOptions(Localization::GetLine("small_white_corona_type"), &smallWhiteCoronaTypeVal);
+	options_smallWhiteCoronaType->AddOption("Circle", (int)eCoronaType::CORONATYPE_CIRCLE);
+	options_smallWhiteCoronaType->AddOption("Headlight", (int)eCoronaType::CORONATYPE_HEADLIGHT);
+	options_smallWhiteCoronaType->AddOption("Headlight Line", (int)eCoronaType::CORONATYPE_HEADLIGHTLINE);
+	options_smallWhiteCoronaType->AddOption("Hex", (int)eCoronaType::CORONATYPE_HEX);
+	options_smallWhiteCoronaType->AddOption("Moon", (int)eCoronaType::CORONATYPE_MOON);
+	options_smallWhiteCoronaType->AddOption("Reflection", (int)eCoronaType::CORONATYPE_REFLECTION);
+	options_smallWhiteCoronaType->AddOption("Ring", (int)eCoronaType::CORONATYPE_RING);
+	options_smallWhiteCoronaType->AddOption("Shinystar", (int)eCoronaType::CORONATYPE_SHINYSTAR);
+	options_smallWhiteCoronaType->AddOption("Streak", (int)eCoronaType::CORONATYPE_STREAK);
+	options_smallWhiteCoronaType->AddOption("Torus", (int)eCoronaType::CORONATYPE_TORUS);
+	options_smallWhiteCoronaType->m_OnChange = [lightGroup]() {
+		lightGroup->smallWhiteCoronaType = (eCoronaType)smallWhiteCoronaTypeVal;
+	};
+
 	auto smallWhiteCoronaScale = window->AddNumberRange(Localization::GetLine("small_white_corona_scale"), &lightGroup->smallWhiteCoronaScale, 0.0f, 1.0f);
 
+	
 
 	/*
 	auto checkBoxLerp = window->AddCheckBox("Lerp color", &lightGroup->lerpColor);
