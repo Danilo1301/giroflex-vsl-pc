@@ -30,10 +30,13 @@
 [X] ADD: flare intensity
 
 [2.3]
-[ ] ADD: white corona type
-[ ] CHANGE: localization files
-[ ] CHANGE: some menu colors
+[X] ADD: white corona type
+[X] CHANGE: localization files
+[X] CHANGE: some menu colors
 
+[2.3.1]
+[X] test: useSmallWhiteCorona = true for default
+[X] CHANGE: localization files! (pt-br)
 
 --- todo (maybe) ---
 

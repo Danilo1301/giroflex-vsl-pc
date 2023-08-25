@@ -49,7 +49,7 @@ public:
 	std::vector<Point*> points;
 	std::vector<PatternCycleStep*> patternCycleSteps;
 	int offsetId = 0;
-	bool useSmallWhiteCorona = false;
+	bool useSmallWhiteCorona = true;
 	float smallWhiteCoronaScale = 0.4f;
 	eCoronaType smallWhiteCoronaType = eCoronaType::CORONATYPE_SHINYSTAR;
 
