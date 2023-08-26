@@ -394,7 +394,7 @@ void WindowLightGroup::CreateEditLightGroup() {
 		lightGroup->smallWhiteCoronaType = (eCoronaType)smallWhiteCoronaTypeVal;
 	};
 
-	auto smallWhiteCoronaScale = window->AddNumberRange(Localization::GetLine("small_white_corona_scale"), &lightGroup->smallWhiteCoronaScale, 0.0f, 1.0f);
+	auto smallWhiteCoronaScale = window->AddNumberRange(Localization::GetLine("small_white_corona_scale"), &lightGroup->smallWhiteCoronaScale, 0.0f, 2.0f);
 
 	
 

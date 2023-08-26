@@ -34,9 +34,10 @@
 [X] CHANGE: localization files
 [X] CHANGE: some menu colors
 
-[2.3.1]
+[2.3 update 1]
 [X] test: useSmallWhiteCorona = true for default
 [X] CHANGE: localization files! (pt-br)
+[X] max white corona scale up to 2
 
 --- todo (maybe) ---
 
