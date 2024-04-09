@@ -1,0 +1,247 @@
+{
+   "color1" : {
+      "a" : 255,
+      "b" : 0,
+      "g" : 0,
+      "r" : 255
+   },
+   "color2" : {
+      "a" : 255,
+      "b" : 255,
+      "g" : 0,
+      "r" : 0
+   },
+   "color3" : {
+      "a" : 255,
+      "b" : 255,
+      "g" : 255,
+      "r" : 255
+   },
+   "curve" : 0.0,
+   "direction" : 1,
+   "distance" : 0.44599813222885132,
+   "flareDistance" : 150.0,
+   "flareIntensity" : 1.0,
+   "flareType" : 0,
+   "keybindMenu" : {
+      "alt" : false,
+      "ctrl" : true,
+      "key" : 90,
+      "shift" : false
+   },
+   "lightbarSettings" : {
+      "ledOffColor" : {
+         "a" : 255,
+         "b" : 0,
+         "g" : 0,
+         "r" : 30
+      },
+      "ledOnColor" : {
+         "a" : 255,
+         "b" : 255,
+         "g" : 255,
+         "r" : 255
+      },
+      "object_prefix" : "lightbar-led-"
+   },
+   "name" : "Lightbar",
+   "nearClip" : 0.30000001192092896,
+   "offsetId" : 0,
+   "patternCycleSteps" : [
+      {
+         "duration" : 7000,
+         "lerpColor" : false,
+         "pattern" : "4_lights-1"
+      },
+      {
+         "duration" : 7000,
+         "lerpColor" : false,
+         "pattern" : "4_lights-2"
+      },
+      {
+         "duration" : 7000,
+         "lerpColor" : false,
+         "pattern" : "4_lights-3"
+      },
+      {
+         "duration" : 7000,
+         "lerpColor" : false,
+         "pattern" : "4_lights-4"
+      },
+      {
+         "duration" : 7000,
+         "lerpColor" : false,
+         "pattern" : "4_lights-5"
+      }
+   ],
+   "patternOffset" : 0,
+   "points" : [
+      {
+         "customColor" : {
+            "a" : 255,
+            "b" : 0,
+            "g" : 255,
+            "r" : 255
+         },
+         "name" : "",
+         "object" : "",
+         "position" : {
+            "x" : 0.0,
+            "y" : 0.0,
+            "z" : 0.0
+         },
+         "rotateObject" : {
+            "axis" : 2,
+            "rotate" : false,
+            "rotateAlways" : false,
+            "speed" : 1.0
+         },
+         "shadow" : {
+            "angle" : 0.0,
+            "enabled" : false,
+            "height" : 3.0,
+            "intensity" : 1.0,
+            "position" : {
+               "x" : 0.0,
+               "y" : 0.0,
+               "z" : 0.0
+            },
+            "rotate" : false,
+            "rotateOffsetAngle" : 0.0,
+            "rotateOffsetPos" : 0.0,
+            "textureIndex" : 0,
+            "width" : 3.0
+         },
+         "useCustomColor" : false
+      },
+      {
+         "customColor" : {
+            "a" : 255,
+            "b" : 0,
+            "g" : 255,
+            "r" : 255
+         },
+         "name" : "",
+         "object" : "",
+         "position" : {
+            "x" : -0.14999999105930328,
+            "y" : 0.0,
+            "z" : 0.0
+         },
+         "rotateObject" : {
+            "axis" : 2,
+            "rotate" : false,
+            "rotateAlways" : false,
+            "speed" : 1.0
+         },
+         "shadow" : {
+            "angle" : 0.0,
+            "enabled" : false,
+            "height" : 3.0,
+            "intensity" : 1.0,
+            "position" : {
+               "x" : 0.0,
+               "y" : 0.0,
+               "z" : 0.0
+            },
+            "rotate" : false,
+            "rotateOffsetAngle" : 0.0,
+            "rotateOffsetPos" : 0.0,
+            "textureIndex" : 0,
+            "width" : 3.0
+         },
+         "useCustomColor" : false
+      },
+      {
+         "customColor" : {
+            "a" : 255,
+            "b" : 0,
+            "g" : 255,
+            "r" : 255
+         },
+         "name" : "",
+         "object" : "",
+         "position" : {
+            "x" : 0.11999998241662979,
+            "y" : 0.0,
+            "z" : 0.0
+         },
+         "rotateObject" : {
+            "axis" : 2,
+            "rotate" : false,
+            "rotateAlways" : false,
+            "speed" : 1.0
+         },
+         "shadow" : {
+            "angle" : 0.0,
+            "enabled" : false,
+            "height" : 3.0,
+            "intensity" : 1.0,
+            "position" : {
+               "x" : 0.0,
+               "y" : 0.0,
+               "z" : 0.0
+            },
+            "rotate" : false,
+            "rotateOffsetAngle" : 0.0,
+            "rotateOffsetPos" : 0.0,
+            "textureIndex" : 0,
+            "width" : 3.0
+         },
+         "useCustomColor" : false
+      },
+      {
+         "customColor" : {
+            "a" : 255,
+            "b" : 0,
+            "g" : 255,
+            "r" : 255
+         },
+         "name" : "",
+         "object" : "",
+         "position" : {
+            "x" : 0.0,
+            "y" : 0.0,
+            "z" : 0.0
+         },
+         "rotateObject" : {
+            "axis" : 2,
+            "rotate" : false,
+            "rotateAlways" : false,
+            "speed" : 1.0
+         },
+         "shadow" : {
+            "angle" : 0.0,
+            "enabled" : false,
+            "height" : 3.0,
+            "intensity" : 1.0,
+            "position" : {
+               "x" : 0.0,
+               "y" : 0.0,
+               "z" : 0.0
+            },
+            "rotate" : false,
+            "rotateOffsetAngle" : 0.0,
+            "rotateOffsetPos" : 0.0,
+            "textureIndex" : 0,
+            "width" : 3.0
+         },
+         "useCustomColor" : false
+      }
+   ],
+   "position" : {
+      "x" : 0.0,
+      "y" : -0.36599999666213989,
+      "z" : 0.93000102043151855
+   },
+   "reflect" : false,
+   "reflectionDistance" : 20.0,
+   "size" : 0.20000000298023224,
+   "smallWhiteCoronaScale" : 0.40000000596046448,
+   "smallWhiteCoronaType" : 9,
+   "turnOnSiren" : true,
+   "type" : 0,
+   "usePatternColors" : false,
+   "useSmallWhiteCorona" : true,
+   "version" : "2.4"
+}

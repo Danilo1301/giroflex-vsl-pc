@@ -18,4 +18,10 @@ public:
 		stepLoop = new PatternLoop();
 		stepLoop->Name = "Step";
 	}
+
+	~VehiclePatternData()
+	{
+		delete patternLoop;
+		delete stepLoop;
+	}
 };

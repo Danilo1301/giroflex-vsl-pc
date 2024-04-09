@@ -21,7 +21,7 @@
 
 bool Mod::m_DebugEnabled = false;
 bool Mod::m_IsSamp = false;
-std::string Mod::m_Version = "2.3";
+std::string Mod::m_Version = "2.4";
 
 CVehicle* testVehicle = NULL;
 unsigned int _prevTime = 0;
@@ -88,7 +88,8 @@ void Mod::Update() {
 	}
 
 	//
-
+	
+	//CTRL + SHIFT + D
 	if (Input::GetKey(17) && Input::GetKey(16)) {
 		if (Input::GetKeyDown(68)) {
 			m_DebugEnabled = !m_DebugEnabled;

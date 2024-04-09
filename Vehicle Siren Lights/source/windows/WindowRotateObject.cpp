@@ -14,7 +14,7 @@ void WindowRotateObject::Create() {
 	CVehicle* veh = WindowMain::m_Vehicle;
 	auto lightGroup = WindowLightGroup::m_LightGroup;
 
-	auto window = Menu::AddWindow("Vehicle Siren Lights", "LightGroups > " + lightGroup->name + " > Points > Rotate Object");
+	auto window = Menu::AddWindow(Menu::m_DefaultWindowTitle, "LightGroups > " + lightGroup->name + " > Points > Rotate Object");
 
 	auto buttonEnabled = window->AddCheckBox("Enable object rotation", &m_LightGroupRotateObject->rotate);
 

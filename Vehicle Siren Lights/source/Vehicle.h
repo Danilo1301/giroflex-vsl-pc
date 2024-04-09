@@ -43,4 +43,6 @@ public:
 	void UpdatePatternAndSteps();
 
 	void RegisterCoronas();
+
+	void RemoveLightGroupDatas(); //not used
 };

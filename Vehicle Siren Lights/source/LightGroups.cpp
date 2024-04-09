@@ -19,24 +19,6 @@ LightGroup* LightGroups::CreateLightGroup(int modelId, std::string fileName)
 	return lightGroup;
 }
 
-
-LightGroup* LightGroups::CreateLightbarLightGroup(int modelId, std::string fileName) {
-
-	Log::file << "[LightGroups] Create LightBar '" << fileName << "' for model ID " << modelId << std::endl;
-
-	LightGroup* lightGroup = new LightGroup(modelId);
-	lightGroup->lightbarSettings.isLightbar = true;
-	lightGroup->UpdateLightbarPoints(11, 0, 0.1f, false);
-
-	if (fileName.empty()) FindUniqueName(lightGroup, "lightBar");
-	else lightGroup->fileName = fileName;
-
-	m_LightGroups[modelId].push_back(lightGroup);
-
-	return lightGroup;
-}
-
-
 void LightGroups::RemoveLightGroup(LightGroup* lightGroup) {
 	Log::file << "[LightGroups] RemoveLightGroup " << lightGroup->fileName << std::endl;
 
@@ -50,7 +32,6 @@ void LightGroups::RemoveLightGroup(LightGroup* lightGroup) {
 		delete lightGroup;
 	}
 }
-
 
 std::vector<LightGroup*> LightGroups::GetLightGroups(int modelId) {
 	return m_LightGroups[modelId];

@@ -12,6 +12,11 @@ public:
 	bool StepChanged = false;
 	bool DontChangeSteps = false;
 
+	~PatternLoop()
+	{
+		Clear();
+	}
+
 	void AddStep(int* time) {
 		Steps.push_back(time);
 	}

@@ -22,7 +22,7 @@ public:
 	static void WriteToFile(std::string path, Json::Value value);
 	static Json::Value ReadFile(std::string path);
 
-	//static void SavePattern(Pattern* pattern);
+	static void SavePattern(Pattern* pattern);
 	static Pattern* LoadPattern(std::string fileName);
 
 	static void SaveLightGroup(LightGroup* lightGroup);

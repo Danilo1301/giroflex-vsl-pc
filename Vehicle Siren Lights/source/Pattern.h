@@ -30,17 +30,6 @@ public:
 		return step;
 	}
 
-	PatternStep* AddStep(bool left, bool middle, bool right, int duration)
-	{
-		PatternStep* step = new PatternStep();
-		step->values.push_back(left ? 1 : 0);
-		step->values.push_back(middle ? 1 : 0);
-		step->values.push_back(right ? 1 : 0);
-		step->duration = duration;
-		steps.push_back(step);
-		return step;
-	}
-
 	/*
 	void RemoveStep(PatternStep* step)
 	{
@@ -56,20 +45,19 @@ public:
 		return time;
 	}
 
-	/*
 	Json::Value ToJSON() {
 		Json::Value value = Json::objectValue;
-		value["name"] = name;
+		//value["name"] = name;
 
 		value["steps"] = Json::arrayValue;
 		for (auto step : steps) {
 			Json::Value stepValue;
 			stepValue["duration"] = step->duration;
 
-			stepValue["values"] = Json::arrayValue;
+			stepValue["data"] = Json::arrayValue;
 			for (auto val : step->values)
 			{
-				stepValue["values"].append(val);
+				stepValue["data"].append(val);
 			}
 
 			value["steps"].append(stepValue);
@@ -77,10 +65,9 @@ public:
 
 		return value;
 	}
-	*/
 
 	void FromJSON(Json::Value value) {
-		name = value["name"].asString();
+		name = fileName;
 
 		for (int step_i = 0; step_i < (int)value["steps"].size(); step_i++)
 		{
@@ -88,10 +75,12 @@ public:
 
 			int duration = step["duration"].asInt();
 
+			if (duration <= 0) continue;
+
 			std::vector<int> values;
-			for (int val_i = 0; val_i < (int)step["values"].size(); val_i++)
+			for (int val_i = 0; val_i < (int)step["data"].size(); val_i++)
 			{
-				values.push_back(step["values"][val_i].asInt());
+				values.push_back(step["data"][val_i].asInt());
 			}
 
 			AddStep(values, duration);

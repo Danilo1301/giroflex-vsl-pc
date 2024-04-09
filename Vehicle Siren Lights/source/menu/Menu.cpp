@@ -4,6 +4,7 @@
 #include "TextEditor.h"
 #include "KeySelector.h"
 
+std::string Menu::m_DefaultWindowTitle = "Vehicle Siren Lights (by Danilo1301)";
 std::vector<Window*> Menu::m_Windows;
 Window* Menu::m_ActiveWindow = nullptr;
 Item* Menu::m_ItemClicked = nullptr;

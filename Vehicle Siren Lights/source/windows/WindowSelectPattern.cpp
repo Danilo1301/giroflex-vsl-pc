@@ -15,7 +15,7 @@ std::function<void(Pattern*, int)> WindowSelectPattern::m_OnAddPatternCycleStep;
 std::function<void(PatternCycleStep*)> WindowSelectPattern::m_OnDeletePatternCycleStep;
 
 void WindowSelectPattern::CreatePatterns() {
-	auto window = Menu::AddWindow("Vehicle Siren Lights", "Patterns");
+	auto window = Menu::AddWindow(Menu::m_DefaultWindowTitle, "Patterns");
 
 	if (m_MainWindow) {
 		Menu::RemoveWindow(m_MainWindow);

@@ -39,16 +39,24 @@
 [X] CHANGE: localization files! (pt-br)
 [X] max white corona scale up to 2
 
+[2.4]
+[] ADD: option to select amount of lights (from 0 to 11)
+[] ADD: distance, curve to lightgroups
+[] ADD: custom color to points
+[] REMOVE: siren position from point
+[] ADD: option to duplicate lightgroups
+[] CHANGE: changed the way pattern json works
+[] CHANGE: localization files (pt-br; en)
+[] ADD: new patterns + site to create your own patterns
+
 --- todo (maybe) ---
 
-
+[ ] ADD: option to show only current edditing lightgroup
 [ ] FIX: select pattern makes points invisible at WindowSelectPattern::m_OnBack
 [ ] FIX: fix material ambient settings (for giroflex and non giroflex)
 [ ] ADD: intensity to all point shadows 
 
-
 --- release ---
-
 
 Check Mod::m_Version
 Check logs
@@ -59,3 +67,11 @@ Add OTHER DATA, if needed
 
 Change README
 PULL
+
+--- build ---
+
+* plugin-sdk
+https://github.com/DK22Pac/plugin-sdk/commit/42ddb127d1a7dffcce0c74938da2afc001d90d42
+no xp support
+
+* Visual Studio 2019

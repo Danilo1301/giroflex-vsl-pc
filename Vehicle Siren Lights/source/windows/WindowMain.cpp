@@ -13,7 +13,7 @@
 CVehicle* WindowMain::m_Vehicle = nullptr;
 
 void WindowMain::CreateMain() {
-	auto window = Menu::AddWindow("Vehicle Siren Lights", Localization::GetLine("info_vehicle_id") + " " + std::to_string(m_Vehicle->m_nModelIndex) + " - v" + Mod::m_Version);
+	auto window = Menu::AddWindow(Menu::m_DefaultWindowTitle, Localization::GetLine("info_vehicle_id") + " " + std::to_string(m_Vehicle->m_nModelIndex) + " - v" + Mod::m_Version);
 
 	auto buttonEditLightGroups = window->AddButton(Localization::GetLine("main_edit_light_groups"));
 	buttonEditLightGroups->m_OnClick = [window]() {

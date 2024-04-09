@@ -3,6 +3,7 @@
 #include "VehicleDummy.h"
 #include "Mod.h"
 #include "LightGroups.h"
+#include "log/Log.h"
 
 #include "menu/Menu.h"
 #include "windows/WindowLightGroup.h"
@@ -206,7 +207,15 @@ void Vehicle::DrawPoints() {
 
 		int i = 0;
 		for (auto point : lightGroup->points) {
-			auto position = VehicleDummy::GetTransformedPosition(m_Vehicle, lightGroup->position + point->position);
+
+			auto amountOfPoints = lightGroup->points.size();
+			auto distance = lightGroup->distance;
+			auto curve = lightGroup->curve;
+
+			//position
+			float x = (i * distance) - ((amountOfPoints - 1) * distance / 2);
+			float y = (float)arch_fn_parabola((float)(i), curve, (float)(amountOfPoints - 1));
+			auto position = VehicleDummy::GetTransformedPosition(m_Vehicle, CVector(x, y, 0) + lightGroup->position + point->position);
 
 
 			CFont::SetOrientation(ALIGN_CENTER);
@@ -296,32 +305,29 @@ void Vehicle::RenderBefore()
 			{
 				auto point = lightGroup->points[point_i];
 
-				bool isLightbar = lightGroup->lightbarSettings.isLightbar;
-
-				CRGBA color = isLightbar ? lightGroup->lightbarSettings.ledOnColor : point->color;
+				CRGBA color = lightGroup->lightbarSettings.ledOnColor;
 				bool enabled = true;
 
 				if (name.length() == 0) continue;
 
-				if (isLightbar)
+				if (point->object.length() > 0)
 				{
-					if (ToUpper(name).compare(ToUpper(lightGroup->lightbarSettings.object_prefix + std::to_string(point_i + 1))) != 0) continue;
-					
-					enabled = point->GetIsEnabled(step, point_i);
+					if (ToUpper(name).compare(ToUpper(point->object)) != 0) continue;
 				}
 				else {
-					if (point->object.length() == 0) continue;
-					if (ToUpper(name).compare(ToUpper(point->object)) != 0) continue;
-
-					enabled = point->GetIsEnabled(step);
+					if (ToUpper(name).compare(ToUpper(lightGroup->lightbarSettings.object_prefix + std::to_string(point_i + 1))) != 0) continue;
 				}
+
+				
+
+				enabled = point->GetIsEnabled(step, point_i);
 
 				//TestHelper::AddLine("found " + name);
 
 				if (!vehiclePatternData->lightsOn) enabled = false;
 				if (m_FreezeLights) enabled = true;
 
-				if (!enabled) color = isLightbar ? lightGroup->lightbarSettings.ledOffColor : point->disabledColor;
+				if (!enabled) color = lightGroup->lightbarSettings.ledOffColor;
 
 				//
 
@@ -396,6 +402,14 @@ void Vehicle::RenderShadows()
 		for (size_t point_i = 0; point_i < lightGroup->points.size(); point_i++)
 		{
 			auto point = lightGroup->points[point_i];
+			auto amountOfPoints = lightGroup->points.size();
+			auto distance = lightGroup->distance;
+			auto curve = lightGroup->curve;
+
+			//position
+			float x = (point_i * distance) - ((amountOfPoints - 1) * distance / 2);
+			float y = (float)arch_fn_parabola((float)(point_i), curve, (float)(amountOfPoints - 1));
+			//auto position = CVector(x, y, 0) + lightGroup->position + point->position;
 
 			if(!point->shadow.enabled) continue;
 
@@ -412,7 +426,7 @@ void Vehicle::RenderShadows()
 			CVector2D right = CVector2D(m_Vehicle->m_matrix->right);
 			CVector2D_Normalize(&right);
 
-			auto offsetPos = lightGroup->position + point->position + CVector(shadow.position.x, shadow.position.y, 0);
+			auto offsetPos = lightGroup->position + CVector(x, y, 0) + point->position + CVector(shadow.position.x, shadow.position.y, 0);
 
 			CVector_AddDir(&pos, forward, right, offsetPos.x, offsetPos.y);
 
@@ -440,18 +454,31 @@ void Vehicle::RenderShadows()
 
 			//
 
-			CRGBA color = point->color;
-			bool enabled = true;
+			//color
+			CRGBA color = lightGroup->color1;
+			if ((double)point_i < ((double)amountOfPoints) / (double)2)
+			{
+				color = lightGroup->color1;
 
-			bool isLightbar = lightGroup->IsLightbar();
-
-			if (isLightbar) {
-				enabled = point->GetIsEnabled(step, point_i);
+				if (amountOfPoints % 2 == 1 && point_i == std::round(amountOfPoints / 2) && amountOfPoints > 2)
+				{
+					color = lightGroup->color3;
+				}
 			}
 			else {
-				enabled = point->GetIsEnabled(step);
+				color = lightGroup->color2;
 			}
 
+			//custom color
+			if (point->useCustomColor)
+			{
+				color = point->customColor;
+			}
+
+			bool enabled = true;
+			
+			enabled = point->GetIsEnabled(step, point_i);
+			
 			if (!vehiclePatternData->lightsOn) enabled = false;
 			if (m_FreezeLights) enabled = true;
 
@@ -554,6 +581,24 @@ void Vehicle::UpdatePatternAndSteps() {
 
 		if (patternLoop->HasStepChanged() || stepLoop->HasNoSteps())
 		{
+			TestHelper::AddLine("pattern step changed or step loop has no steps");
+
+			//pattern offset
+			if (stepLoop->HasNoSteps())
+			{
+				TestHelper::AddLine("pattern offset applied");
+
+				int patternOffset = lightGroup->patternOffset;
+				while (patternOffset > 0)
+				{
+					patternLoop->StepIndex++;
+					if (patternLoop->StepIndex >= (int)patternLoop->Steps.size()) patternLoop->StepIndex = 0;
+					patternOffset--;
+				}
+			}
+
+			//
+
 			stepLoop->Clear();
 
 			auto pattern = lightGroup->patternCycleSteps[patternLoop->StepIndex]->pattern;
@@ -600,19 +645,40 @@ void Vehicle::RegisterCoronas()
 		for (size_t point_i = 0; point_i < lightGroup->points.size(); point_i++)
 		{
 			auto point = lightGroup->points[point_i];
-			CVector position = point->position;
 
-			CRGBA color = point->color;
-			bool enabled = true;
+			auto amountOfPoints = lightGroup->points.size();
+			auto distance = lightGroup->distance;
+			auto curve = lightGroup->curve;
 
-			bool isLightbar = lightGroup->lightbarSettings.isLightbar;
+			//position
+			float x = (point_i * distance) - ((amountOfPoints - 1) * distance / 2);
+			float y = (float)arch_fn_parabola((float)(point_i), curve, (float)(amountOfPoints - 1));
+			auto position = CVector(x, y, 0) + lightGroup->position + point->position;
 
-			if (isLightbar) {
-				enabled = point->GetIsEnabled(step, point_i);
+			//color
+			CRGBA color = lightGroup->color1;
+			if ((double)point_i < ((double)amountOfPoints) / (double)2)
+			{
+				color = lightGroup->color1;
+
+				if (amountOfPoints % 2 == 1 && point_i == std::round(amountOfPoints / 2) && amountOfPoints > 2)
+				{
+					color = lightGroup->color3;
+				}
 			}
 			else {
-				enabled = point->GetIsEnabled(step);
+				color = lightGroup->color2;
 			}
+
+			//custom color
+			if (point->useCustomColor)
+			{
+				color = point->customColor;
+			}
+
+			bool enabled = true;
+
+			enabled = point->GetIsEnabled(step, point_i);
 
 			if (!vehiclePatternData->lightsOn) enabled = false;
 			if (m_FreezeLights) enabled = true;
@@ -642,7 +708,7 @@ void Vehicle::RegisterCoronas()
 					color.g,
 					color.b,
 					flareAlpha,
-					lightGroup->position + position,
+					position,
 					0.0f,
 					1000.0f,
 					lightGroup->type,
@@ -671,7 +737,7 @@ void Vehicle::RegisterCoronas()
 					255,
 					255,
 					color.a,
-					lightGroup->position + position,
+					position,
 					enabled ? (radius * lightGroup->smallWhiteCoronaScale) : 0.0f,
 					1000.0f,
 					lightGroup->smallWhiteCoronaType,
@@ -696,7 +762,7 @@ void Vehicle::RegisterCoronas()
 				color.g,
 				color.b,
 				color.a,
-				lightGroup->position + position,
+				position,
 				enabled ? radius : 0.0f,
 				1000.0f,
 				lightGroup->type,
@@ -714,10 +780,23 @@ void Vehicle::RegisterCoronas()
 			);
 
 			if (lightGroup->reflect && enabled) {
-				CVector fposition = m_Vehicle->TransformFromObjectSpace(lightGroup->position + position);
+				CVector fposition = m_Vehicle->TransformFromObjectSpace(position);
 				Command< 0x09E5 >(fposition.x, fposition.y, fposition.z, (int)color.r, (int)color.g, (int)color.b, lightGroup->reflectionDistance);
 			}
 		}
 	}
 	
+}
+
+void Vehicle::RemoveLightGroupDatas()
+{
+	std::vector<LightGroup*> toDelete;
+	for (auto pair : m_LightGroupData) toDelete.push_back(pair.first);
+
+	for (auto lightGroup : toDelete)
+	{
+		auto vehiclePatternData = m_LightGroupData[lightGroup];
+		m_LightGroupData.erase(lightGroup);
+		delete vehiclePatternData;
+	}
 }

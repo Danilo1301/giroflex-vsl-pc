@@ -7,7 +7,6 @@ public:
 	static std::map<int, std::vector<LightGroup*>> m_LightGroups;
 
 	static LightGroup* CreateLightGroup(int modelId, std::string fileName);
-	static LightGroup* CreateLightbarLightGroup(int modelId, std::string fileName);
 
 	static void RemoveLightGroup(LightGroup* lightGroup);
 	static std::vector<LightGroup*> GetLightGroups(int modelId);

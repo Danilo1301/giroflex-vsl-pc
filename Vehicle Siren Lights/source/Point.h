@@ -5,12 +5,6 @@
 #include "LightGroupShadow.h"
 #include "LightGroupRotateObject.h"
 
-enum class eSirenPosition {
-	LEFT,
-	MIDDLE,
-	RIGHT
-};
-
 enum class eSirenDirection {
 	FRONT,
 	BOTH,
@@ -22,9 +16,11 @@ public:
 	std::string name = "";
 	CVector position = CVector(0, 0, 0);
 	std::string object = "";
-	CRGBA color = CRGBA(255, 0, 0);
+
+	bool useCustomColor = false;
+	CRGBA customColor = CRGBA(255, 255, 0);
+
 	CRGBA disabledColor = CRGBA(0, 0, 0);
-	eSirenPosition sirenPosition = eSirenPosition::LEFT;
 	LightGroupShadow shadow;
 	LightGroupRotateObject rotateObject;
 
@@ -43,10 +39,6 @@ public:
 	}
 	*/
 
-	bool GetIsEnabled(PatternStep* step) {
-		return GetIsEnabled(step, (int)sirenPosition);
-	}
-
 	bool GetIsEnabled(PatternStep* step, int index) {
 		if (index >= (int)step->values.size()) return false;
 		return step->values[index] == 1;
@@ -58,9 +50,12 @@ public:
 		value["name"] = name;
 		value["position"] = CVectorToJSON(position);
 		value["object"] = object;
-		value["color"] = ColorToJSON(color);
-		value["disabledColor"] = ColorToJSON(disabledColor);
-		value["sirenPosition"] = (int)sirenPosition;
+
+		value["useCustomColor"] = useCustomColor;
+		value["customColor"] = ColorToJSON(customColor);
+
+		//value["disabledColor"] = ColorToJSON(disabledColor);
+		//value["sirenPosition"] = (int)sirenPosition;
 
 		Json::Value shadowValue = Json::objectValue;
 		shadowValue["enabled"] = shadow.enabled;
@@ -89,9 +84,12 @@ public:
 		name = value["name"].asString();
 		position = CVectorFromJSON(value["position"]);
 		object = value["object"].asString();
-		color = ColorFromJSON(value["color"]);
-		disabledColor = ColorFromJSON(value["disabledColor"]);
-		sirenPosition = (eSirenPosition)value["sirenPosition"].asInt();
+
+		useCustomColor = ValidateValue(value["useCustomColor"], useCustomColor).asBool();;
+		customColor = ValidateColor(value["customColor"], customColor);
+
+		//disabledColor = ColorFromJSON(value["disabledColor"]);
+		//sirenPosition = (eSirenPosition)value["sirenPosition"].asInt();
 
 		Json::Value shadowValue = value["shadow"];
 		if (!shadowValue.isNull())

@@ -15,7 +15,7 @@ void WindowShadow::Create() {
 	CVehicle* veh = WindowMain::m_Vehicle;
 	auto lightGroup = WindowLightGroup::m_LightGroup;
 
-	auto window = Menu::AddWindow("Vehicle Siren Lights", "LightGroups > " + lightGroup->name + " > Points > Shadow");
+	auto window = Menu::AddWindow(Menu::m_DefaultWindowTitle, "LightGroups > " + lightGroup->name + " > Points > Shadow");
 
 	auto buttonEnabled = window->AddCheckBox(Localization::GetLine("enable_shadow"), &m_LightGroupShadow->enabled);
 

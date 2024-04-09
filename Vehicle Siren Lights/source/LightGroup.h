@@ -6,16 +6,14 @@
 #include "Point.h"
 #include "LightGroupShadow.h"
 #include "Keybinds.h"
+#include "TestHelper.h"
+#include "Mod.h"
 
 #include "log/Log.h"
 
 struct LightbarSettings {
-	//int amountOfLights = 11;
-	//float lightDistance = 0.1f;
-
-	bool isLightbar = false;
 	std::string object_prefix = "lightbar-led-";
-	CRGBA ledOnColor = CRGBA(255, 255, 0);
+	CRGBA ledOnColor = CRGBA(255, 255, 255);
 	CRGBA ledOffColor = CRGBA(30, 0, 0);
 };
 
@@ -34,10 +32,17 @@ public:
 	std::string name = "Light group";
 	std::string fileName = "";
 	int modelId;
+
+	CRGBA color1 = CRGBA(255, 0, 0);
+	CRGBA color2 = CRGBA(0, 0, 255);
+	CRGBA color3 = CRGBA(255, 255, 255);
+
 	bool reflect = false;
 	bool turnOnSiren = true;
 	float reflectionDistance = 20.0f;
 	float size = 0.2f;
+	float distance = 0.3f;
+	float curve = 0.0f;
 	float nearClip = 0.3f;
 	eCoronaFlareType flareType = eCoronaFlareType::FLARETYPE_NONE;
 	float flareDistance = 150.0;
@@ -48,6 +53,7 @@ public:
 	CVector position = CVector(0, 0, 0);
 	std::vector<Point*> points;
 	std::vector<PatternCycleStep*> patternCycleSteps;
+	int patternOffset = 0;
 	int offsetId = 0;
 	bool useSmallWhiteCorona = true;
 	float smallWhiteCoronaScale = 0.4f;
@@ -58,62 +64,10 @@ public:
 		this->keybindMenu.SaveAsNumber = true;
 	}
 
-	bool IsLightbar()
-	{
-		return lightbarSettings.isLightbar;
-	}
-
-	void UpdateLightbarPoints(int amountOfLights, float curve, float distance, bool shadow)
-	{
-		if (!IsLightbar()) return;
-
-		CVector lastPos = CVector(0, 0, 0);
-		CRGBA lastColor = CRGBA(255, 0, 0);
-
-		int i = 0;
-		while ((int)points.size() < amountOfLights)
-		{
-			Point* lastPoint = points.size() > 0 ? points[points.size() - 1] : NULL;
-
-			if (lastPoint)
-			{
-				lastPos = lastPoint->position;
-				lastColor = lastPoint->color;
-
-				lastPos.x += distance;
-			}
-
-			lastPos.y = (float)arch_fn_parabola((float)i, curve, (float)(amountOfLights-1));
-
-			AddPoint(lastPos, lastColor);
-
-			i++;
-		}
-
-		while (amountOfLights < (int)points.size())
-		{
-			Point* lastPoint = points[points.size() - 1];
-			RemovePoint(lastPoint);
-		}
-
-		for (auto point : points)
-		{
-			point->shadow.enabled = shadow;
-		}
-	}
-
-	Point* AddPoint(CVector position, CRGBA color, eSirenPosition sirenPosition) {
+	Point* AddPoint() {
 		Point* point = new Point();
-		point->position = position;
-		point->sirenPosition = sirenPosition;
-		point->color = color;
-		//point->shadow.enabled = false;
 		points.push_back(point);
 		return point;
-	}
-
-	Point* AddPoint(CVector position, CRGBA color) {
-		return AddPoint(position, color, eSirenPosition::LEFT);
 	}
 
 	void RemovePoint(Point* point) {
@@ -121,6 +75,18 @@ public:
 		if (it == points.end()) return;
 		points.erase(it);
 		delete point;
+	}
+
+	void SetNumberOfPoints(int amount)
+	{
+		while ((int)points.size() < amount)
+		{
+			AddPoint();
+		}
+		while ((int)points.size() > amount)
+		{
+			RemovePoint(points[points.size() - 1]);
+		}
 	}
 
 	void AddPatternCycleStep(Pattern* pattern, int duration) {
@@ -140,9 +106,27 @@ public:
 		delete patternCycleStep;
 	}
 
-	void Destroy() {
-		while (patternCycleSteps.size() > 0) 
+	void RemoveAllPatternCycleSteps()
+	{
+		while (patternCycleSteps.size() > 0)
 			RemovePatternCycleStep(patternCycleSteps[0]);
+	}
+
+	void FindNewPatterns()
+	{
+		RemoveAllPatternCycleSteps();
+
+		for (auto pattern : Patterns::m_Patterns)
+		{
+			if (pattern->steps[0]->values.size() == points.size())
+			{
+				AddPatternCycleStep(pattern, 7000);
+			}
+		}
+	}
+
+	void Destroy() {
+		RemoveAllPatternCycleSteps();
 		
 		RemoveAllPoints();
 	}
@@ -157,8 +141,7 @@ public:
 		Json::Value value = Json::objectValue;
 
 		value["lightbarSettings"] = Json::objectValue;
-		value["lightbarSettings"] = Json::objectValue;
-		value["lightbarSettings"]["isLightbar"] = lightbarSettings.isLightbar;
+		//value["lightbarSettings"]["isLightbar"] = lightbarSettings.isLightbar;
 		value["lightbarSettings"]["object_prefix"] = lightbarSettings.object_prefix;
 		value["lightbarSettings"]["ledOnColor"] = ColorToJSON(lightbarSettings.ledOnColor);
 		value["lightbarSettings"]["ledOffColor"] = ColorToJSON(lightbarSettings.ledOffColor);
@@ -166,10 +149,17 @@ public:
 		value["keybindMenu"] = keybindMenu.ToJSON();
 
 		value["name"] = name;
+
+		value["color1"] = ColorToJSON(color1);
+		value["color2"] = ColorToJSON(color2);
+		value["color3"] = ColorToJSON(color3);
+
 		value["reflect"] = reflect;
 		value["turnOnSiren"] = turnOnSiren;
 		value["reflectionDistance"] = reflectionDistance;
 		value["size"] = size;
+		value["distance"] = distance;
+		value["curve"] = curve;
 		value["nearClip"] = nearClip;
 		value["flareType"] = (int)flareType;
 		value["flareDistance"] = flareDistance;
@@ -178,6 +168,7 @@ public:
 		value["direction"] = (int)direction;
 		value["usePatternColors"] = usePatternColors;
 		value["position"] = CVectorToJSON(position);
+		value["patternOffset"] = patternOffset;
 		value["offsetId"] = offsetId;
 		value["useSmallWhiteCorona"] = useSmallWhiteCorona;
 		value["smallWhiteCoronaScale"] = smallWhiteCoronaScale;
@@ -193,6 +184,8 @@ public:
 			value["patternCycleSteps"].append( PatternCycleStepToJSON(patternCycleStep) );
 		}
 
+		value["version"] = Mod::m_Version;
+
 		return value;
 	}
 
@@ -201,7 +194,7 @@ public:
 
 		if (!value["lightbarSettings"].isNull())
 		{
-			lightbarSettings.isLightbar = value["lightbarSettings"]["isLightbar"].asBool();
+			//lightbarSettings.isLightbar = value["lightbarSettings"]["isLightbar"].asBool();
 			lightbarSettings.object_prefix = value["lightbarSettings"]["object_prefix"].asString();
 			lightbarSettings.ledOnColor = ColorFromJSON(value["lightbarSettings"]["ledOnColor"]);
 			lightbarSettings.ledOffColor = ColorFromJSON(value["lightbarSettings"]["ledOffColor"]);
@@ -212,10 +205,16 @@ public:
 			keybindMenu.FromJSON(value["keybindMenu"]);
 		}
 
+		color1 = ValidateColor(value["color1"], color1);
+		color2 = ValidateColor(value["color2"], color2);
+		color3 = ValidateColor(value["color3"], color3);
+
 		reflect = value["reflect"].asBool();
 		turnOnSiren = value["turnOnSiren"].asBool();
 		reflectionDistance = value["reflectionDistance"].asFloat();
 		size = value["size"].asFloat();
+		distance = value["distance"].asFloat();
+		curve = value["curve"].asFloat();
 		nearClip = value["nearClip"].asFloat();
 		flareType = (eCoronaFlareType)value["flareType"].asInt();
 		flareDistance = value["flareDistance"].asFloat();
@@ -224,6 +223,7 @@ public:
 		direction = (eSirenDirection)value["direction"].asInt();
 		usePatternColors = value["usePatternColors"].asBool();
 		position = CVectorFromJSON(value["position"]);
+		patternOffset = ValidateValue(value["patternOffset"], patternOffset).asInt();
 		offsetId = ValidateValue(value["offsetId"], offsetId).asInt();
 		useSmallWhiteCorona = ValidateValue(value["useSmallWhiteCorona"], useSmallWhiteCorona).asBool();
 		smallWhiteCoronaScale = ValidateValue(value["smallWhiteCoronaScale"], smallWhiteCoronaScale).asFloat();

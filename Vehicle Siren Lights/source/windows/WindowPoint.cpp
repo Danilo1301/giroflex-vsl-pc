@@ -21,13 +21,16 @@ void WindowPoint::Create() {
 	CVehicle* veh = WindowMain::m_Vehicle;
 	auto lightGroup = WindowLightGroup::m_LightGroup;
 
-	auto window = Menu::AddWindow("Vehicle Siren Lights", "LightGroups > " + lightGroup->name + " > Points");
+	auto window = Menu::AddWindow(Menu::m_DefaultWindowTitle, "LightGroups > " + lightGroup->name + " > Points");
 
 	int i = 0;
 	for (auto point : lightGroup->points)
 	{
 		auto buttonEditPoint = window->AddButton(Localization::GetLineFormatted("edit_point", point->name, (i + 1)));
-		buttonEditPoint->AddColorIndicator(&point->color, CVector2D(20, 0));
+		
+		if(point->useCustomColor)
+			buttonEditPoint->AddColorIndicator(&point->customColor, CVector2D(20, 0));
+
 		buttonEditPoint->m_OnClick = [window, point]() {
 			m_Point = point;
 
@@ -38,15 +41,20 @@ void WindowPoint::Create() {
 		i++;
 	}
 
+	/*
 	auto buttonAddPoint = window->AddButton(Localization::GetLine("add_point"));
 	buttonAddPoint->m_OnClick = [window, lightGroup]() {
+		Vehicles::RemoveAllVehicles();
 
-		auto point = lightGroup->AddPoint(CVector(0, 0, 0), CRGBA(255, 0, 0));
+		auto point = lightGroup->AddPoint();
+		lightGroup->FindNewPatterns();
+
+		Vehicles::TryAddAllVehicles();
 
 		Menu::RemoveWindow(window);
 		Create();
 	};
-
+	*/
 
 	auto buttonBack = window->AddButton(Localization::GetLine("back"));
 	buttonBack->m_OnClick = [window]() {
@@ -63,7 +71,7 @@ void WindowPoint::CreateEditPoint() {
 
 	auto point = m_Point;
 
-	auto window = Menu::AddWindow("Vehicle Siren Lights", "LightGroups > " + lightGroup->name + " > Points");
+	auto window = Menu::AddWindow(Menu::m_DefaultWindowTitle, "LightGroups > " + lightGroup->name + " > Points");
 
 	auto buttonName = window->AddButton(Localization::GetLine("edit_name"));
 	buttonName->AddTextStr(&point->name, CVector2D(10, 0));
@@ -76,73 +84,59 @@ void WindowPoint::CreateEditPoint() {
 		PositionEditor::Toggle(&point->position);
 	};
 
-	static int tmpVal;
-	tmpVal = (int)point->sirenPosition;
+	auto useCustomColor = window->AddCheckBox(Localization::GetLine("use_custom_color"), &point->useCustomColor);
 
-	if (!lightGroup->IsLightbar())
-	{
-		auto optionsSirenPos = window->AddOptions(Localization::GetLine("siren_position"), &tmpVal);
-		optionsSirenPos->AddOption(Localization::GetLine("left"), (int)eSirenPosition::LEFT);
-		optionsSirenPos->AddOption(Localization::GetLine("middle"), (int)eSirenPosition::MIDDLE);
-		optionsSirenPos->AddOption(Localization::GetLine("right"), (int)eSirenPosition::RIGHT);
-		optionsSirenPos->m_OnChange = [point, optionsSirenPos]() {
-			point->sirenPosition = (eSirenPosition)tmpVal;
-		};
-	}
-
-	auto buttonColor = window->AddButton(Localization::GetLine("color"));
-	buttonColor->AddColorIndicator(&point->color, CVector2D(20, 0));
-	buttonColor->m_OnClick = [window, point]() {
-		Menu::CreateColorPickerWindow(&point->color, [window]() {
+	auto buttonCustomColor = window->AddButton(Localization::GetLine("custom_color"));
+	buttonCustomColor->AddColorIndicator(&point->customColor, CVector2D(20, 0));
+	buttonCustomColor->m_OnClick = [window, point]() {
+		Menu::CreateColorPickerWindow(&point->customColor, [window]() {
 			Menu::m_ActiveWindow = window;
 		});
 	};
 
-	if (!lightGroup->IsLightbar())
-	{
-		auto buttonObjName = window->AddButton(Localization::GetLine("select_object"));
-		buttonObjName->AddTextStr(&point->object, CVector2D(10, 0));
-		buttonObjName->m_OnClick = [window, point, veh]() {
-			Vehicles::m_DrawVehicleFrames = true;
+	auto buttonObjName = window->AddButton(Localization::GetLine("select_object"));
+	buttonObjName->AddTextStr(&point->object, CVector2D(10, 0));
+	buttonObjName->m_OnClick = [window, point, veh]() {
+		Vehicles::m_DrawVehicleFrames = true;
 
-			auto window2 = Menu::AddWindow("", Localization::GetLine("select_object"));
-			window2->m_Position.x += window2->m_Size.x + 5.0f;
+		auto window2 = Menu::AddWindow("", Localization::GetLine("select_object"));
+		window2->m_Position.x += window2->m_Size.x + 5.0f;
 
-			auto button = window2->AddButton("[None]");
-			button->m_OnClick = [window, window2, point]() {
-				point->object = "";
+		auto button = window2->AddButton("[None]");
+		button->m_OnClick = [window, window2, point]() {
+			point->object = "";
+
+			Menu::RemoveWindow(window2);
+			Menu::m_ActiveWindow = window;
+			Vehicles::m_DrawVehicleFrames = false;
+		};
+
+		auto frames = VehicleDummy::GetFramesOnVehicle(veh);
+		for (auto frame : frames) {
+			if (frame == veh->m_pRwClump->object.parent) continue;
+
+			std::string name = GetFrameNodeName(frame);
+
+			auto button = window2->AddButton(name);
+			button->m_OnClick = [window, window2, point, name]() {
+				point->object = name;
 
 				Menu::RemoveWindow(window2);
 				Menu::m_ActiveWindow = window;
 				Vehicles::m_DrawVehicleFrames = false;
 			};
-
-			auto frames = VehicleDummy::GetFramesOnVehicle(veh);
-			for (auto frame : frames) {
-				if (frame == veh->m_pRwClump->object.parent) continue;
-
-				std::string name = GetFrameNodeName(frame);
-
-				auto button = window2->AddButton(name);
-				button->m_OnClick = [window, window2, point, name]() {
-					point->object = name;
-
-					Menu::RemoveWindow(window2);
-					Menu::m_ActiveWindow = window;
-					Vehicles::m_DrawVehicleFrames = false;
-				};
-			}
-		};
+		}
+	};
 	
 
-		auto buttonDisabledColor = window->AddButton(Localization::GetLine("disabled_object_color"));
-		buttonDisabledColor->AddColorIndicator(&point->disabledColor, CVector2D(20, 0));
-		buttonDisabledColor->m_OnClick = [window, point]() {
-			Menu::CreateColorPickerWindow(&point->disabledColor, [window]() {
-				Menu::m_ActiveWindow = window;
-			});
-		};
-	}
+	auto buttonDisabledColor = window->AddButton(Localization::GetLine("disabled_object_color"));
+	buttonDisabledColor->AddColorIndicator(&point->disabledColor, CVector2D(20, 0));
+	buttonDisabledColor->m_OnClick = [window, point]() {
+		Menu::CreateColorPickerWindow(&point->disabledColor, [window]() {
+			Menu::m_ActiveWindow = window;
+		});
+	};
+	
 
 	auto buttonShadow = window->AddButton(Localization::GetLine("edit_shadow"));
 	buttonShadow->m_OnClick = [point, window]() {
@@ -151,15 +145,12 @@ void WindowPoint::CreateEditPoint() {
 		WindowShadow::Create();
 	};
 
-	if (!lightGroup->IsLightbar())
-	{
-		auto buttonRotateObject = window->AddButton("Rotate Object");
-		buttonRotateObject->m_OnClick = [point, window]() {
-			Menu::RemoveWindow(window);
-			WindowRotateObject::m_LightGroupRotateObject = &point->rotateObject;
-			WindowRotateObject::Create();
-		};
-	}
+	auto buttonRotateObject = window->AddButton("Rotate Object");
+	buttonRotateObject->m_OnClick = [point, window]() {
+		Menu::RemoveWindow(window);
+		WindowRotateObject::m_LightGroupRotateObject = &point->rotateObject;
+		WindowRotateObject::Create();
+	};
 
 	auto buttonDelete = window->AddButton(Localization::GetLine("delete"));
 	buttonDelete->m_BackgroundColor = CRGBA(255, 0, 0, 80);
@@ -175,7 +166,7 @@ void WindowPoint::CreateEditPoint() {
 	
 	auto buttonClone = window->AddButton(Localization::GetLine("clone"));
 	buttonClone->m_OnClick = [window, lightGroup, point]() {
-		auto newPoint = lightGroup->AddPoint(CVector(), CRGBA());
+		auto newPoint = lightGroup->AddPoint();
 		newPoint->FromJSON(point->ToJSON());
 
 		Menu::RemoveWindow(window);

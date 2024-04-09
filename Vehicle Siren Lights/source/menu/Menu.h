@@ -12,6 +12,7 @@ enum class eArrowDirection {
 
 class Menu {
 public:
+	static std::string m_DefaultWindowTitle;
 	static std::vector<Window*> m_Windows;
 	static Window* m_ActiveWindow;
 	static Item* m_ItemClicked;

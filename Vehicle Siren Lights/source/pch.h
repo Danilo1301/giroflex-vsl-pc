@@ -197,6 +197,18 @@ static Json::Value ValidateValue(Json::Value value, T defaultValue)
 	return value;
 }
 
+static CVector ValidateCVector(Json::Value value, CVector defaultValue)
+{
+	if (value.empty()) return defaultValue;
+	return CVectorFromJSON(value);
+}
+
+static CRGBA ValidateColor(Json::Value value, CRGBA defaultValue)
+{
+	if (value.empty()) return defaultValue;
+	return ColorFromJSON(value);
+}
+
 static std::string ToUpper(std::string data) {
 	std::for_each(data.begin(), data.end(), [](char& c) {
 		c = ::toupper(c);
