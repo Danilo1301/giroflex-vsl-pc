@@ -31,6 +31,10 @@ Debug: CTRL + SHIFT + D
 * Instalando as texturas das luzes: https://youtu.be/0cT0OPJW9kM
 * Como criar um padrão de piscar: https://youtu.be/uQWaDB5bb5o
 
+<h1>Tutoriais (Adaptação)</h1>
+
+* Como trocar o giroflex: https://youtu.be/L-mZXxpCRVY
+
 <h1>Config</h1>
 
 Cada veículo tem uma pasta separada com o seu ID para salvar as configurações

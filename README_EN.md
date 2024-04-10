@@ -29,6 +29,10 @@ Debug: CTRL + SHIFT + D
 * Installing the lights textures: https://youtu.be/0cT0OPJW9kM
 * How to create your flash pattern: https://youtu.be/uQWaDB5bb5o
 
+<h1>Tutoriais (Adaptação)</h1>
+
+* Como trocar o giroflex: https://youtu.be/L-mZXxpCRVY
+
 <h1>Config</h1>
 
 Each vehicle has a separated folder with an ID to save its configuration
