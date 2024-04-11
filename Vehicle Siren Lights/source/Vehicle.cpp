@@ -327,21 +327,22 @@ void Vehicle::RenderBefore()
 					color = point->customColor;
 				}
 
+				if (lightGroup->lightbarSettings.useLightbarLeds)
+				{
+					color = lightGroup->lightbarSettings.ledOnColor;
+				}
+
 				bool enabled = true;
 
 				if (name.length() == 0) continue;
 
-				if (point->object.length() > 0)
+				if (lightGroup->lightbarSettings.useLightbarLeds)
 				{
-					//if object is defined
-					if (ToUpper(name).compare(ToUpper(point->object)) != 0) continue;
-				}
-				else {
-					//if object is not defined (using lightbar)
 					if (ToUpper(name).compare(ToUpper(lightGroup->lightbarSettings.object_prefix + std::to_string(point_i + 1))) != 0) continue;
 				}
-
-				
+				else {
+					if (ToUpper(name).compare(ToUpper(point->object)) != 0) continue;
+				}
 
 				enabled = point->GetIsEnabled(step, point_i);
 
@@ -352,14 +353,12 @@ void Vehicle::RenderBefore()
 
 				if (!enabled)
 				{
-					if (point->object.length() > 0)
+					if (lightGroup->lightbarSettings.useLightbarLeds)
 					{
-						//if object is defined
-						color = point->disabledColor;
+						color = lightGroup->lightbarSettings.ledOffColor;
 					}
 					else {
-						//if object is not defined (using lightbar)
-						color = lightGroup->lightbarSettings.ledOffColor;
+						color = point->disabledColor;
 					}
 				}
 

@@ -12,6 +12,7 @@
 #include "log/Log.h"
 
 struct LightbarSettings {
+	bool useLightbarLeds = false;
 	std::string object_prefix = "lightbar-led-";
 	CRGBA ledOnColor = CRGBA(255, 255, 255);
 	CRGBA ledOffColor = CRGBA(30, 0, 0);

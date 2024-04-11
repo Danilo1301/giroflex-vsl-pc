@@ -132,6 +132,9 @@
     <ClCompile Include="source\menu\KeySelector.cpp">
       <Filter>source\menu</Filter>
     </ClCompile>
+    <ClCompile Include="source\windows\WindowLightbarLed.cpp">
+      <Filter>source\windows</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="source\Mod.h">
@@ -256,6 +259,9 @@
     </ClInclude>
     <ClInclude Include="source\menu\KeySelector.h">
       <Filter>source\menu</Filter>
+    </ClInclude>
+    <ClInclude Include="source\windows\WindowLightbarLed.h">
+      <Filter>source\windows</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

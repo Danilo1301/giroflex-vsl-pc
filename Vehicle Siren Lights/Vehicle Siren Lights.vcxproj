@@ -38,6 +38,7 @@
     <ClCompile Include="source\Vehicle.cpp" />
     <ClCompile Include="source\VehicleDummy.cpp" />
     <ClCompile Include="source\Vehicles.cpp" />
+    <ClCompile Include="source\windows\WindowLightbarLed.cpp" />
     <ClCompile Include="source\windows\WindowLightGroup.cpp" />
     <ClCompile Include="source\windows\WindowLightgroupMenu.cpp" />
     <ClCompile Include="source\windows\WindowMain.cpp" />
@@ -80,6 +81,7 @@
     <ClInclude Include="source\VehicleDummy.h" />
     <ClInclude Include="source\VehiclePatternData.h" />
     <ClInclude Include="source\Vehicles.h" />
+    <ClInclude Include="source\windows\WindowLightbarLed.h" />
     <ClInclude Include="source\windows\WindowLightGroup.h" />
     <ClInclude Include="source\windows\WindowLightgroupMenu.h" />
     <ClInclude Include="source\windows\WindowMain.h" />
