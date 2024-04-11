@@ -33,7 +33,9 @@ Debug: CTRL + SHIFT + D
 
 <h1>Tutoriais (Adaptação)</h1>
 
+* Instalando Blender + addon DragonFF: https://youtu.be/EKHa7vld8LY
 * Como trocar o giroflex: https://youtu.be/L-mZXxpCRVY
+* Adaptando as LEDs da moto: https://youtu.be/zlMe2Mxz-oI
 
 <h1>Config</h1>
 
