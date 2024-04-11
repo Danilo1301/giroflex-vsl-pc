@@ -142,7 +142,7 @@ public:
 		Json::Value value = Json::objectValue;
 
 		value["lightbarSettings"] = Json::objectValue;
-		//value["lightbarSettings"]["isLightbar"] = lightbarSettings.isLightbar;
+		value["lightbarSettings"]["useLightbarLeds"] = lightbarSettings.useLightbarLeds;
 		value["lightbarSettings"]["object_prefix"] = lightbarSettings.object_prefix;
 		value["lightbarSettings"]["ledOnColor"] = ColorToJSON(lightbarSettings.ledOnColor);
 		value["lightbarSettings"]["ledOffColor"] = ColorToJSON(lightbarSettings.ledOffColor);
@@ -195,7 +195,7 @@ public:
 
 		if (!value["lightbarSettings"].isNull())
 		{
-			//lightbarSettings.isLightbar = value["lightbarSettings"]["isLightbar"].asBool();
+			lightbarSettings.useLightbarLeds = ValidateValue(value["lightbarSettings"]["useLightbarLeds"], lightbarSettings.useLightbarLeds).asBool();
 			lightbarSettings.object_prefix = value["lightbarSettings"]["object_prefix"].asString();
 			lightbarSettings.ledOnColor = ColorFromJSON(value["lightbarSettings"]["ledOnColor"]);
 			lightbarSettings.ledOffColor = ColorFromJSON(value["lightbarSettings"]["ledOffColor"]);
