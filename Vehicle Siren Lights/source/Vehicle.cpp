@@ -304,17 +304,40 @@ void Vehicle::RenderBefore()
 			for (size_t point_i = 0; point_i < lightGroup->points.size(); point_i++)
 			{
 				auto point = lightGroup->points[point_i];
+				auto amountOfPoints = lightGroup->points.size();
 
-				CRGBA color = lightGroup->lightbarSettings.ledOnColor;
+				//color
+				CRGBA color = lightGroup->color1;
+				if ((double)point_i < ((double)amountOfPoints) / (double)2)
+				{
+					color = lightGroup->color1;
+
+					if (amountOfPoints % 2 == 1 && point_i == std::round(amountOfPoints / 2) && amountOfPoints > 2)
+					{
+						color = lightGroup->color3;
+					}
+				}
+				else {
+					color = lightGroup->color2;
+				}
+
+				//custom color
+				if (point->useCustomColor)
+				{
+					color = point->customColor;
+				}
+
 				bool enabled = true;
 
 				if (name.length() == 0) continue;
 
 				if (point->object.length() > 0)
 				{
+					//if object is defined
 					if (ToUpper(name).compare(ToUpper(point->object)) != 0) continue;
 				}
 				else {
+					//if object is not defined (using lightbar)
 					if (ToUpper(name).compare(ToUpper(lightGroup->lightbarSettings.object_prefix + std::to_string(point_i + 1))) != 0) continue;
 				}
 
@@ -327,7 +350,18 @@ void Vehicle::RenderBefore()
 				if (!vehiclePatternData->lightsOn) enabled = false;
 				if (m_FreezeLights) enabled = true;
 
-				if (!enabled) color = lightGroup->lightbarSettings.ledOffColor;
+				if (!enabled)
+				{
+					if (point->object.length() > 0)
+					{
+						//if object is defined
+						color = point->disabledColor;
+					}
+					else {
+						//if object is not defined (using lightbar)
+						color = lightGroup->lightbarSettings.ledOffColor;
+					}
+				}
 
 				//
 

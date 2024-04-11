@@ -40,14 +40,18 @@
 [X] max white corona scale up to 2
 
 [2.4]
-[] ADD: option to select amount of lights (from 0 to 11)
-[] ADD: distance, curve to lightgroups
-[] ADD: custom color to points
-[] REMOVE: siren position from point
-[] ADD: option to duplicate lightgroups
-[] CHANGE: changed the way pattern json works
-[] CHANGE: localization files (pt-br; en)
-[] ADD: new patterns + site to create your own patterns
+[X] ADD: option to select amount of lights (from 0 to 11)
+[X] ADD: distance, curve to lightgroups
+[X] ADD: custom color to points
+[X] REMOVE: siren position from point
+[X] ADD: option to duplicate lightgroups
+[X] CHANGE: changed the way pattern json works
+[X] CHANGE: localization files (pt-br; en)
+[X] ADD: new patterns + site to create your own patterns
+
+[2.4 update 1]
+[X] FIX: disabled color (from point) not working on object
+[X] FIX: custom color (from point) not working on object
 
 --- todo (maybe) ---
 
