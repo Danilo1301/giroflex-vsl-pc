@@ -56,7 +56,6 @@ void WindowLightGroup::CreateLightGroups() {
 				CreateEditLightGroup();
 			};
 		}
-
 	}
 
 	window->AddItem("--------------------------------------");
@@ -110,6 +109,8 @@ void WindowLightGroup::CreateEditLightGroup() {
 		
 		Vehicles::TryAddAllVehicles();
 	};
+
+	auto pointsPositionFixed = window->AddCheckBox(Localization::GetLine("points_position_fixed"), &lightGroup->pointsPositionFixed);
 
 	auto size = window->AddNumberRange(Localization::GetLine("size"), &lightGroup->size, 0.0f, 10.0f);
 

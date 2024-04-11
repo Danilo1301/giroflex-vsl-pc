@@ -217,6 +217,9 @@ void Vehicle::DrawPoints() {
 			float y = (float)arch_fn_parabola((float)(i), curve, (float)(amountOfPoints - 1));
 			auto position = VehicleDummy::GetTransformedPosition(m_Vehicle, CVector(x, y, 0) + lightGroup->position + point->position);
 
+			//fixed position
+			if (lightGroup->pointsPositionFixed)
+				position = VehicleDummy::GetTransformedPosition(m_Vehicle, lightGroup->position + point->position);
 
 			CFont::SetOrientation(ALIGN_CENTER);
 			CFont::SetColor(CRGBA(255, 255, 255));
@@ -461,6 +464,10 @@ void Vehicle::RenderShadows()
 
 			auto offsetPos = lightGroup->position + CVector(x, y, 0) + point->position + CVector(shadow.position.x, shadow.position.y, 0);
 
+			//fixed position
+			if (lightGroup->pointsPositionFixed)
+				offsetPos = lightGroup->position + point->position + CVector(shadow.position.x, shadow.position.y, 0);
+
 			CVector_AddDir(&pos, forward, right, offsetPos.x, offsetPos.y);
 
 			//
@@ -687,6 +694,10 @@ void Vehicle::RegisterCoronas()
 			float x = (point_i * distance) - ((amountOfPoints - 1) * distance / 2);
 			float y = (float)arch_fn_parabola((float)(point_i), curve, (float)(amountOfPoints - 1));
 			auto position = CVector(x, y, 0) + lightGroup->position + point->position;
+
+			//fixed position
+			if (lightGroup->pointsPositionFixed)
+				position = lightGroup->position + point->position;
 
 			//color
 			CRGBA color = lightGroup->color1;

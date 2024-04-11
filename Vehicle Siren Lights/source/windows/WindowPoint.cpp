@@ -166,8 +166,13 @@ void WindowPoint::CreateEditPoint() {
 	
 	auto buttonClone = window->AddButton(Localization::GetLine("clone"));
 	buttonClone->m_OnClick = [window, lightGroup, point]() {
+		Vehicles::RemoveAllVehicles();
+
 		auto newPoint = lightGroup->AddPoint();
 		newPoint->FromJSON(point->ToJSON());
+		lightGroup->FindNewPatterns();
+
+		Vehicles::TryAddAllVehicles();
 
 		Menu::RemoveWindow(window);
 		Create();

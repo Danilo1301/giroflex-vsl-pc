@@ -53,6 +53,13 @@
 [X] FIX: disabled color (from point) not working on object
 [X] FIX: custom color (from point) not working on object
 
+[2.4 update 2]
+[X] ADD: window for LED options
+
+[2.4 update 3]
+[X] ADD: option to fix points position to (0, 0)
+[X] FIX: patterns not updating after cloning Point
+
 --- todo (maybe) ---
 
 [ ] ADD: option to show only current edditing lightgroup

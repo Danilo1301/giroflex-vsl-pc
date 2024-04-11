@@ -53,6 +53,7 @@ public:
 	bool usePatternColors = false;
 	CVector position = CVector(0, 0, 0);
 	std::vector<Point*> points;
+	bool pointsPositionFixed = false;
 	std::vector<PatternCycleStep*> patternCycleSteps;
 	int patternOffset = 0;
 	int offsetId = 0;
@@ -180,6 +181,8 @@ public:
 			value["points"].append( point->ToJSON() );
 		}
 
+		value["pointsPositionFixed"] = pointsPositionFixed;
+
 		value["patternCycleSteps"] = Json::arrayValue;
 		for (auto patternCycleStep : patternCycleSteps) {
 			value["patternCycleSteps"].append( PatternCycleStepToJSON(patternCycleStep) );
@@ -191,12 +194,12 @@ public:
 	}
 
 	void FromJSON(Json::Value value) {
-		name = value["name"].asString();
+		name = ValidateValue(value["name"], name).asString();
 
 		if (!value["lightbarSettings"].isNull())
 		{
 			lightbarSettings.useLightbarLeds = ValidateValue(value["lightbarSettings"]["useLightbarLeds"], lightbarSettings.useLightbarLeds).asBool();
-			lightbarSettings.object_prefix = value["lightbarSettings"]["object_prefix"].asString();
+			lightbarSettings.object_prefix = ValidateValue(value["lightbarSettings"]["object_prefix"], lightbarSettings.object_prefix).asString();
 			lightbarSettings.ledOnColor = ColorFromJSON(value["lightbarSettings"]["ledOnColor"]);
 			lightbarSettings.ledOffColor = ColorFromJSON(value["lightbarSettings"]["ledOffColor"]);
 		}
@@ -210,20 +213,20 @@ public:
 		color2 = ValidateColor(value["color2"], color2);
 		color3 = ValidateColor(value["color3"], color3);
 
-		reflect = value["reflect"].asBool();
-		turnOnSiren = value["turnOnSiren"].asBool();
-		reflectionDistance = value["reflectionDistance"].asFloat();
-		size = value["size"].asFloat();
-		distance = value["distance"].asFloat();
-		curve = value["curve"].asFloat();
-		nearClip = value["nearClip"].asFloat();
-		flareType = (eCoronaFlareType)value["flareType"].asInt();
-		flareDistance = value["flareDistance"].asFloat();
-		flareIntensity = value["flareIntensity"].asFloat();
-		type = (eCoronaType)value["type"].asInt();
-		direction = (eSirenDirection)value["direction"].asInt();
-		usePatternColors = value["usePatternColors"].asBool();
-		position = CVectorFromJSON(value["position"]);
+		reflect = ValidateValue(value["reflect"], reflect).asBool();
+		turnOnSiren = ValidateValue(value["turnOnSiren"], turnOnSiren).asBool();
+		reflectionDistance = ValidateValue(value["reflectionDistance"], reflectionDistance).asFloat();
+		size = ValidateValue(value["size"], size).asFloat();
+		distance = ValidateValue(value["distance"], distance).asFloat();
+		curve = ValidateValue(value["curve"], curve).asFloat();
+		nearClip = ValidateValue(value["nearClip"], nearClip).asFloat();
+		flareType = (eCoronaFlareType)ValidateValue(value["flareType"], (int)flareType).asInt();
+		flareDistance = ValidateValue(value["flareDistance"], flareDistance).asFloat();
+		flareIntensity = ValidateValue(value["flareIntensity"], flareIntensity).asFloat();
+		type = (eCoronaType)ValidateValue(value["type"], (int)type).asInt();
+		direction = (eSirenDirection)ValidateValue(value["direction"], (int)direction).asInt();
+		usePatternColors = ValidateValue(value["usePatternColors"], usePatternColors).asBool();
+		position = ValidateCVector(value["position"], position);
 		patternOffset = ValidateValue(value["patternOffset"], patternOffset).asInt();
 		offsetId = ValidateValue(value["offsetId"], offsetId).asInt();
 		useSmallWhiteCorona = ValidateValue(value["useSmallWhiteCorona"], useSmallWhiteCorona).asBool();
@@ -239,6 +242,8 @@ public:
 			points.push_back(point);
 		}
 
+		pointsPositionFixed = ValidateValue(value["pointsPositionFixed"], pointsPositionFixed).asBool();
+
 		for (size_t i = 0; i < value["patternCycleSteps"].size(); i++)
 		{
 			Json::Value patternCycleStepValue = value["patternCycleSteps"][i];
@@ -253,8 +258,6 @@ public:
 			else {
 				patternCycleSteps.push_back(patternCycleStep);
 			}
-
-			
 		}
 	}
 };
