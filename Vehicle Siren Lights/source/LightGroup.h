@@ -39,8 +39,9 @@ public:
 	CRGBA color3 = CRGBA(255, 255, 255);
 
 	bool reflect = false;
+	float reflectionIntensity = 0.5f;
+	float reflectionDistance = 50.0f;
 	bool turnOnSiren = true;
-	float reflectionDistance = 20.0f;
 	float size = 0.2f;
 	float distance = 0.3f;
 	float curve = 0.0f;
@@ -157,8 +158,9 @@ public:
 		value["color3"] = ColorToJSON(color3);
 
 		value["reflect"] = reflect;
-		value["turnOnSiren"] = turnOnSiren;
+		value["reflectionIntensity"] = reflectionIntensity;
 		value["reflectionDistance"] = reflectionDistance;
+		value["turnOnSiren"] = turnOnSiren;
 		value["size"] = size;
 		value["distance"] = distance;
 		value["curve"] = curve;
@@ -214,8 +216,9 @@ public:
 		color3 = ValidateColor(value["color3"], color3);
 
 		reflect = ValidateValue(value["reflect"], reflect).asBool();
-		turnOnSiren = ValidateValue(value["turnOnSiren"], turnOnSiren).asBool();
+		reflectionIntensity = ValidateValue(value["reflectionIntensity"], reflectionIntensity).asFloat();
 		reflectionDistance = ValidateValue(value["reflectionDistance"], reflectionDistance).asFloat();
+		turnOnSiren = ValidateValue(value["turnOnSiren"], turnOnSiren).asBool();
 		size = ValidateValue(value["size"], size).asFloat();
 		distance = ValidateValue(value["distance"], distance).asFloat();
 		curve = ValidateValue(value["curve"], curve).asFloat();

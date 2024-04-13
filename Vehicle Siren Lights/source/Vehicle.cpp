@@ -824,8 +824,15 @@ void Vehicle::RegisterCoronas()
 			);
 
 			if (lightGroup->reflect && enabled) {
+				CRGBA reflectColor = CRGBA(
+					ucharIntensity(color.r, lightGroup->reflectionIntensity),
+					ucharIntensity(color.g, lightGroup->reflectionIntensity),
+					ucharIntensity(color.b, lightGroup->reflectionIntensity),
+					color.a
+				);
+
 				CVector fposition = m_Vehicle->TransformFromObjectSpace(position);
-				Command< 0x09E5 >(fposition.x, fposition.y, fposition.z, (int)color.r, (int)color.g, (int)color.b, lightGroup->reflectionDistance);
+				Command< 0x09E5 >(fposition.x, fposition.y, fposition.z, (int)reflectColor.r, (int)reflectColor.g, (int)reflectColor.b, lightGroup->reflectionDistance);
 			}
 		}
 	}

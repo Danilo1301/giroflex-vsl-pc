@@ -198,7 +198,20 @@ void WindowLightGroup::CreateEditLightGroup() {
 
 	auto nearClip = window->AddNumberRange(Localization::GetLine("near_clip"), &lightGroup->nearClip, 0.0f, 10.0f);
 
+	static int directionVal;
+	directionVal = (int)lightGroup->direction;
+	auto optionsDirection = window->AddOptions(Localization::GetLine("light_direction"), &directionVal);
+	optionsDirection->AddOption(Localization::GetLine("light_direction_back"), (int)eSirenDirection::BACK);
+	optionsDirection->AddOption(Localization::GetLine("light_direction_both"), (int)eSirenDirection::BOTH);
+	optionsDirection->AddOption(Localization::GetLine("light_direction_front"), (int)eSirenDirection::FRONT);
+	optionsDirection->m_OnChange = [lightGroup]() {
+		lightGroup->direction = (eSirenDirection)directionVal;
+	};
+
 	auto checkBoxReflect = window->AddCheckBox(Localization::GetLine("reflect"), &lightGroup->reflect);
+
+	auto reflectionIntensity = window->AddNumberRange(Localization::GetLine("reflection_intensity"), &lightGroup->reflectionIntensity, 0.0f, 1.0f);
+	reflectionIntensity->m_HoldToChange = true;
 
 	auto reflectionDistance = window->AddNumberRange(Localization::GetLine("reflection_distance"), &lightGroup->reflectionDistance, 0.0f, 50.0f);
 	reflectionDistance->m_HoldToChange = true;
@@ -216,17 +229,6 @@ void WindowLightGroup::CreateEditLightGroup() {
 	offsetId->m_HoldToChange = true;
 
 	//auto checkBoxCReflect = window->AddCheckBox("Corona reflection", &lightGroup->cReflect);
-
-	static int directionVal;
-	directionVal = (int)lightGroup->direction;
-	auto optionsDirection = window->AddOptions(Localization::GetLine("light_direction"), &directionVal);
-	optionsDirection->AddOption(Localization::GetLine("light_direction_back"), (int)eSirenDirection::BACK);
-	optionsDirection->AddOption(Localization::GetLine("light_direction_both"), (int)eSirenDirection::BOTH);
-	optionsDirection->AddOption(Localization::GetLine("light_direction_front"), (int)eSirenDirection::FRONT);
-	optionsDirection->m_OnChange = [lightGroup]() {
-		lightGroup->direction = (eSirenDirection)directionVal;
-	};
-
 
 	static int typeVal;
 	typeVal = (int)lightGroup->type;

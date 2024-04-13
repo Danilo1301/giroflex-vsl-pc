@@ -60,6 +60,9 @@
 [X] ADD: option to fix points position to (0, 0)
 [X] FIX: patterns not updating after cloning Point
 
+[2.5]
+[] ADD: reflex intensity
+
 --- todo (maybe) ---
 
 [ ] ADD: option to show only current edditing lightgroup
