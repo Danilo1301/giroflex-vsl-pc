@@ -69,8 +69,6 @@ void Mod::Update() {
 		}
 	}
 
-
-
 	//
 
 	if (Keybinds::toggleLights.CheckKeybind())

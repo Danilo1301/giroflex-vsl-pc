@@ -21,7 +21,12 @@ public:
 	CRGBA customColor = CRGBA(255, 255, 0);
 
 	CRGBA disabledColor = CRGBA(0, 0, 0, 255);
+
+	bool useCustomEnabledColor = false;
+	CRGBA enabledColor = CRGBA(255, 255, 255);
+
 	LightGroupShadow shadow;
+
 	LightGroupRotateObject rotateObject;
 
 	/*
@@ -55,6 +60,10 @@ public:
 		value["customColor"] = ColorToJSON(customColor);
 
 		value["disabledColor"] = ColorToJSON(disabledColor);
+
+		value["useCustomEnabledColor"] = useCustomEnabledColor;
+		value["enabledColor"] = ColorToJSON(enabledColor);
+
 		//value["sirenPosition"] = (int)sirenPosition;
 
 		Json::Value shadowValue = Json::objectValue;
@@ -88,7 +97,11 @@ public:
 		useCustomColor = ValidateValue(value["useCustomColor"], useCustomColor).asBool();;
 		customColor = ValidateColor(value["customColor"], customColor);
 
-		disabledColor = ColorFromJSON(value["disabledColor"]);
+		disabledColor = ValidateColor(value["disabledColor"], disabledColor);
+
+		useCustomEnabledColor = ValidateValue(value["useCustomEnabledColor"], useCustomEnabledColor).asBool();;
+		enabledColor = ValidateColor(value["enabledColor"], enabledColor);
+
 		//sirenPosition = (eSirenPosition)value["sirenPosition"].asInt();
 
 		Json::Value shadowValue = value["shadow"];

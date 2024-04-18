@@ -136,7 +136,16 @@ void WindowPoint::CreateEditPoint() {
 			Menu::m_ActiveWindow = window;
 		});
 	};
+
+	auto useCustomEnabledColor = window->AddCheckBox(Localization::GetLine("use_custom_enabled_color"), &point->useCustomEnabledColor);
 	
+	auto buttonEnabledColor = window->AddButton(Localization::GetLine("enabled_object_color"));
+	buttonEnabledColor->AddColorIndicator(&point->enabledColor, CVector2D(20, 0));
+	buttonEnabledColor->m_OnClick = [window, point]() {
+		Menu::CreateColorPickerWindow(&point->enabledColor, [window]() {
+			Menu::m_ActiveWindow = window;
+		});
+	};
 
 	auto buttonShadow = window->AddButton(Localization::GetLine("edit_shadow"));
 	buttonShadow->m_OnClick = [point, window]() {

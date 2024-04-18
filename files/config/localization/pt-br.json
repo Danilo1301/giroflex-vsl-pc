@@ -64,6 +64,8 @@
    "custom_color": "Cor customizada",
    "select_object": "Selecionar objeto",
    "disabled_object_color": "Cor desligado (objeto)",
+   "use_custom_enabled_color": "Usar cor customizada - ligado (objeto)",
+   "enabled_object_color": "Cor ligado (objeto)",
    
    "select_edit_pattern": "[ Pattern: %s, Tempo: %d ]",
    "add_pattern": "Adicionar pattern",

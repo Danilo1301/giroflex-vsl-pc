@@ -326,10 +326,13 @@ void Vehicle::RenderBefore()
 
 				//custom color
 				if (point->useCustomColor)
-				{
 					color = point->customColor;
-				}
 
+				//custom enabled color
+				if (point->useCustomEnabledColor)
+					color = point->enabledColor;
+
+				//led colors
 				if (lightGroup->lightbarSettings.useLightbarLeds)
 				{
 					color = lightGroup->lightbarSettings.ledOnColor;
@@ -356,13 +359,10 @@ void Vehicle::RenderBefore()
 
 				if (!enabled)
 				{
+					color = point->disabledColor;
+
 					if (lightGroup->lightbarSettings.useLightbarLeds)
-					{
 						color = lightGroup->lightbarSettings.ledOffColor;
-					}
-					else {
-						color = point->disabledColor;
-					}
 				}
 
 				//

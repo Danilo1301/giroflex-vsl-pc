@@ -64,6 +64,8 @@
    "custom_color": "Custom color",
    "select_object": "Select object",
    "disabled_object_color": "Disabled color (for object)",
+   "use_custom_enabled_color": "Use custom color - enabled (for object)",
+   "enabled_object_color": "Enabled color (for object)",
    
    "select_edit_pattern": "[ Pattern: %s, Duration: %d ]",
    "add_pattern": "Add pattern",
