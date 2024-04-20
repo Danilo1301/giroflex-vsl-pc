@@ -19,10 +19,10 @@
    },
    "curve" : 0.0,
    "direction" : 1,
-   "distance" : 0.42999833822250366,
+   "distance" : 0.41299855709075928,
    "flareDistance" : 150.0,
-   "flareIntensity" : 1.0,
-   "flareType" : 0,
+   "flareIntensity" : 0.50500047206878662,
+   "flareType" : 1,
    "keybindMenu" : {
       "alt" : false,
       "ctrl" : true,
@@ -42,7 +42,8 @@
          "g" : 255,
          "r" : 255
       },
-      "object_prefix" : "lightbar-led-"
+      "object_prefix" : "lightbar-led-",
+      "useLightbarLeds" : false
    },
    "name" : "Lightbar",
    "nearClip" : 0.30000001192092896,
@@ -83,6 +84,18 @@
             "g" : 255,
             "r" : 255
          },
+         "disabledColor" : {
+            "a" : 255,
+            "b" : 0,
+            "g" : 0,
+            "r" : 0
+         },
+         "enabledColor" : {
+            "a" : 255,
+            "b" : 255,
+            "g" : 255,
+            "r" : 255
+         },
          "name" : "",
          "object" : "",
          "position" : {
@@ -112,12 +125,25 @@
             "textureIndex" : 0,
             "width" : 3.0
          },
-         "useCustomColor" : false
+         "useCustomColor" : false,
+         "useCustomEnabledColor" : false
       },
       {
          "customColor" : {
             "a" : 255,
             "b" : 0,
+            "g" : 255,
+            "r" : 255
+         },
+         "disabledColor" : {
+            "a" : 255,
+            "b" : 0,
+            "g" : 0,
+            "r" : 0
+         },
+         "enabledColor" : {
+            "a" : 255,
+            "b" : 255,
             "g" : 255,
             "r" : 255
          },
@@ -150,12 +176,25 @@
             "textureIndex" : 0,
             "width" : 3.0
          },
-         "useCustomColor" : false
+         "useCustomColor" : false,
+         "useCustomEnabledColor" : false
       },
       {
          "customColor" : {
             "a" : 255,
             "b" : 0,
+            "g" : 255,
+            "r" : 255
+         },
+         "disabledColor" : {
+            "a" : 255,
+            "b" : 0,
+            "g" : 0,
+            "r" : 0
+         },
+         "enabledColor" : {
+            "a" : 255,
+            "b" : 255,
             "g" : 255,
             "r" : 255
          },
@@ -188,12 +227,25 @@
             "textureIndex" : 0,
             "width" : 3.0
          },
-         "useCustomColor" : false
+         "useCustomColor" : false,
+         "useCustomEnabledColor" : false
       },
       {
          "customColor" : {
             "a" : 255,
             "b" : 0,
+            "g" : 255,
+            "r" : 255
+         },
+         "disabledColor" : {
+            "a" : 255,
+            "b" : 0,
+            "g" : 0,
+            "r" : 0
+         },
+         "enabledColor" : {
+            "a" : 255,
+            "b" : 255,
             "g" : 255,
             "r" : 255
          },
@@ -226,18 +278,21 @@
             "textureIndex" : 0,
             "width" : 3.0
          },
-         "useCustomColor" : false
+         "useCustomColor" : false,
+         "useCustomEnabledColor" : false
       }
    ],
+   "pointsPositionFixed" : false,
    "position" : {
       "x" : 0.0,
-      "y" : 0.043999947607517242,
-      "z" : 1.1300008296966553
+      "y" : 0.052000042051076889,
+      "z" : 1.1520006656646729
    },
    "reflect" : false,
    "reflectionDistance" : 20.0,
+   "reflectionIntensity" : 0.5,
    "size" : 0.20000000298023224,
-   "smallWhiteCoronaScale" : 0.40000000596046448,
+   "smallWhiteCoronaScale" : 2.0,
    "smallWhiteCoronaType" : 9,
    "turnOnSiren" : true,
    "type" : 0,

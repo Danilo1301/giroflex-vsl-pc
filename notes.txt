@@ -63,7 +63,9 @@
 [2.4 update 4]
 [X] ADD: reflex intensity
 
-[2.4 update 5]  (yes, there are like 5 updates now, but whatever, i dont want a 2.4.1)
+(yes, there are like 5 updates now, but whatever, i dont want a 2.4.1)
+
+[2.4 update 5]
 [X] ADD: option to make objects use a 'different' color instead of color1, 2 or 3 (customEnabledColor)
 
 --- todo (maybe) ---

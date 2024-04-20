@@ -42,7 +42,8 @@
          "g" : 255,
          "r" : 255
       },
-      "object_prefix" : "lightbar-led-"
+      "object_prefix" : "lightbar-led-",
+      "useLightbarLeds" : false
    },
    "name" : "Headlights",
    "nearClip" : 0.30000001192092896,
@@ -83,6 +84,18 @@
             "g" : 255,
             "r" : 255
          },
+         "disabledColor" : {
+            "a" : 255,
+            "b" : 0,
+            "g" : 0,
+            "r" : 0
+         },
+         "enabledColor" : {
+            "a" : 255,
+            "b" : 255,
+            "g" : 255,
+            "r" : 255
+         },
          "name" : "",
          "object" : "",
          "position" : {
@@ -112,12 +125,25 @@
             "textureIndex" : 2,
             "width" : 1.4599777460098267
          },
-         "useCustomColor" : false
+         "useCustomColor" : false,
+         "useCustomEnabledColor" : false
       },
       {
          "customColor" : {
             "a" : 255,
             "b" : 0,
+            "g" : 255,
+            "r" : 255
+         },
+         "disabledColor" : {
+            "a" : 255,
+            "b" : 0,
+            "g" : 0,
+            "r" : 0
+         },
+         "enabledColor" : {
+            "a" : 255,
+            "b" : 255,
             "g" : 255,
             "r" : 255
          },
@@ -150,16 +176,19 @@
             "textureIndex" : 2,
             "width" : 1.4599777460098267
          },
-         "useCustomColor" : false
+         "useCustomColor" : false,
+         "useCustomEnabledColor" : false
       }
    ],
+   "pointsPositionFixed" : false,
    "position" : {
       "x" : 0.0,
-      "y" : 2.4760041236877441,
-      "z" : 0.036001630127429962
+      "y" : 2.438002347946167,
+      "z" : -0.019998375326395035
    },
    "reflect" : false,
    "reflectionDistance" : 20.0,
+   "reflectionIntensity" : 0.5,
    "size" : 0.31999990344047546,
    "smallWhiteCoronaScale" : 0.40000000596046448,
    "smallWhiteCoronaType" : 0,

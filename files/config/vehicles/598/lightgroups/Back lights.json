@@ -42,7 +42,8 @@
          "g" : 255,
          "r" : 255
       },
-      "object_prefix" : "lightbar-led-"
+      "object_prefix" : "lightbar-led-",
+      "useLightbarLeds" : false
    },
    "name" : "Back lights",
    "nearClip" : 0.30000001192092896,
@@ -83,41 +84,15 @@
             "g" : 255,
             "r" : 255
          },
-         "name" : "",
-         "object" : "",
-         "position" : {
-            "x" : 0.0,
-            "y" : 0.0,
-            "z" : 0.0
-         },
-         "rotateObject" : {
-            "axis" : 2,
-            "rotate" : false,
-            "rotateAlways" : false,
-            "speed" : 1.0
-         },
-         "shadow" : {
-            "angle" : 0.0,
-            "enabled" : false,
-            "height" : 3.0,
-            "intensity" : 1.0,
-            "position" : {
-               "x" : 0.0,
-               "y" : 0.0,
-               "z" : 0.0
-            },
-            "rotate" : false,
-            "rotateOffsetAngle" : 0.0,
-            "rotateOffsetPos" : 0.0,
-            "textureIndex" : 0,
-            "width" : 3.0
-         },
-         "useCustomColor" : false
-      },
-      {
-         "customColor" : {
+         "disabledColor" : {
             "a" : 255,
             "b" : 0,
+            "g" : 0,
+            "r" : 0
+         },
+         "enabledColor" : {
+            "a" : 255,
+            "b" : 255,
             "g" : 255,
             "r" : 255
          },
@@ -150,16 +125,70 @@
             "textureIndex" : 0,
             "width" : 3.0
          },
-         "useCustomColor" : false
+         "useCustomColor" : false,
+         "useCustomEnabledColor" : false
+      },
+      {
+         "customColor" : {
+            "a" : 255,
+            "b" : 0,
+            "g" : 255,
+            "r" : 255
+         },
+         "disabledColor" : {
+            "a" : 255,
+            "b" : 0,
+            "g" : 0,
+            "r" : 0
+         },
+         "enabledColor" : {
+            "a" : 255,
+            "b" : 255,
+            "g" : 255,
+            "r" : 255
+         },
+         "name" : "",
+         "object" : "",
+         "position" : {
+            "x" : 0.0,
+            "y" : 0.0,
+            "z" : 0.0
+         },
+         "rotateObject" : {
+            "axis" : 2,
+            "rotate" : false,
+            "rotateAlways" : false,
+            "speed" : 1.0
+         },
+         "shadow" : {
+            "angle" : 0.0,
+            "enabled" : false,
+            "height" : 3.0,
+            "intensity" : 1.0,
+            "position" : {
+               "x" : 0.0,
+               "y" : 0.0,
+               "z" : 0.0
+            },
+            "rotate" : false,
+            "rotateOffsetAngle" : 0.0,
+            "rotateOffsetPos" : 0.0,
+            "textureIndex" : 0,
+            "width" : 3.0
+         },
+         "useCustomColor" : false,
+         "useCustomEnabledColor" : false
       }
    ],
+   "pointsPositionFixed" : false,
    "position" : {
       "x" : 0.0,
-      "y" : -2.7540013790130615,
-      "z" : 0.07000163197517395
+      "y" : -2.7020027637481689,
+      "z" : 0.068001642823219299
    },
    "reflect" : false,
    "reflectionDistance" : 20.0,
+   "reflectionIntensity" : 0.5,
    "size" : 0.20000000298023224,
    "smallWhiteCoronaScale" : 0.40000000596046448,
    "smallWhiteCoronaType" : 0,
