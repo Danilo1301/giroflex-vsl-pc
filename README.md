@@ -64,6 +64,6 @@ Isso acontece quando você usa o mod SilentPatch. Não há uma opção no Silent
 
 [plugin-sdk](https://github.com/DK22Pac/plugin-sdk)
 
-plugin-sdk commit: https://github.com/DK22Pac/plugin-sdk/commit/42ddb127d1a7dffcce0c74938da2afc001d90d42
+plugin-sdk commit: https://github.com/DK22Pac/plugin-sdk/commit/62a1080902627b3edec0124acf02127ba8c0dcdb
 
 Visual Studio 2019 (no XP support)
