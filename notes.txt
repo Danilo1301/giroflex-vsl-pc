@@ -71,6 +71,7 @@
 [2.5]
 [X] ADD: position lightgroup (with LEFT; MIDDLE; RIGHT)
 [X] ADD: editing options (showThisLightgroupOnly)
+[X] ADD: lightId offset to main settings
 
 --- todo (maybe) ---
 

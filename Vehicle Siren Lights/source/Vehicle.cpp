@@ -14,6 +14,7 @@
 #include "CShadows.h"
 
 float Vehicle::m_MatAmbient = 3.5f;
+int Vehicle::m_LightIdOffset = 20;
 
 static std::list<std::pair<unsigned int*, unsigned int>> m_ResetEntries;
 
@@ -683,7 +684,8 @@ void Vehicle::RegisterCoronas()
 		distanceFromPlayer = DistanceBetweenPoints(ped->GetPosition(), m_Vehicle->GetPosition());
 	}
 
-	int lightId = reinterpret_cast<unsigned int>(m_Vehicle) + 50;
+	//check PC\Jogos\GTA San Andreas\lightId offset mods.txt
+	int lightId = reinterpret_cast<unsigned int>(m_Vehicle) + Vehicle::m_LightIdOffset;
 
 	for (auto pair : m_LightGroupData)
 	{
@@ -699,8 +701,6 @@ void Vehicle::RegisterCoronas()
 		auto step = pattern->steps[stepLoop->StepIndex];
 
 		if (!step) continue;
-
-		lightId += lightGroup->offsetId;
 
 		for (size_t point_i = 0; point_i < lightGroup->points.size(); point_i++)
 		{

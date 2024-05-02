@@ -249,6 +249,8 @@ void Config::SaveSettings() {
 	Json::Value value = Json::objectValue;
 
 	value["material_ambient"] = Vehicle::m_MatAmbient;
+	value["light_id_offset"] = Vehicle::m_LightIdOffset;
+
 	value["keybinds"] = Keybinds::ToJSON();
 	value["language"] = Localization::m_CurrentLanguage;
 
@@ -267,7 +269,8 @@ void Config::LoadSettings() {
 
 	Json::Value value = ReadFile(path);
 
-	Vehicle::m_MatAmbient = value["material_ambient"].asFloat();
+	Vehicle::m_MatAmbient = ValidateValue(value["material_ambient"], Vehicle::m_MatAmbient).asFloat();
+	Vehicle::m_LightIdOffset = ValidateValue(value["light_id_offset"], Vehicle::m_LightIdOffset).asInt();
 	Keybinds::FromJSON(value["keybinds"]);
 	if (!value["language"].isNull()) Localization::m_CurrentLanguage = value["language"].asString();
 

@@ -12,6 +12,9 @@ void WindowSettings::CreateSettings() {
 	auto matAmbient = window->AddNumberRange(Localization::GetLine("settings_material_ambient"), &Vehicle::m_MatAmbient, 0.0f, 20.0f);
 	matAmbient->m_AddBy = 0.3f;
 
+	auto lightIdOffset = window->AddNumberRange("Light ID offset", &Vehicle::m_LightIdOffset, 0, 999999);
+	lightIdOffset->m_HoldToChange = true;
+
 	auto back = window->AddButton(Localization::GetLine("back"));
 	back->m_OnClick = [window]() {
 		Menu::RemoveWindow(window);

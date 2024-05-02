@@ -8,6 +8,8 @@
 class Vehicle {
 public:
 	static float m_MatAmbient;
+	static int m_LightIdOffset;
+
 	CVehicle* m_Vehicle;
 
 	std::map<LightGroup*, VehiclePatternData*> m_LightGroupData;

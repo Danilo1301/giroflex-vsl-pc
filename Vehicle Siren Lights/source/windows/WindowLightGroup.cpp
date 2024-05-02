@@ -251,9 +251,6 @@ void WindowLightGroup::CreateEditLightGroup() {
 		Vehicles::TryAddAllVehicles();
 	};
 
-	auto offsetId = window->AddNumberRange("Light ID offset", &lightGroup->offsetId, -999999, 999999);
-	offsetId->m_HoldToChange = true;
-
 	//auto checkBoxCReflect = window->AddCheckBox("Corona reflection", &lightGroup->cReflect);
 
 	static int typeVal;

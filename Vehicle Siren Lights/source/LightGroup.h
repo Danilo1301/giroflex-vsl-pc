@@ -59,7 +59,6 @@ public:
 	bool pointsPositionFixed = false;
 	std::vector<PatternCycleStep*> patternCycleSteps;
 	int patternOffset = 0;
-	int offsetId = 0;
 	bool useSmallWhiteCorona = true;
 	float smallWhiteCoronaScale = 0.4f;
 	eCoronaType smallWhiteCoronaType = eCoronaType::CORONATYPE_SHINYSTAR;
@@ -197,7 +196,6 @@ public:
 		value["usePatternColors"] = usePatternColors;
 		value["position"] = CVectorToJSON(position);
 		value["patternOffset"] = patternOffset;
-		value["offsetId"] = offsetId;
 		value["useSmallWhiteCorona"] = useSmallWhiteCorona;
 		value["smallWhiteCoronaScale"] = smallWhiteCoronaScale;
 		value["smallWhiteCoronaType"] = (int)smallWhiteCoronaType;
@@ -257,7 +255,6 @@ public:
 		usePatternColors = ValidateValue(value["usePatternColors"], usePatternColors).asBool();
 		position = ValidateCVector(value["position"], position);
 		patternOffset = ValidateValue(value["patternOffset"], patternOffset).asInt();
-		offsetId = ValidateValue(value["offsetId"], offsetId).asInt();
 		useSmallWhiteCorona = ValidateValue(value["useSmallWhiteCorona"], useSmallWhiteCorona).asBool();
 		smallWhiteCoronaScale = ValidateValue(value["smallWhiteCoronaScale"], smallWhiteCoronaScale).asFloat();
 		smallWhiteCoronaType = (eCoronaType)ValidateValue(value["smallWhiteCoronaType"], (int)smallWhiteCoronaType).asInt();
