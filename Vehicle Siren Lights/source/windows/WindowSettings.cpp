@@ -10,7 +10,7 @@ void WindowSettings::CreateSettings() {
 	auto window = Menu::AddWindow(Menu::m_DefaultWindowTitle, Localization::GetLine("main_settings"));
 
 	auto matAmbient = window->AddNumberRange(Localization::GetLine("settings_material_ambient"), &Vehicle::m_MatAmbient, 0.0f, 20.0f);
-	matAmbient->m_AddBy = 0.3f;
+	matAmbient->m_AddBy = 0.1f;
 
 	auto lightIdOffset = window->AddNumberRange("Light ID offset", &Vehicle::m_LightIdOffset, 0, 999999);
 	lightIdOffset->m_HoldToChange = true;

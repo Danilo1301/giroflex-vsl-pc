@@ -70,8 +70,10 @@
 
 [2.5]
 [X] ADD: position lightgroup (with LEFT; MIDDLE; RIGHT)
-[X] ADD: editing options (showThisLightgroupOnly)
+[X] ADD: editing options (option to show only current edditing lightgroup)
 [X] ADD: lightId offset to main settings
+[X] ADD: option to freeze lightgroup
+[X] ADD: option to keep lights always enabled
 
 --- todo (maybe) ---
 

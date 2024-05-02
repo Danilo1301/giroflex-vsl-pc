@@ -62,6 +62,8 @@ public:
 	bool useSmallWhiteCorona = true;
 	float smallWhiteCoronaScale = 0.4f;
 	eCoronaType smallWhiteCoronaType = eCoronaType::CORONATYPE_SHINYSTAR;
+	bool freezeLights = false;
+	bool alwaysEnabled = false;
 
 	LightGroup(int modelId) {
 		this->modelId = modelId;
@@ -195,22 +197,25 @@ public:
 		value["direction"] = (int)direction;
 		value["usePatternColors"] = usePatternColors;
 		value["position"] = CVectorToJSON(position);
-		value["patternOffset"] = patternOffset;
-		value["useSmallWhiteCorona"] = useSmallWhiteCorona;
-		value["smallWhiteCoronaScale"] = smallWhiteCoronaScale;
-		value["smallWhiteCoronaType"] = (int)smallWhiteCoronaType;
 
 		value["points"] = Json::arrayValue;
 		for (auto point : points) {
-			value["points"].append( point->ToJSON() );
+			value["points"].append(point->ToJSON());
 		}
 
 		value["pointsPositionFixed"] = pointsPositionFixed;
 
 		value["patternCycleSteps"] = Json::arrayValue;
 		for (auto patternCycleStep : patternCycleSteps) {
-			value["patternCycleSteps"].append( PatternCycleStepToJSON(patternCycleStep) );
+			value["patternCycleSteps"].append(PatternCycleStepToJSON(patternCycleStep));
 		}
+
+		value["patternOffset"] = patternOffset;
+		value["useSmallWhiteCorona"] = useSmallWhiteCorona;
+		value["smallWhiteCoronaScale"] = smallWhiteCoronaScale;
+		value["smallWhiteCoronaType"] = (int)smallWhiteCoronaType;
+		value["freezeLights"] = freezeLights;
+		value["alwaysEnabled"] = alwaysEnabled;
 
 		value["version"] = Mod::m_Version;
 
@@ -228,10 +233,7 @@ public:
 			lightbarSettings.ledOffColor = ColorFromJSON(value["lightbarSettings"]["ledOffColor"]);
 		}
 
-		if (!value["keybindMenu"].isNull())
-		{
-			keybindMenu.FromJSON(value["keybindMenu"]);
-		}
+		if (!value["keybindMenu"].isNull()) keybindMenu.FromJSON(value["keybindMenu"]);
 
 		isPositionLightGroup = ValidateValue(value["isPositionLightGroup"], isPositionLightGroup).asBool();
 
@@ -254,10 +256,6 @@ public:
 		direction = (eSirenDirection)ValidateValue(value["direction"], (int)direction).asInt();
 		usePatternColors = ValidateValue(value["usePatternColors"], usePatternColors).asBool();
 		position = ValidateCVector(value["position"], position);
-		patternOffset = ValidateValue(value["patternOffset"], patternOffset).asInt();
-		useSmallWhiteCorona = ValidateValue(value["useSmallWhiteCorona"], useSmallWhiteCorona).asBool();
-		smallWhiteCoronaScale = ValidateValue(value["smallWhiteCoronaScale"], smallWhiteCoronaScale).asFloat();
-		smallWhiteCoronaType = (eCoronaType)ValidateValue(value["smallWhiteCoronaType"], (int)smallWhiteCoronaType).asInt();
 
 		for (size_t i = 0; i < value["points"].size(); i++)
 		{
@@ -285,5 +283,12 @@ public:
 				patternCycleSteps.push_back(patternCycleStep);
 			}
 		}
+
+		patternOffset = ValidateValue(value["patternOffset"], patternOffset).asInt();
+		useSmallWhiteCorona = ValidateValue(value["useSmallWhiteCorona"], useSmallWhiteCorona).asBool();
+		smallWhiteCoronaScale = ValidateValue(value["smallWhiteCoronaScale"], smallWhiteCoronaScale).asFloat();
+		smallWhiteCoronaType = (eCoronaType)ValidateValue(value["smallWhiteCoronaType"], (int)smallWhiteCoronaType).asInt();
+		freezeLights = ValidateValue(value["freezeLights"], freezeLights).asBool();
+		alwaysEnabled = ValidateValue(value["alwaysEnabled"], alwaysEnabled).asBool();
 	}
 };

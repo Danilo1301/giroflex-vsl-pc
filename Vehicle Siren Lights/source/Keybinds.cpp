@@ -3,7 +3,7 @@
 Keybind Keybinds::openMenu("L", KEYBIND_FLAGS::CTRL);
 Keybind Keybinds::toggleDebug("D", KEYBIND_FLAGS::CTRL | KEYBIND_FLAGS::SHIFT);
 Keybind Keybinds::toggleLights("J", KEYBIND_FLAGS::CTRL);
-Keybind Keybinds::editorSlower("", KEYBIND_FLAGS::ALT);
+Keybind Keybinds::editorSlower("", KEYBIND_FLAGS::SHIFT);
 Keybind Keybinds::reloadConfig("R", KEYBIND_FLAGS::CTRL);
 
 Json::Value Keybinds::ToJSON()

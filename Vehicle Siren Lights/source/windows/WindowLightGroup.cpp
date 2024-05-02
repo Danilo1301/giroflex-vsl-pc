@@ -318,6 +318,10 @@ void WindowLightGroup::CreateEditLightGroup() {
 	auto buttonKey = window->AddButtonKey("Key to toggle", lightGroup->keys);
 	*/
 
+	window->AddCheckBox(Localization::GetLine("freeze_lights"), &lightGroup->freezeLights);
+
+	window->AddCheckBox(Localization::GetLine("lights_always_enabled"), &lightGroup->alwaysEnabled);
+
 	auto buttonKeybind = window->AddButtonKey(Localization::GetLine("lightgroup_keybind"), &lightGroup->keybindMenu);
 	
 	buttonKeybind->m_OnClick = [window, lightGroup]() {

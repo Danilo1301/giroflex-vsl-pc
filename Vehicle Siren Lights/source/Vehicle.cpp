@@ -349,6 +349,7 @@ void Vehicle::RenderBefore()
 				else {
 					if (ToUpper(name).compare(ToUpper(point->object)) != 0) continue;
 				}
+				//TestHelper::AddLine("found " + name);
 
 				//
 
@@ -361,11 +362,9 @@ void Vehicle::RenderBefore()
 				else {
 					enabled = point->GetIsEnabled(step, point_i);
 				}
-				//
 
-				//TestHelper::AddLine("found " + name);
-
-				if (!vehiclePatternData->lightsOn) enabled = false;
+				if (lightGroup->freezeLights) enabled = true;
+				if (!vehiclePatternData->lightsOn && !lightGroup->alwaysEnabled) enabled = false;
 				if (WindowEditingOptions::FreezeLights) enabled = true;
 				if (WindowEditingOptions::ShowCurrentEditingLightGroup)
 					if (WindowLightGroup::m_LightGroup != lightGroup) enabled = false;
@@ -528,6 +527,8 @@ void Vehicle::RenderShadows()
 				color = point->customColor;
 			}
 
+			//
+
 			bool enabled = true;
 			
 			if (lightGroup->isPositionLightGroup)
@@ -538,7 +539,8 @@ void Vehicle::RenderShadows()
 				enabled = point->GetIsEnabled(step, point_i);
 			}
 			
-			if (!vehiclePatternData->lightsOn) enabled = false;
+			if (lightGroup->freezeLights) enabled = true;
+			if (!vehiclePatternData->lightsOn && !lightGroup->alwaysEnabled) enabled = false;
 			if (WindowEditingOptions::FreezeLights) enabled = true;
 			if (WindowEditingOptions::ShowCurrentEditingLightGroup)
 				if (WindowLightGroup::m_LightGroup != lightGroup) enabled = false;
@@ -633,7 +635,15 @@ void Vehicle::UpdatePatternAndSteps() {
 
 		vehiclePatternData->patternLoop->DontChangeSteps = !vehiclePatternData->autoChangePattern; //manually change
 
-		if (vehiclePatternData->paused || !vehiclePatternData->lightsOn) continue;
+		if (vehiclePatternData->paused) continue;
+		
+		if (!vehiclePatternData->lightsOn)
+		{
+			if (!lightGroup->alwaysEnabled)
+			{
+				continue;
+			}
+		}
 
 		auto stepLoop = vehiclePatternData->stepLoop;
 		auto patternLoop = vehiclePatternData->patternLoop;
@@ -750,7 +760,8 @@ void Vehicle::RegisterCoronas()
 				enabled = point->GetIsEnabled(step, point_i);
 			}
 
-			if (!vehiclePatternData->lightsOn) enabled = false;
+			if (lightGroup->freezeLights) enabled = true;
+			if (!vehiclePatternData->lightsOn && !lightGroup->alwaysEnabled) enabled = false;
 			if (WindowEditingOptions::FreezeLights) enabled = true;
 			if (WindowEditingOptions::ShowCurrentEditingLightGroup)
 				if (WindowLightGroup::m_LightGroup != lightGroup) enabled = false;

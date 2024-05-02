@@ -52,6 +52,15 @@ void PositionEditor::Draw() {
 
 	Menu::DrawString("Edit position", position.x + 10.0f, position.y + 10.0f, textColor);
 
+	/*
+	CVector2D keys1Position = CVector2D(position.x + 100.0f, position.y + 40.0f);
+	Menu::DrawArrowKeyButton(keys1Position.x + (20 + 2) * 0, keys1Position.y, eArrowDirection::LEFT, 20, 20);
+	Menu::DrawArrowKeyButton(keys1Position.x + (20 + 2) * 1, keys1Position.y, eArrowDirection::DOWN, 20, 20);
+	Menu::DrawArrowKeyButton(keys1Position.x + (20 + 2) * 1, keys1Position.y - (20 + 2), eArrowDirection::UP, 20, 20);
+	Menu::DrawArrowKeyButton(keys1Position.x + (20 + 2) * 2, keys1Position.y, eArrowDirection::RIGHT, 20, 20);
+	Menu::DrawString("Move", keys1Position.x + 70, keys1Position.y, CRGBA(255, 255, 255));
+	*/
+
 	CVector2D keys1Position = CVector2D(position.x + 100.0f, position.y + 40.0f);
 	Menu::DrawKeyButton("A", keys1Position.x + (20 + 2) * 0, keys1Position.y, 20, 20);
 	Menu::DrawKeyButton("S", keys1Position.x + (20 + 2) * 1, keys1Position.y, 20, 20);
@@ -59,13 +68,16 @@ void PositionEditor::Draw() {
 	Menu::DrawKeyButton("D", keys1Position.x + (20 + 2) * 2, keys1Position.y, 20, 20);
 	Menu::DrawString("Move", keys1Position.x + 70, keys1Position.y, CRGBA(255, 255, 255));
 
+	/*
 	CVector2D keys2Position = CVector2D(position.x + 240.0f, position.y + 30.0f);
-	//Menu::DrawKeyButton(Keybinds::editorUpDown.GetKeybindString(), keys2Position.x, keys2Position.y, 50, 20);
-	//Menu::DrawString("+", keys2Position.x + 55.0f, keys2Position.y, CRGBA(255, 255, 255));
-	
-	//Menu::DrawKeyButton("K", 70 + keys2Position.x, keys2Position.y - 15, 20, 20);
-	//Menu::DrawKeyButton("M", 70 + keys2Position.x, keys2Position.y + 15, 20, 20);
+	Menu::DrawKeyButton("CTRL", keys2Position.x, keys2Position.y, 50, 20);
+	Menu::DrawString("+", keys2Position.x + 55.0f, keys2Position.y, CRGBA(255, 255, 255));
+	Menu::DrawArrowKeyButton(70 + keys2Position.x, keys2Position.y - 15, eArrowDirection::UP, 20, 20);
+	Menu::DrawArrowKeyButton(70 + keys2Position.x, keys2Position.y + 15, eArrowDirection::DOWN, 20, 20);
+	Menu::DrawString("Move Up/Down", keys2Position.x + 100, keys2Position.y, CRGBA(255, 255, 255));
+	*/
 
+	CVector2D keys2Position = CVector2D(position.x + 240.0f, position.y + 30.0f);
 	Menu::DrawArrowKeyButton(70 + keys2Position.x, keys2Position.y - 15, eArrowDirection::UP, 20, 20);
 	Menu::DrawArrowKeyButton(70 + keys2Position.x, keys2Position.y + 15, eArrowDirection::DOWN, 20, 20);
 
