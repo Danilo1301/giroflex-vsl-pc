@@ -2,9 +2,9 @@
 
 <h1>Required</h1>
 
-1. CLEO
-2. Modloader
-3. Version **GTA 1.0 US**
+1. Version **GTA SA 1.0 US**
+2. CLEO or any ASI Loader
+3. Modloader
 4. Open Limit Adjuster or Fastman92 Limit Adjuster
 
 <h1>How to install</h1>
@@ -22,6 +22,8 @@ Press CTRL + J to enable/disable lights only
 Press CTRL + R to reload config
 
 Debug: CTRL + SHIFT + D
+
+You can change the keys in 'Vehicle Siren Lights\data\settings.json'
 
 <h1>Tutorials</h1>
 

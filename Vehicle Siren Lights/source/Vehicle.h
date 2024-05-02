@@ -8,7 +8,6 @@
 class Vehicle {
 public:
 	static float m_MatAmbient;
-	static bool m_FreezeLights;
 	CVehicle* m_Vehicle;
 
 	std::map<LightGroup*, VehiclePatternData*> m_LightGroupData;

@@ -3,6 +3,7 @@
 #include "windows/WindowMain.h"
 #include "windows/WindowTest.h"
 #include "windows/WindowLightgroupMenu.h"
+#include "windows/WindowEditingOptions.h"
 
 #include "Patterns.h"
 #include "Vehicles.h"
@@ -21,7 +22,7 @@
 
 bool Mod::m_DebugEnabled = false;
 bool Mod::m_IsSamp = false;
-std::string Mod::m_Version = "2.4";
+std::string Mod::m_Version = "2.5";
 
 CVehicle* testVehicle = NULL;
 unsigned int _prevTime = 0;
@@ -193,7 +194,7 @@ void Mod::ToggleMenu() {
 		Menu::RemoveAllWindows();
 
 		SetPlayerControl(true);
-		Vehicle::m_FreezeLights = false;
+		WindowEditingOptions::FreezeLights = false;
 
 		Config::SaveJSON();
 	}

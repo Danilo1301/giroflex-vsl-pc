@@ -38,6 +38,7 @@
     <ClCompile Include="source\Vehicle.cpp" />
     <ClCompile Include="source\VehicleDummy.cpp" />
     <ClCompile Include="source\Vehicles.cpp" />
+    <ClCompile Include="source\windows\WindowEditingOptions.cpp" />
     <ClCompile Include="source\windows\WindowLightbarLed.cpp" />
     <ClCompile Include="source\windows\WindowLightGroup.cpp" />
     <ClCompile Include="source\windows\WindowLightgroupMenu.cpp" />
@@ -51,7 +52,6 @@
   <ItemGroup>
     <ClInclude Include="..\include\json_tool.h" />
     <ClInclude Include="source\Config.h" />
-    <ClInclude Include="source\ePointPosition.h" />
     <ClInclude Include="source\input\Input.h" />
     <ClInclude Include="source\Keybinds.h" />
     <ClInclude Include="source\LightGroup.h" />
@@ -82,6 +82,7 @@
     <ClInclude Include="source\VehicleDummy.h" />
     <ClInclude Include="source\VehiclePatternData.h" />
     <ClInclude Include="source\Vehicles.h" />
+    <ClInclude Include="source\windows\WindowEditingOptions.h" />
     <ClInclude Include="source\windows\WindowLightbarLed.h" />
     <ClInclude Include="source\windows\WindowLightGroup.h" />
     <ClInclude Include="source\windows\WindowLightgroupMenu.h" />

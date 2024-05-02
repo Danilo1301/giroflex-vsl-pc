@@ -18,10 +18,14 @@
    "next": "Proximo",
    
    "add_light_group": "Adicionar LightGroup",
+   "add_position_light_group": "Adicionar Position LightGroup (ESQUERDA, CENTRO, DIREITA)",
    "add_lightbar": "Adicionar Giroflex",
    "edit_light_group": "[ Editar '%s' ]",
    
+   "editing_options": "Opcoes de edicao",
    "freeze_lights": "Congelar luzes",
+   "show_current_editing_lightgroup": "Mostrar apenas estas luzes",
+   
    "edit_name": "Editar nome",
    "amount_of_lights": "Quantidade de luzes",
    "lights": "luzes",

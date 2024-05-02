@@ -18,10 +18,14 @@
    "next": "Next",
    
    "add_light_group": "Add LightGroup",
+   "add_position_light_group": "Add Position LightGroup (LEFT, CENTER, RIGHT)",
    "add_lightbar": "Add Lightbar",
    "edit_light_group": "[ Edit '%s' ]",
    
+   "editing_options": "Editing options",
    "freeze_lights": "Freeze lights",
+   "show_current_editing_lightgroup": "Show only this lights",
+   
    "edit_name": "Edit name",
    "amount_of_lights": "Amount of lights",
    "lights": "lights",

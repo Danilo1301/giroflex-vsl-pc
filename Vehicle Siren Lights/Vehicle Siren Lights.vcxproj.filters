@@ -135,6 +135,9 @@
     <ClCompile Include="source\windows\WindowLightbarLed.cpp">
       <Filter>source\windows</Filter>
     </ClCompile>
+    <ClCompile Include="source\windows\WindowEditingOptions.cpp">
+      <Filter>source\windows</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="source\Mod.h">
@@ -263,8 +266,8 @@
     <ClInclude Include="source\windows\WindowLightbarLed.h">
       <Filter>source\windows</Filter>
     </ClInclude>
-    <ClInclude Include="source\ePointPosition.h">
-      <Filter>source</Filter>
+    <ClInclude Include="source\windows\WindowEditingOptions.h">
+      <Filter>source\windows</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -8,12 +8,12 @@
 #include "menu/Menu.h"
 #include "windows/WindowLightGroup.h"
 #include "windows/WindowLightgroupMenu.h"
+#include "windows/WindowEditingOptions.h"
 
 #include "CVisibilityPlugins.h"
 #include "CShadows.h"
 
 float Vehicle::m_MatAmbient = 3.5f;
-bool Vehicle::m_FreezeLights = false;
 
 static std::list<std::pair<unsigned int*, unsigned int>> m_ResetEntries;
 
@@ -32,7 +32,7 @@ Vehicle::Vehicle(CVehicle* veh) {
 void Vehicle::Update() {
 	CheckForLightGroups();
 
-	if (!m_FreezeLights)
+	if (!WindowEditingOptions::FreezeLights)
 	{
 		m_RotateShadowAngle += Mod::GetDeltaTime() * 0.5f;
 		while (m_RotateShadowAngle >= 360) m_RotateShadowAngle -= 360;
@@ -365,7 +365,9 @@ void Vehicle::RenderBefore()
 				//TestHelper::AddLine("found " + name);
 
 				if (!vehiclePatternData->lightsOn) enabled = false;
-				if (m_FreezeLights) enabled = true;
+				if (WindowEditingOptions::FreezeLights) enabled = true;
+				if (WindowEditingOptions::ShowCurrentEditingLightGroup)
+					if (WindowLightGroup::m_LightGroup != lightGroup) enabled = false;
 
 				if (!enabled)
 				{
@@ -536,7 +538,9 @@ void Vehicle::RenderShadows()
 			}
 			
 			if (!vehiclePatternData->lightsOn) enabled = false;
-			if (m_FreezeLights) enabled = true;
+			if (WindowEditingOptions::FreezeLights) enabled = true;
+			if (WindowEditingOptions::ShowCurrentEditingLightGroup)
+				if (WindowLightGroup::m_LightGroup != lightGroup) enabled = false;
 
 			if (!enabled) continue;
 
@@ -747,7 +751,9 @@ void Vehicle::RegisterCoronas()
 			}
 
 			if (!vehiclePatternData->lightsOn) enabled = false;
-			if (m_FreezeLights) enabled = true;
+			if (WindowEditingOptions::FreezeLights) enabled = true;
+			if (WindowEditingOptions::ShowCurrentEditingLightGroup)
+				if (WindowLightGroup::m_LightGroup != lightGroup) enabled = false;
 
 			auto positionY = lightGroup->position.y + point->position.y;
 			auto angle = Point::GetAngle(m_Vehicle, lightGroup->position + point->position);

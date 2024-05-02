@@ -69,16 +69,21 @@
 [X] ADD: option to make objects use a 'different' color instead of color1, 2 or 3 (customEnabledColor)
 
 [2.5]
-[] ADD: position lightgroup (with LEFT; MIDDLE; RIGHT)
+[X] ADD: position lightgroup (with LEFT; MIDDLE; RIGHT)
+[X] ADD: editing options (showThisLightgroupOnly)
 
 --- todo (maybe) ---
 
-[ ] ADD: option to show only current edditing lightgroup
+[X] ADD: option to show only current edditing lightgroup
 [ ] FIX: select pattern makes points invisible at WindowSelectPattern::m_OnBack
 [ ] FIX: fix material ambient settings (for giroflex and non giroflex)
 [ ] ADD: intensity to all point shadows 
 
 --- release ---
+
+Check files folder
+
+Change README
 
 Check Mod::m_Version
 Check logs
@@ -87,13 +92,4 @@ Add ASI to zip
 Add LOCALIZATION, if needed
 Add OTHER DATA, if needed
 
-Change README
-PULL
-
---- build ---
-
-* plugin-sdk
-https://github.com/DK22Pac/plugin-sdk/commit/42ddb127d1a7dffcce0c74938da2afc001d90d42
-no xp support
-
-* Visual Studio 2019
+Pull

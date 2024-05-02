@@ -4,6 +4,7 @@
 #include "WindowPoint.h"
 #include "WindowSelectPattern.h"
 #include "WindowLightbarLed.h"
+#include "WindowEditingOptions.h"
 
 #include "../Mod.h"
 #include "../Patterns.h"
@@ -43,6 +44,7 @@ void WindowLightGroup::CreateLightGroups() {
 		Vehicles::RemoveAllVehicles();
 
 		auto lightGroup = LightGroups::CreateLightGroup(veh->m_nModelIndex, "");
+		lightGroup->name = "Position Light group";
 		lightGroup->isPositionLightGroup = true;
 		lightGroup->position = CVector(0, 0, 2);
 		lightGroup->AddPoint(eSirenPosition::LEFT);
@@ -104,7 +106,11 @@ void WindowLightGroup::CreateEditLightGroup() {
 
 	auto window = Menu::AddWindow(Menu::m_DefaultWindowTitle, "LightGroups > " + lightGroup->name);
 
-	auto checkBoxFreezeLights = window->AddCheckBox(Localization::GetLine("freeze_lights"), &Vehicle::m_FreezeLights);
+	auto buttonEditingOptions = window->AddButton(Localization::GetLine("editing_options"));
+	buttonEditingOptions->m_OnClick = [window]() {
+		Menu::RemoveWindow(window);
+		WindowEditingOptions::Create();
+	};
 
 	auto buttonName = window->AddButton(Localization::GetLine("edit_name"));
 	buttonName->AddTextStr(&lightGroup->name, CVector2D(10, 0));
