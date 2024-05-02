@@ -263,6 +263,9 @@
     <ClInclude Include="source\windows\WindowLightbarLed.h">
       <Filter>source\windows</Filter>
     </ClInclude>
+    <ClInclude Include="source\ePointPosition.h">
+      <Filter>source</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\include\json_valueiterator.inl">

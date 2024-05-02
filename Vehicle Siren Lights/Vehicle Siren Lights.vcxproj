@@ -51,6 +51,7 @@
   <ItemGroup>
     <ClInclude Include="..\include\json_tool.h" />
     <ClInclude Include="source\Config.h" />
+    <ClInclude Include="source\ePointPosition.h" />
     <ClInclude Include="source\input\Input.h" />
     <ClInclude Include="source\Keybinds.h" />
     <ClInclude Include="source\LightGroup.h" />

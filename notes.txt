@@ -68,6 +68,9 @@
 [2.4 update 5]
 [X] ADD: option to make objects use a 'different' color instead of color1, 2 or 3 (customEnabledColor)
 
+[2.5]
+[] ADD: position lightgroup (with LEFT; MIDDLE; RIGHT)
+
 --- todo (maybe) ---
 
 [ ] ADD: option to show only current edditing lightgroup

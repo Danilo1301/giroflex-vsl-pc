@@ -21,9 +21,8 @@ void WindowLightGroup::CreateLightGroups() {
 	auto veh = WindowMain::m_Vehicle;
 	auto window = Menu::AddWindow(Menu::m_DefaultWindowTitle, "LightGroups");
 
-	auto buttonAddLightGroupSiren = window->AddButton(Localization::GetLine("add_light_group"));
-	buttonAddLightGroupSiren->m_OnClick = [veh, window]() mutable {
-
+	auto buttonAddLightGroup = window->AddButton(Localization::GetLine("add_light_group"));
+	buttonAddLightGroup->m_OnClick = [veh, window]() mutable {
 		Vehicles::RemoveAllVehicles();
 
 		auto lightGroup = LightGroups::CreateLightGroup(veh->m_nModelIndex, "");
@@ -38,6 +37,25 @@ void WindowLightGroup::CreateLightGroups() {
 		Menu::RemoveWindow(window);
 		CreateLightGroups();
 	};
+
+	auto buttonAddPositionLightGroup = window->AddButton(Localization::GetLine("add_position_light_group"));
+	buttonAddPositionLightGroup->m_OnClick = [veh, window]() mutable {
+		Vehicles::RemoveAllVehicles();
+
+		auto lightGroup = LightGroups::CreateLightGroup(veh->m_nModelIndex, "");
+		lightGroup->isPositionLightGroup = true;
+		lightGroup->position = CVector(0, 0, 2);
+		lightGroup->AddPoint(eSirenPosition::LEFT);
+		lightGroup->AddPoint(eSirenPosition::MIDDLE);
+		lightGroup->AddPoint(eSirenPosition::RIGHT);
+
+		lightGroup->FindNewPatterns();
+
+		Vehicles::TryAddAllVehicles();
+
+		Menu::RemoveWindow(window);
+		CreateLightGroups();
+		};
 
 	int lightGroupsNum = 0;
 	if (LightGroups::HasLightGroups(veh->m_nModelIndex)) lightGroupsNum = LightGroups::GetLightGroups(veh->m_nModelIndex).size();
@@ -182,11 +200,14 @@ void WindowLightGroup::CreateEditLightGroup() {
 		});
 	};
 
-	auto buttonEditLightbarSettings = window->AddButton(Localization::GetLine("edit_lightbar_settings"));
-	buttonEditLightbarSettings->m_OnClick = [window]() {
-		Menu::RemoveWindow(window);
-		WindowLightbarLed::Create();
-	};
+	if (!lightGroup->isPositionLightGroup)
+	{
+		auto buttonEditLightbarSettings = window->AddButton(Localization::GetLine("edit_lightbar_settings"));
+		buttonEditLightbarSettings->m_OnClick = [window]() {
+			Menu::RemoveWindow(window);
+			WindowLightbarLed::Create();
+		};
+	}
 
 	/*
 	auto amountLights = window->AddNumberRange("Amount of lights", &lightGroup->amount, 1, 999);
@@ -194,7 +215,6 @@ void WindowLightGroup::CreateEditLightGroup() {
 	auto offsetId = window->AddNumberRange("Offset ID", &lightGroup->offsetId, -9999999, 9999999);
 	offsetId->m_HoldToChange = true;
 	*/
-
 
 	auto nearClip = window->AddNumberRange(Localization::GetLine("near_clip"), &lightGroup->nearClip, 0.0f, 10.0f);
 

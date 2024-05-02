@@ -5,6 +5,12 @@
 #include "LightGroupShadow.h"
 #include "LightGroupRotateObject.h"
 
+enum class eSirenPosition {
+	LEFT,
+	MIDDLE,
+	RIGHT
+};
+
 enum class eSirenDirection {
 	FRONT,
 	BOTH,
@@ -28,6 +34,8 @@ public:
 	LightGroupShadow shadow;
 
 	LightGroupRotateObject rotateObject;
+
+	eSirenPosition sirenPosition = eSirenPosition::LEFT;
 
 	/*
 	CRGBA GetColor(PatternStep* step) {
@@ -64,8 +72,6 @@ public:
 		value["useCustomEnabledColor"] = useCustomEnabledColor;
 		value["enabledColor"] = ColorToJSON(enabledColor);
 
-		//value["sirenPosition"] = (int)sirenPosition;
-
 		Json::Value shadowValue = Json::objectValue;
 		shadowValue["enabled"] = shadow.enabled;
 		shadowValue["textureIndex"] = shadow.textureIndex;
@@ -86,6 +92,8 @@ public:
 		rotateObjectValue["axis"] = (int)rotateObject.axis;
 		value["rotateObject"] = rotateObjectValue;
 
+		value["sirenPosition"] = (int)sirenPosition;
+
 		return value;
 	}
 
@@ -101,8 +109,6 @@ public:
 
 		useCustomEnabledColor = ValidateValue(value["useCustomEnabledColor"], useCustomEnabledColor).asBool();;
 		enabledColor = ValidateColor(value["enabledColor"], enabledColor);
-
-		//sirenPosition = (eSirenPosition)value["sirenPosition"].asInt();
 
 		Json::Value shadowValue = value["shadow"];
 		if (!shadowValue.isNull())
@@ -128,6 +134,8 @@ public:
 			rotateObject.speed = rotateObjectValue["speed"].asFloat();
 			rotateObject.axis = (eRotateObjectAxis)rotateObjectValue["axis"].asInt();
 		}
+
+		sirenPosition = (eSirenPosition)value["sirenPosition"].asInt();
 	}
 
 	static double GetAngle(CVehicle* vehicle, CVector position) {

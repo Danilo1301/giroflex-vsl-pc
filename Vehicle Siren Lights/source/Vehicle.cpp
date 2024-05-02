@@ -338,7 +338,6 @@ void Vehicle::RenderBefore()
 					color = lightGroup->lightbarSettings.ledOnColor;
 				}
 
-				bool enabled = true;
 
 				if (name.length() == 0) continue;
 
@@ -350,7 +349,18 @@ void Vehicle::RenderBefore()
 					if (ToUpper(name).compare(ToUpper(point->object)) != 0) continue;
 				}
 
-				enabled = point->GetIsEnabled(step, point_i);
+				//
+
+				bool enabled = true;
+
+				if (lightGroup->isPositionLightGroup)
+				{
+					enabled = point->GetIsEnabled(step, (int)point->sirenPosition);
+				}
+				else {
+					enabled = point->GetIsEnabled(step, point_i);
+				}
+				//
 
 				//TestHelper::AddLine("found " + name);
 
@@ -517,7 +527,13 @@ void Vehicle::RenderShadows()
 
 			bool enabled = true;
 			
-			enabled = point->GetIsEnabled(step, point_i);
+			if (lightGroup->isPositionLightGroup)
+			{
+				enabled = point->GetIsEnabled(step, (int)point->sirenPosition);
+			}
+			else {
+				enabled = point->GetIsEnabled(step, point_i);
+			}
 			
 			if (!vehiclePatternData->lightsOn) enabled = false;
 			if (m_FreezeLights) enabled = true;
@@ -722,7 +738,13 @@ void Vehicle::RegisterCoronas()
 
 			bool enabled = true;
 
-			enabled = point->GetIsEnabled(step, point_i);
+			if (lightGroup->isPositionLightGroup)
+			{
+				enabled = point->GetIsEnabled(step, (int)point->sirenPosition);
+			}
+			else {
+				enabled = point->GetIsEnabled(step, point_i);
+			}
 
 			if (!vehiclePatternData->lightsOn) enabled = false;
 			if (m_FreezeLights) enabled = true;

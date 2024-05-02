@@ -84,6 +84,20 @@ void WindowPoint::CreateEditPoint() {
 		PositionEditor::Toggle(&point->position);
 	};
 
+	static int tmpVal;
+	tmpVal = (int)point->sirenPosition;
+
+	if (lightGroup->isPositionLightGroup)
+	{
+		auto optionsSirenPos = window->AddOptions(Localization::GetLine("siren_position"), &tmpVal);
+		optionsSirenPos->AddOption(Localization::GetLine("left"), (int)eSirenPosition::LEFT);
+		optionsSirenPos->AddOption(Localization::GetLine("middle"), (int)eSirenPosition::MIDDLE);
+		optionsSirenPos->AddOption(Localization::GetLine("right"), (int)eSirenPosition::RIGHT);
+		optionsSirenPos->m_OnChange = [point, optionsSirenPos]() {
+			point->sirenPosition = (eSirenPosition)tmpVal;
+		};
+	}
+
 	auto useCustomColor = window->AddCheckBox(Localization::GetLine("use_custom_color"), &point->useCustomColor);
 
 	auto buttonCustomColor = window->AddButton(Localization::GetLine("custom_color"));

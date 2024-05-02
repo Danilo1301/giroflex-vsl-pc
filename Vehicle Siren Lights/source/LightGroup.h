@@ -34,6 +34,8 @@ public:
 	std::string fileName = "";
 	int modelId;
 
+	bool isPositionLightGroup = false;
+
 	CRGBA color1 = CRGBA(255, 0, 0);
 	CRGBA color2 = CRGBA(0, 0, 255);
 	CRGBA color3 = CRGBA(255, 255, 255);
@@ -73,6 +75,12 @@ public:
 		return point;
 	}
 
+	Point* AddPoint(eSirenPosition sirenPosition) {
+		Point* point = AddPoint();
+		point->sirenPosition = sirenPosition;
+		return point;
+	}
+
 	void RemovePoint(Point* point) {
 		auto it = std::find(points.begin(), points.end(), point);
 		if (it == points.end()) return;
@@ -84,7 +92,13 @@ public:
 	{
 		while ((int)points.size() < amount)
 		{
-			AddPoint();
+			if (isPositionLightGroup)
+			{
+				AddPoint(eSirenPosition::RIGHT);
+			}
+			else {
+				AddPoint();
+			}
 		}
 		while ((int)points.size() > amount)
 		{
@@ -119,11 +133,19 @@ public:
 	{
 		RemoveAllPatternCycleSteps();
 
-		for (auto pattern : Patterns::m_Patterns)
+		if (isPositionLightGroup)
 		{
-			if (pattern->steps[0]->values.size() == points.size())
+			for (auto pattern : Patterns::m_Patterns)
 			{
-				AddPatternCycleStep(pattern, 7000);
+				if (pattern->steps[0]->values.size() == 3)
+					AddPatternCycleStep(pattern, 7000);
+			}
+		}
+		else {
+			for (auto pattern : Patterns::m_Patterns)
+			{
+				if (pattern->steps[0]->values.size() == points.size())
+					AddPatternCycleStep(pattern, 7000);
 			}
 		}
 	}
@@ -152,6 +174,8 @@ public:
 		value["keybindMenu"] = keybindMenu.ToJSON();
 
 		value["name"] = name;
+
+		value["isPositionLightGroup"] = isPositionLightGroup;
 
 		value["color1"] = ColorToJSON(color1);
 		value["color2"] = ColorToJSON(color2);
@@ -210,6 +234,8 @@ public:
 		{
 			keybindMenu.FromJSON(value["keybindMenu"]);
 		}
+
+		isPositionLightGroup = ValidateValue(value["isPositionLightGroup"], isPositionLightGroup).asBool();
 
 		color1 = ValidateColor(value["color1"], color1);
 		color2 = ValidateColor(value["color2"], color2);
