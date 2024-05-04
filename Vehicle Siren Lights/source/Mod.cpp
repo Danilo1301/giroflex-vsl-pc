@@ -194,7 +194,9 @@ void Mod::ToggleMenu() {
 		Menu::RemoveAllWindows();
 
 		SetPlayerControl(true);
-		WindowEditingOptions::FreezeLights = false;
+		//WindowEditingOptions::FreezeLights = false;
+		WindowEditingOptions::ShowCurrentEditingLightGroup = false;
+
 
 		Config::SaveJSON();
 	}
