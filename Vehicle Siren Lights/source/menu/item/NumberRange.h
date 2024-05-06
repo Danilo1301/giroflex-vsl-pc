@@ -18,4 +18,5 @@ public:
 	void Update();
 	void Draw(float x, float y);
 	void DrawNumberDisplay(float x, float y, float width, float height);
+	void CheckValueChanged(T prevValue, T newValue);
 };

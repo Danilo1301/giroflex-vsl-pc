@@ -63,6 +63,7 @@ void WindowPoint::Create() {
 
 		//Vehicles::m_DrawVehiclePoints = false;
 	};
+	window->SetBackButton(buttonBack);
 }
 
 void WindowPoint::CreateEditPoint() {
@@ -206,5 +207,6 @@ void WindowPoint::CreateEditPoint() {
 		Menu::RemoveWindow(window);
 		Create();
 	};
+	window->SetBackButton(buttonBack);
 }
 

@@ -15,9 +15,10 @@ void WindowSettings::CreateSettings() {
 	auto lightIdOffset = window->AddNumberRange("Light ID offset", &Vehicle::m_LightIdOffset, 0, 999999);
 	lightIdOffset->m_HoldToChange = true;
 
-	auto back = window->AddButton(Localization::GetLine("back"));
-	back->m_OnClick = [window]() {
+	auto buttonBack = window->AddButton(Localization::GetLine("back"));
+	buttonBack->m_OnClick = [window]() {
 		Menu::RemoveWindow(window);
 		WindowMain::CreateMain();
 	};
+	window->SetBackButton(buttonBack);
 }

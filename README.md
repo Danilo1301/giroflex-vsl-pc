@@ -27,6 +27,14 @@ Debug: CTRL + SHIFT + D
 
 Você pode trocar as teclas em 'Vehicle Siren Lights\data\settings.json'
 
+<h1>Botões no Menu</h1>
+
+Setas CIMA e BAIXO: mudam os itens no menu
+
+Botão ESPAÇO: seleciona um item no menu / altera o valor de alguns campos
+
+Botão BACKSPACE: volta para o menu anterior
+
 <h1>Tutoriais</h1>
 
 * Instalando o mod giroflex: https://youtu.be/QzMA8UHS8lM

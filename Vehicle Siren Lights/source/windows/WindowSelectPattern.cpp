@@ -50,6 +50,7 @@ void WindowSelectPattern::CreatePatterns() {
 
 		if (m_OnBack) m_OnBack();
 	};
+	window->SetBackButton(buttonBack);
 }
 
 void WindowSelectPattern::CreateAddPattern() {
@@ -164,11 +165,12 @@ void WindowSelectPattern::CreateEditPattern() {
 		CreatePatterns();
 	};
 
-	auto back = window->AddButton(Localization::GetLine("back"));
-	back->m_OnClick = [window]() {
+	auto buttonBack = window->AddButton(Localization::GetLine("back"));
+	buttonBack->m_OnClick = [window]() {
 		Menu::RemoveWindow(window);
 		CreatePatterns();
 	};
+	window->SetBackButton(buttonBack);
 }
 
 void WindowSelectPattern::Close() {

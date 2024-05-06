@@ -1,8 +1,13 @@
 #include "Menu.h"
-#include "../input/Input.h"
+
 #include "PositionEditor.h"
 #include "TextEditor.h"
+#include "TipMessage.h"
 #include "KeySelector.h"
+
+#include "../TestHelper.h"
+
+#include "../input/Input.h"
 
 std::string Menu::m_DefaultWindowTitle = "Vehicle Siren Lights (by Danilo1301)";
 std::vector<Window*> Menu::m_Windows;
@@ -227,6 +232,7 @@ void Menu::Draw() {
     if (PositionEditor::m_Visible) PositionEditor::Draw();
     if (TextEditor::m_Visible) TextEditor::Draw();
     if (KeySelector::m_Visible) KeySelector::Draw();
+    if (TipMessage::m_Visible) TipMessage::Draw();
 }
 
 void Menu::Update() {
@@ -234,6 +240,7 @@ void Menu::Update() {
     PositionEditor::Update();
     TextEditor::Update();
     KeySelector::Update();
+    TipMessage::Update();
 
     if (PositionEditor::m_Visible) return;
     if (TextEditor::m_Visible) return;
@@ -242,15 +249,24 @@ void Menu::Update() {
 
     if (m_IsOpen) {
         if (Input::GetKeyDown(VK_UP)) {
-            if (m_ActiveWindow) m_ActiveWindow->GoUp();
+            if (m_ActiveWindow) {
+                m_ActiveWindow->GoUp();
+                TipMessage::ShowTip_MenuSelectKey();
+            }
         }
 
         if (Input::GetKeyDown(VK_DOWN)) {
-            if (m_ActiveWindow) m_ActiveWindow->GoDown();
+            if (m_ActiveWindow) {
+                m_ActiveWindow->GoDown();
+                TipMessage::ShowTip_MenuSelectKey();
+            }
         }
 
         if (Input::GetKeyDown(8)) { //backspace
-            if (m_ActiveWindow) m_ActiveWindow->GoBackToPrevWindow();
+            if (m_ActiveWindow)
+            {
+                m_ActiveWindow->GoBackToPrevWindow();
+            }
         }
     }
 

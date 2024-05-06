@@ -2,6 +2,7 @@
    "info_vehicle_id": "Vehicle ID:",
    "info_move_camera": "- Press [ALT] to move the camera",
    "info_hide_samp_chat": "- Press [F7] to hide samp chat",
+   "info_go_to_prev_window": "- Press [BACKSPACE] to go back to previous window",
    
    "main_edit_light_groups": "Edit LightGroups",
    "main_edit_patterns": "Edit Patterns",
@@ -125,5 +126,9 @@
    "flare_intensity": "Flare intensity",
    "use_small_white_corona":  "Use white corona",
    "small_white_corona_type": "White corona type",
-   "small_white_corona_scale": "White corona scale"
+   "small_white_corona_scale": "White corona scale",
+   
+   "tip_menu_select": "TIP: Press [SPACE] to select an item in the menu",
+   "tip_menu_back": "TIP: Press [BACKSPACE] to go back to previous window",
+   "tip_number_range_set_value": "TIP: Press [SPACE] to change the value"
 }

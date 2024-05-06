@@ -30,6 +30,7 @@
     <ClCompile Include="source\menu\Menu.cpp" />
     <ClCompile Include="source\menu\PositionEditor.cpp" />
     <ClCompile Include="source\menu\TextEditor.cpp" />
+    <ClCompile Include="source\menu\TipMessage.cpp" />
     <ClCompile Include="source\menu\Window.cpp" />
     <ClCompile Include="source\Mod.cpp" />
     <ClCompile Include="source\Patterns.cpp" />
@@ -69,6 +70,7 @@
     <ClInclude Include="source\menu\Menu.h" />
     <ClInclude Include="source\menu\PositionEditor.h" />
     <ClInclude Include="source\menu\TextEditor.h" />
+    <ClInclude Include="source\menu\TipMessage.h" />
     <ClInclude Include="source\menu\Window.h" />
     <ClInclude Include="source\Mod.h" />
     <ClInclude Include="source\Keybind.h" />

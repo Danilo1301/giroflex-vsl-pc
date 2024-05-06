@@ -138,6 +138,9 @@
     <ClCompile Include="source\windows\WindowEditingOptions.cpp">
       <Filter>source\windows</Filter>
     </ClCompile>
+    <ClCompile Include="source\menu\TipMessage.cpp">
+      <Filter>source\menu</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="source\Mod.h">
@@ -268,6 +271,9 @@
     </ClInclude>
     <ClInclude Include="source\windows\WindowEditingOptions.h">
       <Filter>source\windows</Filter>
+    </ClInclude>
+    <ClInclude Include="source\menu\TipMessage.h">
+      <Filter>source\menu</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

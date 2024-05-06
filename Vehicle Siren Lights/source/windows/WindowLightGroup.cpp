@@ -85,6 +85,7 @@ void WindowLightGroup::CreateLightGroups() {
 		Menu::RemoveWindow(window);
 		WindowMain::CreateMain();
 	};
+	window->SetBackButton(buttonBack);
 }
 
 void WindowLightGroup::CreateEditLightGroup() {
@@ -363,4 +364,5 @@ void WindowLightGroup::CreateEditLightGroup() {
 		m_LightGroup = NULL;
 		CreateLightGroups();
 	};
+	window->SetBackButton(buttonBack);
 }

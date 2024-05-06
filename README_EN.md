@@ -25,6 +25,14 @@ Debug: CTRL + SHIFT + D
 
 You can change the keys in 'Vehicle Siren Lights\data\settings.json'
 
+<h1>Keys in Menu</h1>
+
+Arrows UP and DOWN: change the items in the menu
+
+Button SPACE: select an item in the menu / change the value of some fields
+
+Button BACKSPACE: go back to previous menu
+
 <h1>Tutorials</h1>
 
 * Installing the giroflex mod: https://youtu.be/QzMA8UHS8lM

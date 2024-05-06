@@ -22,7 +22,7 @@
 
 bool Mod::m_DebugEnabled = false;
 bool Mod::m_IsSamp = false;
-std::string Mod::m_Version = "2.5";
+std::string Mod::m_Version = "2.6";
 
 CVehicle* testVehicle = NULL;
 unsigned int _prevTime = 0;
@@ -98,7 +98,19 @@ void Mod::Update() {
 
 	if (Keybinds::openMenu.CheckKeybind())
 	{
-		ToggleMenu();
+		bool openTestMenu = false;
+
+		if (openTestMenu)
+		{
+			if (!Menu::m_IsOpen)
+			{
+				WindowTest::Create();
+				Menu::SetOpen(true);
+			}
+		}
+		else {
+			ToggleMenu();
+		}
 	}
 
 	if (Menu::m_IsOpen && !KeySelector::m_Visible) {
@@ -186,7 +198,6 @@ void Mod::ToggleMenu() {
 
 	if (open) {
 		WindowMain::CreateMain();
-		//WindowTest::Create();
 
 		SetPlayerControl(false);
 	}

@@ -2,18 +2,23 @@
 #include "Menu.h"
 #include "../input/Input.h"
 
+#include "../TestHelper.h"
+
 #include <iostream>
 
 bool TextEditor::m_Visible = false;
 std::string TextEditor::m_Title = "";
 
-bool TextEditor::m_NumbersOnly = false;
+EDIT_TYPE TextEditor::m_EditType = EDIT_TYPE::EDIT_STRING;
+
 bool TextEditor::m_AutoUpdate = false;
 
 std::string TextEditor::m_Value = "";
 
 std::string* TextEditor::m_pStr = nullptr;
 int* TextEditor::m_pInt = nullptr;
+float* TextEditor::m_pFloat = nullptr;
+unsigned char* TextEditor::m_pUChar = nullptr;
 
 CVector2D TextEditor::m_Size = CVector2D(500, 120);
 std::function<void(void)> TextEditor::m_OnConfirm = NULL;
@@ -43,14 +48,20 @@ void TextEditor::Update() {
 			else {
 				//Log::file << i << ": (" << c << ") (" << charUpperStr << ")" << (capslockOn ? "CAPS" : "NOCAPS") << std::endl;
 
-				if (i == 189 && shiftDown)
+				TestHelper::AddLine(std::to_string(i) + ": (" + c + ")");
+
+				if (len < 80)
 				{
-					m_Value += "_";
-				}
-				else
-				{
-					if (((m_AvailableChars.find(charLowerStr) != std::string::npos && !m_NumbersOnly) || m_Numbers.find(charLowerStr) != std::string::npos) && len < 80) {
-						m_Value += capslockOn ? charUpperStr : charLowerStr;
+					if (i == 189 && shiftDown) // [ SHIFT + -/_ ]
+					{
+						m_Value += "_";
+					}
+					else
+					{
+						if (m_AvailableChars.find(charLowerStr) != std::string::npos)
+						{
+							m_Value += capslockOn ? charUpperStr : charLowerStr;
+						}
 					}
 				}
 			}
@@ -94,7 +105,7 @@ void TextEditor::Open(std::string title, bool autoUpdate, std::string* value) {
 	m_pStr = value;
 
 	m_Visible = true;
-	m_NumbersOnly = false;
+	m_EditType = EDIT_TYPE::EDIT_STRING;
 	m_AutoUpdate = autoUpdate;
 }
 
@@ -104,7 +115,27 @@ void TextEditor::Open(std::string title, bool autoUpdate, int* value) {
 	m_pInt = value;
 
 	m_Visible = true;
-	m_NumbersOnly = true;
+	m_EditType = EDIT_TYPE::EDIT_INT;
+	m_AutoUpdate = autoUpdate;
+}
+
+void TextEditor::Open(std::string title, bool autoUpdate, float* value) {
+	m_Title = title;
+	m_Value = std::to_string(*value);
+	m_pFloat = value;
+
+	m_Visible = true;
+	m_EditType = EDIT_TYPE::EDIT_FLOAT;
+	m_AutoUpdate = autoUpdate;
+}
+
+void TextEditor::Open(std::string title, bool autoUpdate, unsigned char* value) {
+	m_Title = title;
+	m_Value = std::to_string(*value);
+	m_pUChar = value;
+
+	m_Visible = true;
+	m_EditType = EDIT_TYPE::EDIT_UCHAR;
 	m_AutoUpdate = autoUpdate;
 }
 
@@ -120,10 +151,27 @@ void TextEditor::Close() {
 }
 
 void TextEditor::UpdateValue() {
-	if (m_NumbersOnly) {
+
+	if (m_EditType == EDIT_TYPE::EDIT_STRING)
+	{
+		*m_pStr = m_Value;
+	}
+
+	if (m_EditType == EDIT_TYPE::EDIT_INT)
+	{
 		*m_pInt = atoi(m_Value.c_str());
 	}
-	else {
-		*m_pStr = m_Value;
+
+	if (m_EditType == EDIT_TYPE::EDIT_UCHAR)
+	{
+		int value = atoi(m_Value.c_str());
+		if (value < 0) value = 0;
+		if (value > 255) value = 255;
+		*m_pUChar = (unsigned char)value;
+	}
+
+	if (m_EditType == EDIT_TYPE::EDIT_FLOAT)
+	{
+		*m_pFloat = std::stof(m_Value.c_str());
 	}
 }

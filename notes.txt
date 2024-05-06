@@ -75,6 +75,11 @@
 [X] ADD: option to freeze lightgroup
 [X] ADD: option to keep lights always enabled
 
+[2.6]
+[X] ADD: option to press (SPACE) and edit float/int value
+[X] ADD: button to go back to previous window (BACKSPACE)
+[X] ADD: tip messages
+
 --- todo (maybe) ---
 
 [X] ADD: option to show only current edditing lightgroup

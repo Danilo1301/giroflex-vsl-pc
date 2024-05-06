@@ -40,4 +40,5 @@ void WindowRotateObject::Create() {
 		Menu::RemoveWindow(window);
 		WindowPoint::CreateEditPoint();
 	};
+	window->SetBackButton(buttonBack);
 }

@@ -44,4 +44,5 @@ void WindowLightbarLed::Create()
 		Menu::RemoveWindow(window);
 		WindowLightGroup::CreateEditLightGroup();
 	};
+	window->SetBackButton(buttonBack);
 }

@@ -34,6 +34,8 @@ public:
 
 	Window* m_PrevWindow = nullptr;
 
+	Item* m_BackButton = nullptr;
+
 	//int m_ListStartIndex = 0; //remove
 	//int m_ = 0;
 
@@ -66,4 +68,6 @@ public:
 	Item* AddDivider(float height);
 
 	ButtonKey* AddButtonKey(std::string text, Keybind* keybind);
+
+	void SetBackButton(Item* button);
 };

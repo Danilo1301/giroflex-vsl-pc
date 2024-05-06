@@ -1,6 +1,11 @@
 #include "NumberRange.h"
 #include "../Menu.h"
+
+#include "../TextEditor.h"
+#include "../TipMessage.h"
+
 #include "../../input/Input.h"
+#include "../../TestHelper.h"
 
 template<class T>
 NumberRange<T>::NumberRange(T* value, T addBy)
@@ -58,17 +63,19 @@ void NumberRange<T>::Update()
 
 	if (!m_IsSelected) return;
 
-	auto prevVal = *m_Value;
+	T prevVal = *m_Value;
 
 	if ((*m_Value > m_Min)) {
 		if (m_HoldToChange) {
 			if (Input::GetKey(VK_LEFT)) {
 				(*m_Value) -= m_AddBy;
+				TipMessage::ShowTip_NumberRangeSetValue();
 			}
 		}
 		else {
 			if (Input::GetKeyDown(VK_LEFT)) {
 				(*m_Value) -= m_AddBy;
+				TipMessage::ShowTip_NumberRangeSetValue();
 			}
 		}
 	}
@@ -77,22 +84,56 @@ void NumberRange<T>::Update()
 		if (m_HoldToChange) {
 			if (Input::GetKey(VK_RIGHT)) {
 				(*m_Value) += m_AddBy;
+				TipMessage::ShowTip_NumberRangeSetValue();
 			}
 		}
 		else {
 			if (Input::GetKeyDown(VK_RIGHT)) {
 				(*m_Value) += m_AddBy;
+				TipMessage::ShowTip_NumberRangeSetValue();
 			}
 		}
 	}
 
-	if (*m_Value < m_Min) *m_Value = m_Min;
-	if (*m_Value > m_Max) *m_Value = m_Max;
-
-	if (prevVal != *m_Value)
+	if (Input::GetKeyDown(VK_SPACE)) //SPACE
 	{
-		if (m_OnChange) m_OnChange();
+		if (!TextEditor::m_Visible)
+		{
+			NumberRange<T>* self = this;
+
+			if (std::is_same<T, float>::value)
+			{
+				TestHelper::AddLine("start edit float (" + m_Label + ")");
+				TextEditor::m_OnConfirm = [self, prevVal]() {
+					TestHelper::AddLine("confirm edit float");
+					self->CheckValueChanged(prevVal, *self->m_Value);
+				};
+				TextEditor::Open(m_Label, false, (float*)m_Value);
+			}
+
+			if (std::is_same<T, int>::value)
+			{
+				TestHelper::AddLine("start edit int (" + m_Label + ")");
+				TextEditor::m_OnConfirm = [self, prevVal]() {
+					TestHelper::AddLine("confirm edit int");
+					self->CheckValueChanged(prevVal, *self->m_Value);
+				};
+				TextEditor::Open(m_Label, false, (int*)m_Value);
+			}
+
+			if (std::is_same<T, unsigned char>::value)
+			{
+				TestHelper::AddLine("start edit edit uchar (" + m_Label + ")");
+				TextEditor::m_OnConfirm = [self, prevVal]() {
+					TestHelper::AddLine("confirm uchar");
+					self->CheckValueChanged(prevVal, *self->m_Value);
+				};
+				TextEditor::Open(m_Label, false, (unsigned char*)m_Value);
+			}
+		}
 	}
+
+	CheckValueChanged(prevVal, *m_Value);
 }
 
 template<class T>
@@ -113,6 +154,22 @@ void NumberRange<T>::DrawNumberDisplay(float x, float y, float width, float heig
 	Menu::m_FontAlign = eFontAlignment::ALIGN_CENTER;
 	Menu::DrawString(std::to_string(*m_Value), x + width/2, y + height/2 - 10.0f, CRGBA(0, 0, 0));
 	Menu::m_FontAlign = eFontAlignment::ALIGN_LEFT;
+}
+
+template<class T>
+void NumberRange<T>::CheckValueChanged(T prevValue, T newValue)
+{
+	if (*m_Value < m_Min) *m_Value = m_Min;
+	if (*m_Value > m_Max) *m_Value = m_Max;
+
+	if (prevValue != newValue)
+	{
+		TestHelper::AddLine("value changed from " + std::to_string(prevValue) + " to " + std::to_string(newValue));
+		if (m_OnChange)
+		{
+			m_OnChange();
+		}
+	}
 }
 
 /*

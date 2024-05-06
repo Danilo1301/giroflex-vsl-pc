@@ -1,6 +1,7 @@
 #include "Window.h"
-#include "Menu.h"
 
+#include "Menu.h"
+#include "TipMessage.h"
 
 void Window::Draw() {
 	char buffer[256];
@@ -134,6 +135,12 @@ void Window::GoDown() {
 
 void Window::GoBackToPrevWindow()
 {
+	if (m_BackButton)
+	{
+		m_BackButton->m_OnClick();
+		return;
+	}
+
 	if (m_PrevWindow == nullptr) return;
 
 	Menu::m_ActiveWindow = m_PrevWindow;
@@ -338,6 +345,13 @@ ButtonKey* Window::AddButtonKey(std::string text, Keybind* keybind) {
 	auto buttonKey = (ButtonKey*)AddItem(new ButtonKey(keybind));
 	buttonKey->m_Label = text;
 	return buttonKey;
+}
+
+void Window::SetBackButton(Item* button)
+{
+	m_BackButton = button;
+
+	TipMessage::ShowTip_MenuBackKey();
 }
 
 /*

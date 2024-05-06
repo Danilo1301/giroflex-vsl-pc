@@ -2,6 +2,7 @@
    "info_vehicle_id": "Veiculo ID:",
    "info_move_camera": "- Aperte [ALT] para mover a camera",
    "info_hide_samp_chat": "- Aperte [F7] para esconder o chat",
+   "info_go_to_prev_window": "- Aperte [BACKSPACE] para voltar para o menu anterior",
    
    "main_edit_light_groups": "Editar LightGroups",
    "main_edit_patterns": "Editar Patterns",
@@ -125,5 +126,9 @@
    "flare_intensity": "Flare - intensidade",
    "use_small_white_corona":  "Usar luz branca por dentro",
    "small_white_corona_type": "Luz branca - tipo",
-   "small_white_corona_scale": "Luz branca - tamanho"
+   "small_white_corona_scale": "Luz branca - tamanho",
+   
+   "tip_menu_select": "TIP: Pressione [ESPACO] para selecionar um item no menu",
+   "tip_menu_back": "TIP: Pressione [BACKSPACE] para ir para o menu anterior",
+   "tip_number_range_set_value": "TIP: Pressione [ESPACO] para mudar o valor"
 }
