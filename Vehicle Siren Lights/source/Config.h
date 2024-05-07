@@ -16,20 +16,26 @@ public:
 	static void SaveJSON();
 	static void DeleteAllConfig();
 	static void LoadJSON();
-	static std::string GetFullPath(std::string path);
+	static std::string GetFullPluginPath(std::string path);
 	static void CreatePath(std::string path);
 	static bool Exists(std::string path);
 	static void WriteToFile(std::string path, Json::Value value);
 	static Json::Value ReadFile(std::string path);
 
+	static void SavePatterns();
+	static void LoadPatterns();
 	static void SavePattern(Pattern* pattern);
 	static Pattern* LoadPattern(std::string fileName);
 
+	static void SaveLightGroups();
+	static void LoadLightGroups();
 	static void SaveLightGroup(LightGroup* lightGroup);
 	static LightGroup* LoadLightGroup(std::string fileName, int modelId);
 
+	static void LoadLocalizations();
 	static void LoadLocalization(std::string key);
 
 	static void SaveSettings();
 	static void LoadSettings();
+
 };

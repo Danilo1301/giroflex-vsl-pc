@@ -17,10 +17,10 @@ std::string Config::m_LightGroupsPath = "\\lightgroups\\";
 void Config::SaveJSON() {
 	Log::file << "[Config] * Saving config..." << std::endl;
 
-	CreatePath(m_DataPath);
-	CreatePath(m_DataPath + m_PatternsPath);
-	CreatePath(m_DataPath + m_VehiclesPath);
-	CreatePath(m_DataPath + m_LocalizationPath);
+	CreatePath(GetFullPluginPath(m_DataPath));
+	CreatePath(GetFullPluginPath(m_DataPath + m_PatternsPath));
+	CreatePath(GetFullPluginPath(m_DataPath + m_VehiclesPath));
+	CreatePath(GetFullPluginPath(m_DataPath + m_LocalizationPath));
 
 	DeleteAllConfig();
 
@@ -28,123 +28,59 @@ void Config::SaveJSON() {
 
 	SaveSettings();
 
-	for (auto pair : LightGroups::m_LightGroups)
-	{
-		auto modelId = pair.first;
-		auto lightGroups = pair.second;
+	SaveLightGroups();
 
-		for (size_t i = 0; i < lightGroups.size(); i++)
-		{
-			SaveLightGroup(lightGroups[i]);
-		}
-	}
-
-	for (size_t i = 0; i < Patterns::m_Patterns.size(); i++)
-	{
-		SavePattern(Patterns::m_Patterns[i]);
-	}
+	SavePatterns();
 }
 
 void Config::LoadJSON() {
 	Log::file << "[Config] * Loading config..." << std::endl;
 
-	CreatePath(m_DataPath);
-	CreatePath(m_DataPath + m_PatternsPath);
-	CreatePath(m_DataPath + m_VehiclesPath);
-	CreatePath(m_DataPath + m_LocalizationPath);
+	CreatePath(GetFullPluginPath(m_DataPath));
+	CreatePath(GetFullPluginPath(m_DataPath + m_PatternsPath));
+	CreatePath(GetFullPluginPath(m_DataPath + m_VehiclesPath));
+	CreatePath(GetFullPluginPath(m_DataPath + m_LocalizationPath));
 
 	LoadSettings();
 
-	Log::file << "[Config] Loading patterns..." << std::endl;
-
-	std::string pathPatterns = GetFullPath(m_DataPath + m_PatternsPath);
-
-	for (const auto& entry : std::filesystem::directory_iterator(pathPatterns)) {
-		std::string fileName = entry.path().filename().replace_extension().string();
-
-		LoadPattern(fileName);
-	}
+	LoadPatterns();
 	
-	//
+	LoadLightGroups();
 
-	Log::file << "[Config] Loading vehicles..." << std::endl;
-
-	std::string pathVehicles = GetFullPath(m_DataPath + m_VehiclesPath);
-
-	for (const auto& entry : std::filesystem::directory_iterator(pathVehicles)) {
-		int modelId = std::stoi(entry.path().filename().replace_extension());
-
-		Log::file << "[Config] Loading vehicle ID " << modelId  << "..." << std::endl;
-
-		std::string pathLightGroups = GetFullPath(m_DataPath + m_VehiclesPath + std::to_string(modelId) + m_LightGroupsPath);
-
-		for (const auto& entry2 : std::filesystem::directory_iterator(pathLightGroups)) {
-			std::string fileName = entry2.path().filename().replace_extension().string();
-
-			LoadLightGroup(fileName, modelId);
-		}
-	}
-
-	//
-
-	Localization::RemoveAllLines();
-	Localization::m_AvailableLanguages.clear();
-
-	std::string pathLocalization = GetFullPath(m_DataPath + m_LocalizationPath);
-
-	for (const auto& entry : std::filesystem::directory_iterator(pathLocalization)) {
-		std::string language = entry.path().filename().replace_extension().string();
-
-		Log::file << "[Config] Localization " << language << std::endl;
-
-		Localization::m_AvailableLanguages.push_back(language);
-		LoadLocalization(language);
-	}
+	LoadLocalizations();
 }
 
-std::string Config::GetFullPath(std::string path) {
+std::string Config::GetFullPluginPath(std::string path) {
 	std::string pluginPath = PLUGIN_PATH("\\");
 	std::string finalPath = pluginPath + path;
 	return finalPath;
 }
 
 void Config::CreatePath(std::string path) {
-	std::string pluginPath = PLUGIN_PATH("\\");
-	std::string finalPath = pluginPath + path;
-
-	if (!std::filesystem::is_directory(finalPath) || !std::filesystem::exists(finalPath)) {
-		std::filesystem::create_directory(finalPath);
+	if (!std::filesystem::is_directory(path) || !std::filesystem::exists(path)) {
+		std::filesystem::create_directory(path);
 	}
 }
 
 bool Config::Exists(std::string path) {
-	std::string pluginPath = PLUGIN_PATH("\\");
-	std::string finalPath = pluginPath + path;
-	return std::filesystem::exists(finalPath);
+	return std::filesystem::exists(path);
 }
 
-
 void Config::WriteToFile(std::string path, Json::Value value) {
-	std::string pluginPath = PLUGIN_PATH("\\");
-	std::string finalPath = pluginPath + path;
-
-	//Log::file << "[Config] WriteToFile " << finalPath << std::endl;
+	Log::file << "[Config] WriteToFile " << path << std::endl;
 
 	Json::StyledWriter writer;
 	std::string strJson = writer.write(value);
 
-	std::ofstream file(finalPath);
+	std::ofstream file(path);
 	file << strJson;
 	file.close();
 }
 
 Json::Value Config::ReadFile(std::string path) {
-	std::string pluginPath = PLUGIN_PATH("\\");
-	std::string finalPath = pluginPath + path;
+	Log::file << "[Config] ReadFile " << path << std::endl;
 
-	//Log::file << "[Config] ReadFile " << finalPath << std::endl;
-
-	std::ifstream file(finalPath);
+	std::ifstream file(path);
 
 	Json::Value value;
 	Json::Reader reader;
@@ -163,12 +99,12 @@ void Config::DeleteAllConfig() {
 
 	//
 
-	std::string pathVehicles = GetFullPath(m_DataPath + m_VehiclesPath);
+	std::string pathVehicles = GetFullPluginPath(m_DataPath + m_VehiclesPath);
 
 	for (const auto& entry : std::filesystem::directory_iterator(pathVehicles)) {
 		int modelId = std::stoi(entry.path().filename().replace_extension());
 
-		std::string pathLightGroups = GetFullPath(m_DataPath + m_VehiclesPath + std::to_string(modelId) + m_LightGroupsPath);
+		std::string pathLightGroups = GetFullPluginPath(m_DataPath + m_VehiclesPath + std::to_string(modelId) + m_LightGroupsPath);
 
 		for (const auto& entry2 : std::filesystem::directory_iterator(pathLightGroups)) {
 			std::filesystem::remove_all(entry2.path());
@@ -179,26 +115,47 @@ void Config::DeleteAllConfig() {
 
 	//
 
-	std::string pathPatterns = GetFullPath(m_DataPath + m_PatternsPath);
+	std::string pathPatterns = GetFullPluginPath(m_DataPath + m_PatternsPath);
 
 	for (const auto& entry : std::filesystem::directory_iterator(pathPatterns)) {
 		std::filesystem::remove_all(entry.path());
 	}
 }
 
+void Config::SavePatterns()
+{
+	for (size_t i = 0; i < Patterns::m_Patterns.size(); i++)
+	{
+		SavePattern(Patterns::m_Patterns[i]);
+	}
+}
+
+void Config::LoadPatterns()
+{
+	Log::file << "[Config] Loading patterns..." << std::endl;
+
+	std::string pathPatterns = GetFullPluginPath(m_DataPath + m_PatternsPath);
+
+	for (const auto& entry : std::filesystem::directory_iterator(pathPatterns)) {
+		std::string fileName = entry.path().filename().replace_extension().string();
+
+		LoadPattern(fileName);
+	}
+}
+
 void Config::SavePattern(Pattern* pattern) {
-	CreatePath(m_DataPath);
-	CreatePath(m_DataPath + m_PatternsPath);
+	CreatePath(GetFullPluginPath(m_DataPath));
+	CreatePath(GetFullPluginPath(m_DataPath + m_PatternsPath));
 
 	Json::Value value = pattern->ToJSON();
 
-	WriteToFile(m_DataPath + m_PatternsPath + pattern->fileName + ".json", value);
+	WriteToFile(GetFullPluginPath(m_DataPath + m_PatternsPath + pattern->fileName + ".json"), value);
 }
 
 Pattern* Config::LoadPattern(std::string fileName) {
 	Log::file << "[Config] Loading pattern: " << fileName << std::endl;
 
-	Json::Value value = ReadFile(m_DataPath + m_PatternsPath + fileName + ".json");
+	Json::Value value = ReadFile(GetFullPluginPath(m_DataPath + m_PatternsPath + fileName + ".json"));
 
 	Pattern* pattern = Patterns::CreatePattern(value["name"].asString());
 	pattern->fileName = fileName;
@@ -207,23 +164,58 @@ Pattern* Config::LoadPattern(std::string fileName) {
 	return pattern;
 }
 
+void Config::SaveLightGroups()
+{
+	for (auto pair : LightGroups::m_LightGroups)
+	{
+		auto modelId = pair.first;
+		auto lightGroups = pair.second;
+
+		for (size_t i = 0; i < lightGroups.size(); i++)
+		{
+			SaveLightGroup(lightGroups[i]);
+		}
+	}
+}
+
+void Config::LoadLightGroups()
+{
+	Log::file << "[Config] Loading lightGroups..." << std::endl;
+
+	std::string pathVehicles = GetFullPluginPath(m_DataPath + m_VehiclesPath);
+
+	for (const auto& entry : std::filesystem::directory_iterator(pathVehicles)) {
+		int modelId = std::stoi(entry.path().filename().replace_extension());
+
+		Log::file << "[Config] Loading vehicle ID " << modelId << "..." << std::endl;
+
+		std::string pathLightGroups = GetFullPluginPath(m_DataPath + m_VehiclesPath + std::to_string(modelId) + m_LightGroupsPath);
+
+		for (const auto& entry2 : std::filesystem::directory_iterator(pathLightGroups)) {
+			std::string fileName = entry2.path().filename().replace_extension().string();
+
+			LoadLightGroup(fileName, modelId);
+		}
+	}
+}
+
 void Config::SaveLightGroup(LightGroup* lightGroup) {
 	Log::file << "[Config] Saving lightGroup: " << lightGroup->fileName << std::endl;
 
-	CreatePath(m_DataPath);
-	CreatePath(m_DataPath + m_VehiclesPath);
-	CreatePath(m_DataPath + m_VehiclesPath + std::to_string(lightGroup->modelId));
-	CreatePath(m_DataPath + m_VehiclesPath + std::to_string(lightGroup->modelId) + m_LightGroupsPath);
+	CreatePath(GetFullPluginPath(m_DataPath));
+	CreatePath(GetFullPluginPath(m_DataPath + m_VehiclesPath));
+	CreatePath(GetFullPluginPath(m_DataPath + m_VehiclesPath + std::to_string(lightGroup->modelId)));
+	CreatePath(GetFullPluginPath(m_DataPath + m_VehiclesPath + std::to_string(lightGroup->modelId) + m_LightGroupsPath));
 
 	Json::Value value = lightGroup->ToJSON();
 
-	WriteToFile(m_DataPath + m_VehiclesPath + std::to_string(lightGroup->modelId) + m_LightGroupsPath + lightGroup->fileName + ".json", value);
+	WriteToFile(GetFullPluginPath(m_DataPath + m_VehiclesPath + std::to_string(lightGroup->modelId) + m_LightGroupsPath + lightGroup->fileName + ".json"), value);
 }
 
 LightGroup* Config::LoadLightGroup(std::string fileName, int modelId) {
 	Log::file << "[Config] Loading lightGroup: " << fileName << " for ID " << modelId << std::endl;
 
-	Json::Value value = ReadFile(m_DataPath + m_VehiclesPath + std::to_string(modelId) + m_LightGroupsPath + fileName + ".json");
+	Json::Value value = ReadFile(GetFullPluginPath(m_DataPath + m_VehiclesPath + std::to_string(modelId) + m_LightGroupsPath + fileName + ".json"));
 
 	LightGroup* lightGroup = LightGroups::CreateLightGroup(modelId, fileName);
 	lightGroup->FromJSON(value);
@@ -233,8 +225,25 @@ LightGroup* Config::LoadLightGroup(std::string fileName, int modelId) {
 	return lightGroup;
 }
 
+void Config::LoadLocalizations()
+{
+	Localization::RemoveAllLines();
+	Localization::m_AvailableLanguages.clear();
+
+	std::string pathLocalization = GetFullPluginPath(m_DataPath + m_LocalizationPath);
+
+	for (const auto& entry : std::filesystem::directory_iterator(pathLocalization)) {
+		std::string language = entry.path().filename().replace_extension().string();
+
+		Log::file << "[Config] Localization " << language << std::endl;
+
+		Localization::m_AvailableLanguages.push_back(language);
+		LoadLocalization(language);
+	}
+}
+
 void Config::LoadLocalization(std::string key) {
-	Json::Value value = ReadFile(m_DataPath + m_LocalizationPath + key + ".json");
+	Json::Value value = ReadFile(GetFullPluginPath(m_DataPath + m_LocalizationPath + key + ".json"));
 
 	for (auto member : value.getMemberNames()) {
 		Localization::RegisterLine(member, key, value[member].asString());
@@ -242,7 +251,7 @@ void Config::LoadLocalization(std::string key) {
 }
 
 void Config::SaveSettings() {
-	auto path = m_DataPath + "settings.json";
+	auto path = GetFullPluginPath(m_DataPath + "settings.json");
 
 	CreatePath(m_DataPath);
 
@@ -260,7 +269,7 @@ void Config::SaveSettings() {
 void Config::LoadSettings() {
 	Log::file << "[Config] Loading settings.json" << std::endl;
 
-	auto path = m_DataPath + "settings.json";
+	auto path = GetFullPluginPath(m_DataPath + "settings.json");
 
 	if (!Exists(path)) {
 		Log::file << "[Config] settings not found.json";
