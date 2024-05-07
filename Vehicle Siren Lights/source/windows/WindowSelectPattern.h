@@ -2,6 +2,7 @@
 
 #include "../LightGroups.h"
 #include "../Patterns.h"
+#include "../PatternCycleStep.h"
 #include "../menu/Menu.h"
 
 class WindowSelectPattern {

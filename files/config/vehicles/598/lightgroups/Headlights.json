@@ -1,4 +1,5 @@
 {
+   "alwaysEnabled" : false,
    "color1" : {
       "a" : 255,
       "b" : 255,
@@ -23,6 +24,8 @@
    "flareDistance" : 0.0,
    "flareIntensity" : 0.0,
    "flareType" : 0,
+   "freezeLights" : false,
+   "isPositionLightGroup" : false,
    "keybindMenu" : {
       "alt" : false,
       "ctrl" : true,
@@ -47,7 +50,6 @@
    },
    "name" : "Headlights",
    "nearClip" : 0.30000001192092896,
-   "offsetId" : 0,
    "patternCycleSteps" : [
       {
          "duration" : 7000,
@@ -125,6 +127,7 @@
             "textureIndex" : 2,
             "width" : 1.4599777460098267
          },
+         "sirenPosition" : 0,
          "useCustomColor" : false,
          "useCustomEnabledColor" : false
       },
@@ -176,6 +179,7 @@
             "textureIndex" : 2,
             "width" : 1.4599777460098267
          },
+         "sirenPosition" : 0,
          "useCustomColor" : false,
          "useCustomEnabledColor" : false
       }
@@ -196,5 +200,5 @@
    "type" : 0,
    "usePatternColors" : false,
    "useSmallWhiteCorona" : true,
-   "version" : "2.4"
+   "version" : "2.7"
 }

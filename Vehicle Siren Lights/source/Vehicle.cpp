@@ -3,6 +3,8 @@
 #include "VehicleDummy.h"
 #include "Mod.h"
 #include "LightGroups.h"
+#include "TestHelper.h"
+
 #include "log/Log.h"
 
 #include "menu/Menu.h"

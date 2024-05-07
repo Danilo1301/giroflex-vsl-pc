@@ -1,0 +1,5 @@
+[PT-BR] Você pode carregar veículos dentro de qualquer pasta na modloader, basta deixar o arquivo '.vsl-vehicle-config' dentro da pasta do veículo
+[PT-BR] Cuidado ao ter mais de um veículo com o mesmo ID
+
+[EN] You can load vehicles from any folder inside the modloader, you just have to keep the file '.vsl-vehicle-config' inside the vehicle folder
+[EN] Be careful when having more than one vehicle with the same ID

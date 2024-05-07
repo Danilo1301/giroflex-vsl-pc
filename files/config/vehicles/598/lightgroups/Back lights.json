@@ -1,4 +1,5 @@
 {
+   "alwaysEnabled" : false,
    "color1" : {
       "a" : 255,
       "b" : 0,
@@ -23,6 +24,8 @@
    "flareDistance" : 150.0,
    "flareIntensity" : 1.0,
    "flareType" : 0,
+   "freezeLights" : false,
+   "isPositionLightGroup" : false,
    "keybindMenu" : {
       "alt" : false,
       "ctrl" : true,
@@ -47,7 +50,6 @@
    },
    "name" : "Back lights",
    "nearClip" : 0.30000001192092896,
-   "offsetId" : 0,
    "patternCycleSteps" : [
       {
          "duration" : 7000,
@@ -125,6 +127,7 @@
             "textureIndex" : 0,
             "width" : 3.0
          },
+         "sirenPosition" : 0,
          "useCustomColor" : false,
          "useCustomEnabledColor" : false
       },
@@ -176,6 +179,7 @@
             "textureIndex" : 0,
             "width" : 3.0
          },
+         "sirenPosition" : 0,
          "useCustomColor" : false,
          "useCustomEnabledColor" : false
       }
@@ -196,5 +200,5 @@
    "type" : 0,
    "usePatternColors" : false,
    "useSmallWhiteCorona" : true,
-   "version" : "2.4"
+   "version" : "2.7"
 }

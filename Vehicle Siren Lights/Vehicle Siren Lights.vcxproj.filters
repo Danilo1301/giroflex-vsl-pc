@@ -141,6 +141,12 @@
     <ClCompile Include="source\menu\TipMessage.cpp">
       <Filter>source\menu</Filter>
     </ClCompile>
+    <ClCompile Include="source\LightGroup.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Pattern.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="source\Mod.h">
@@ -274,6 +280,9 @@
     </ClInclude>
     <ClInclude Include="source\menu\TipMessage.h">
       <Filter>source\menu</Filter>
+    </ClInclude>
+    <ClInclude Include="source\PatternCycleStep.h">
+      <Filter>source</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

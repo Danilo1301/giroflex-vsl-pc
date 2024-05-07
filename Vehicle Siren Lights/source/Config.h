@@ -21,16 +21,17 @@ public:
 	static bool Exists(std::string path);
 	static void WriteToFile(std::string path, Json::Value value);
 	static Json::Value ReadFile(std::string path);
+	static bool IsPathInsidePluginFolder(std::string path, std::string testFolder);
 
 	static void SavePatterns();
 	static void LoadPatterns();
 	static void SavePattern(Pattern* pattern);
-	static Pattern* LoadPattern(std::string fileName);
+	static Pattern* LoadPattern(std::filesystem::directory_entry fileEntry, std::filesystem::directory_entry patternsEntry);
 
 	static void SaveLightGroups();
 	static void LoadLightGroups();
 	static void SaveLightGroup(LightGroup* lightGroup);
-	static LightGroup* LoadLightGroup(std::string fileName, int modelId);
+	static LightGroup* LoadLightGroup(std::filesystem::directory_entry fileEntry, std::filesystem::directory_entry modelEntry);
 
 	static void LoadLocalizations();
 	static void LoadLocalization(std::string key);
@@ -38,4 +39,6 @@ public:
 	static void SaveSettings();
 	static void LoadSettings();
 
+	static std::vector<std::filesystem::directory_entry> SearchModloaderForFile(std::string fileName);
+	static std::vector<std::filesystem::directory_entry> SearchFolderForFile(std::filesystem::directory_entry path, std::string searchFileName);
 };

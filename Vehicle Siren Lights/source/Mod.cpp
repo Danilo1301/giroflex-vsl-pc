@@ -14,6 +14,7 @@
 #include "VehicleDummy.h"
 #include "TestHelper.h"
 
+#include "log/Log.h"
 #include "menu/Menu.h"
 #include "menu/KeySelector.h"
 #include "localization/Localization.h"
@@ -22,7 +23,7 @@
 
 bool Mod::m_DebugEnabled = false;
 bool Mod::m_IsSamp = false;
-std::string Mod::m_Version = "2.6";
+std::string Mod::m_Version = "2.7";
 
 CVehicle* testVehicle = NULL;
 unsigned int _prevTime = 0;

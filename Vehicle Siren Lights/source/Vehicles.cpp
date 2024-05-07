@@ -1,5 +1,8 @@
 #include "Vehicles.h"
+
 #include "LightGroups.h"
+
+#include "log/Log.h"
 
 std::map<CVehicle*, Vehicle*> Vehicles::m_Vehicles;
 bool Vehicles::m_DrawVehicleFrames = false;

@@ -1,0 +1,6 @@
+[PT-BR] Não crie dois Patterns com o mesmo nome, ou um deles será deletado!
+[PT-BR] Você pode carregar patterns dentro de qualquer pasta na modloader, basta deixar o arquivo '.vsl-patterns-config' dentro dessa pasta
+
+[EN] Don't make two Patterns with the same name, or one of them will be deleted!
+[EN] You can load patterns from any folder inside the modloader, you just have to keep the file '.vsl-patterns-config' inside the folder
+

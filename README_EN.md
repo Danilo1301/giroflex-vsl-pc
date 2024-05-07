@@ -52,11 +52,15 @@ Each vehicle has a separated folder with an ID to save its configuration
 
 The vehicle files are located in "Vehicle Siren Lights/data/vehicles"
 
+You can save the vehicle folder (ex: folder /596/) in any folder inside /modloader, but only if you keep the file '.vsl-vehicle-config' inside
+
 <br>
 
 The flash pattern files are located in "Vehicle Siren Lights/data/patterns"
 
 And you can also create your own flash patterns (see the Tutorials)
+
+You can save the patterns (ex: folder /patterns/) in any folder inside /modloader, but only if you keep the file '.vsl-patterns-config' inside
 
 <h1>Issues</h1>
 

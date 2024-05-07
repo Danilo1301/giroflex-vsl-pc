@@ -80,6 +80,12 @@
 [X] ADD: button to go back to previous window (BACKSPACE)
 [X] ADD: tip messages
 
+[2.7]
+[X] CHANGE: load vehicles from any folder from modloader
+[X] CHANGE: load patterns from any folder from modloader
+[X] UPDATED: updated folder 'data\vehicles'
+[X] UPDATED: updated folder 'data\patterns'
+
 --- todo (maybe) ---
 
 [X] ADD: option to show only current edditing lightgroup

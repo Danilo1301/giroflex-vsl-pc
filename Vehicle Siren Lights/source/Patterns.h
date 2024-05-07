@@ -2,6 +2,7 @@
 
 #include "pch.h"
 #include "Pattern.h"
+#include "PatternCycleStep.h"
 
 class Patterns {
 public:

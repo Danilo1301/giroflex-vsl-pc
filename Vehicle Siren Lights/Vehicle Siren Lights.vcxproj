@@ -17,6 +17,7 @@
     <ClCompile Include="source\Config.cpp" />
     <ClCompile Include="source\input\Input.cpp" />
     <ClCompile Include="source\Keybinds.cpp" />
+    <ClCompile Include="source\LightGroup.cpp" />
     <ClCompile Include="source\LightGroups.cpp" />
     <ClCompile Include="source\LightGroupShadow.cpp" />
     <ClCompile Include="source\localization\Localization.cpp" />
@@ -33,6 +34,7 @@
     <ClCompile Include="source\menu\TipMessage.cpp" />
     <ClCompile Include="source\menu\Window.cpp" />
     <ClCompile Include="source\Mod.cpp" />
+    <ClCompile Include="source\Pattern.cpp" />
     <ClCompile Include="source\Patterns.cpp" />
     <ClCompile Include="source\pch.cpp" />
     <ClCompile Include="source\TestHelper.cpp" />
@@ -75,6 +77,7 @@
     <ClInclude Include="source\Mod.h" />
     <ClInclude Include="source\Keybind.h" />
     <ClInclude Include="source\Pattern.h" />
+    <ClInclude Include="source\PatternCycleStep.h" />
     <ClInclude Include="source\PatternLoop.h" />
     <ClInclude Include="source\Patterns.h" />
     <ClInclude Include="source\pch.h" />

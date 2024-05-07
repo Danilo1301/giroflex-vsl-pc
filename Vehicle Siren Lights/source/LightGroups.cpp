@@ -16,6 +16,13 @@ LightGroup* LightGroups::CreateLightGroup(int modelId, std::string fileName)
 
 	m_LightGroups[modelId].push_back(lightGroup);
 
+	//fix modelDirectoryEntry when creating new lightGroup
+	auto otherLightGroups = LightGroups::GetLightGroups(modelId);
+	if (otherLightGroups.size() > 0)
+	{
+		lightGroup->modelDirectoryEntry = otherLightGroups[0]->modelDirectoryEntry;
+	}
+
 	return lightGroup;
 }
 

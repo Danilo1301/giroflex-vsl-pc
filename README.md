@@ -54,11 +54,15 @@ Cada veículo tem uma pasta separada com o seu ID para salvar as configurações
 
 Os arquivos dos veículos ficam em "Vehicle Siren Lights/data/vehicles"
 
+Você pode salvar as pastas dos veículos (ex: pasta /596/) em qualquer lugar dentro /modloader, desde que você mantenha o arquivo '.vsl-vehicle-config' dentro
+
 <br>
 
 Os arquivos dos padrões de piscar das luzes ficam em "Vehicle Siren Lights/data/patterns"
 
 E você também pode criar seus próprios padrões (veja os Tutoriais)
+
+Você pode salvar os patterns (ex: pasta /patterns/) em qualquer lugar dentro /modloader, desde que você mantenha o arquivo '.vsl-patterns-config' dentro
 
 <h1>Problemas</h1>
 
