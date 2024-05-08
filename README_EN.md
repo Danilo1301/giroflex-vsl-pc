@@ -10,8 +10,8 @@
 <h1>How to install</h1>
 
 1. Download the .zip in [Releases](https://github.com/Danilo1301/giroflex-vsl-pc/releases)
-2. Drag and drop the **modloader** folder to your GTA folder
-3. Optional: install the lights textures (tutorials below)
+2. Open the .zip, open the folder "modloader", copy the folder "Vehicle Siren Lights" and paste it on your **/modloader** folder
+3. Optional: install the light texture, that is located inside the folder "Lights textures" (tutorials below)
 
 <h1>How to use</h1>
 
